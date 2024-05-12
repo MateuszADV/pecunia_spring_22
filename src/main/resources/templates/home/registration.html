@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Rgistration</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+
+    <div class="jumbotron">
+        <h1 style="text-align: center;">REJESTRACJA</h1>
+
+            <form th:action="@{/registration}" method="post" th:object="${userForm}">
+                <table>
+                    <tr>
+                        <td>First Name</td>
+                        <td><input class="input" type="text" th:field="*{firstName}" placeholder="First Name"/></td>
+<!--                        <td th:if="${#fields.hasErrors('firsName')}" th:errors="*{firstName}">Name Error</td>-->
+                        <td  th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: red">></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name</td>
+                        <td><a><input class="input" type="text" th:field="*{lastName}" placeholder="Last Name"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td><a><input class="input" type="password" th:field="*{password}" placeholder="Password"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><a><input class="input" type="text" th:field="*{email}" placeholder="email"></a></td>
+                        <td  th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">></td>
+                    </tr>
+
+
+                </table>
+
+                <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+            </form>
+
+
+    </div>
+</div>
+</body>
+</html>

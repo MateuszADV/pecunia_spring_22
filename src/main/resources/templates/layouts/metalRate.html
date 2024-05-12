@@ -1,0 +1,13 @@
+<header th:fragment="metalRate"
+        xmlns:th="http://www.thymeleaf.org">
+    <span th:if="${getApiMetal} != null ">
+        <span th:if="${getApiMetal.apiResponseInfo} != null ">
+            <div th:if="${getApiMetal.apiResponseInfo.responseStatusInfo.statusCode} == 200" style="text-align: center; background-color: #b0c8db">
+                <span th:text="*{#calendars.format(getApiMetal.apiResponseInfo.date,'yyyy-MM-dd HH:mm:ss')}"></span>
+                <block th:each=" metal : ${getApiMetal.apiMetals}">
+                    <span>[[${metal.metal}]]: [[${metal.price}]] |</span>
+                </block>
+            </div>
+        </span>
+    </span>
+</header>

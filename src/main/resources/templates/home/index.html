@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Pecunia Spring</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div th:if="${rateCurrencyTableA.exchange} != null" style="background: aquamarine; text-align: center">
+            <block th:each=" rate : ${rateCurrencyTableA.exchange.rates}">
+                <span>[[${rate.cod}]]: [[${rate.mid}]] </span>
+            </block>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2">
+            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                <img src="https://dub01pap001files.storage.live.com/y4md3w1qi0YL5yavfhXUFN-NaDSWmpYX8dP-eBdmw0DFcLLvqqroXSozwRBMwyYMXuCz7ysZe0g7xKyCbEbrK-sssY0jYUUSCCHE4k_CwNtyEZbVFW_t9i-86AxZlqTuioEn6irCkrF9GMXA46Mnl_3M8ThY5KdpUQD2x-YtkM6AEXosOITvadBqgRchDOsdJsKfQz9WbG8L3WMya1uqbGpgw?encodeFailures=1&width=1626&height=837" style="max-width: 100%; max-height: 350px"/>
+            </div>
+            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                <img src="https://dub01pap001files.storage.live.com/y4mznzbXXEnybhO3FJCDeKxCJ5-6RJ3O2njC41JvJIuUqD4lfvgaoawUUhZYfqLci_rkCQEkkTX_728YoQfpjfs9KF3QI1ei_7dWBLyTpyZAs9Rmt7kFpo2-72B71m5xW0wcinWyOe2COKDqAneo0wowJbPl_YTvZ-YV1ZwpL8oQJWp9yV9i6KjEf50Eax7MuvphQ5_41hFOd8BThM6QFVDmA?encodeFailures=1&width=1625&height=837" style="max-width: 100%; max-height: 350px"/>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+            <div class="col field" style="float: left; margin: 5px 0px 5px 0px" >
+                <div class="container" style=" background: #4cb148">
+                    <h3>Note</h3>
+                    <div class="row row-cols-1 row-cols-sm-2" style="text-align: center">
+                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                            <img src="https://pehkkw.ch.files.1drv.com/y4mNVXrG_-x12nbIvGKJ2ms8SpGIi3w8QBwgx08L4UQFM7PdqrMwBo_0pUKIX6MA83PmhkU37U1eH4FofvuRnzBPseFf5TBbY82mZ0jnnfh4sK4N6m6B3Q24WTHS-c3W35WA5RFR1mUNr2xlXvocd220LpsypSF6JUdGi0IQAx5koLMpnxVvQ0RqB4t8WiDuEPvlMibKOTmRZXCVxXhaVkxfw/Poland_19_Zlotych_201a_2019.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>
+                        </div>
+                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                            <img src="https://pehkkw.ch.files.1drv.com/y4mTdJBUd72VW2oPVKt6N_UNoV0g0lyGf7Qo9jz8-B9cf8zbYvhse1DYfEAT2Q8HLqdp7zyqPzXuo4LowxfxHRPekKShPTYfweOPADCm-LsyKwR_WUosk3PPZP9nKQK1PtECJWcyybofzDR5su-19-BDPryHNQTFV7y3PV0dD7Ya5ur1uTUsksIbYlOs3VJMFQhLzn0vYma8zCJ5-xVgKX9Qg/Poland_19_Zlotych_201b_2019.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>
+                        </div>
+                    </div>
+                   <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
+                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
+                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
+                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
+                </div>
+            </div>
+            <div class="col field" style="float: left; margin: 5px 0px 5px 0px">
+                <div class="container" style="background: #4cb148">
+                    <h3>Coin</h3>
+                    <div class="row row-cols-1 row-cols-sm-2" style="text-align: center">
+                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                            <img src="https://rgmihw.am.files.1drv.com/y4mdfOUkv9NnTQ-5sWXphR1XN3HmlqMV56L0o2dPMo1p4zkUdNLnB8NoJAvf6Wty85Izk-JZGSzOT_FeyA4YRqMT3yZk8daTa9MmS3fYztWWhtg0SWJbZ9eDWYivwI4fvtJrs3XAXm-_LL5lZKYyORW3gYYBAD2rwlrRGY_fAX4ZHIlvzWZ84oIPPxQunAH1jv9Ns7MZ5Me7TXHpMhHcdPeQw/USA_1_Dollar_102a_1899.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>
+                        </div>
+                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                            <img src="https://rgmihw.am.files.1drv.com/y4mxo5FBMNTr53bLU6lSs7nf9m5TzkXfGUsaxTBi2rxnhg0NNzEFL160RawwsU3vjK8Ifx_qUI7SeD8e4hYXJQMZtuYIQjpi9o2rgbdNFbawNtF1ddNRynhnlsLL5eDsGKzXxNyIpFKtWRxz2bOYQ8Aj81dVAhkOcW6TlG-85bwf1fqPL6xWodcuRMk54Gby5qYchzpIbXYHgtRlP2S4FEqqw/USA_1_Dollar_102b_1899.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>
+                        </div>
+                    </div>
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
+                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
+                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
+                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
+                </div>
+            </div>
+            <div class="col field" style="float: left; margin: 5px 0px 5px 0px">
+                <div class="container" style="background: #4cb148">
+                    <h3>Other</h3>
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
+                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
+                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
+                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Button trigger modal -->
+<!--        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
+<!--            Launch demo modal-->
+<!--        </button>-->
+
+    </div>
+</body>
+</html>
