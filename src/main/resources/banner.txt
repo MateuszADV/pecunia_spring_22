@@ -12,4 +12,9 @@ ${Ansi.YELLOW}:: Spring Boot ::  ${Ansi.DEFAULT}(v${spring-boot.version})
 ${Ansi.BRIGHT_RED}:: Application Name: ${Ansi.DEFAULT}${info.app.name}
 ${Ansi.BLUE}:: Application Version: ${Ansi.DEFAULT}(${info.app.version})
 ${Ansi.GREEN}:: Java Version: ${Ansi.DEFAULT}(${info.app.java})
+${AnsiColor.BRIGHT_MAGENTA}:: Description: ${Ansi.DEFAULT}(${info.app.description})
+${AnsiColor.BRIGHT_BLUE}:: Maven Version :  ${Ansi.DEFAULT}(${info.maven.version})
+${AnsiColor.BRIGHT_GREEN}:: PostgreSql Version :  ${Ansi.DEFAULT}(${info.postgresql.version})
+${AnsiColor.BRIGHT_CYAN}:: Corporation Java :  ${Ansi.DEFAULT}(${info.java-vendor})
+
 ${Ansi.DEFAULT}

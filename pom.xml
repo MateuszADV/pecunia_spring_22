@@ -12,7 +12,7 @@
     <artifactId>pecunia_22</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>pecunia_22</name>
-    <description>pecunia_22</description>
+    <description>pecunia_22_OPIS</description>
     <properties>
         <java.version>22</java.version>
     </properties>
