@@ -1,0 +1,27 @@
+<div th:fragment="pagination"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div th:if = "${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class="col-sm-15">
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                        <a th:if="${currentPage != i}" th:href="@{${pathPage} + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}} ">[[${i}]]</a>
+                        <span th:unless="${currentPage != i}">[[${i}]]</span>
+                        <!--                        &nbsp; &nbsp;-->
+                    </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{${pathPage}  + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}} ">NEXT</a>
+                <span th:unless="${currentPage < totalPages}">NEXT</span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{${pathPage}  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}} ">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+
+</div>

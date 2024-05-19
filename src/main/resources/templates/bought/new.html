@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>New Bought</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Bought NEW</h1>
+            <hr class="my-2">
+            <form th:action="@{/bought/new}" method="post" th:object="${boughtForm}">
+                <div th:replace="~{bought/_form :: form}"></div>
+                <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+            </form>
+            <div>
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/bought')}"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

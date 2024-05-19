@@ -1,0 +1,8 @@
+<div th:fragment="flag"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="container" style="text-align: center; margin-bottom: 15px; padding-bottom: 15px; background: black; color: lightgray">
+        <h3 th:text="${country}"></h3>
+        <img th:src="@{'/images/flags/' + ${country} + '.png'}" style="width: 80px; max-height: 60px"/><br>
+    </div>
+</div>
