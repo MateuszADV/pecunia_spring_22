@@ -1,10 +1,10 @@
 <header th:fragment="form"
-    xmlns:th="http://www.thymeleaf.org">
+        xmlns:th="http://thymeleaf.org">
     <div class="form-row align-items-center">
             <div class="col-md-4">
                 <label>Name</label><br>
-                <input class="form-control form-control-sm mb-2" type="text"th:field="*{name}" placeholder="Name"/>
-                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <input class="form-control form-control-sm mb-2" type="text" th:field="*{name}" placeholder="Name"/>
+                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0 10px 0 10px" >
                     <span th:errors="*{name}" ></span>
                 </div>
             </div>
