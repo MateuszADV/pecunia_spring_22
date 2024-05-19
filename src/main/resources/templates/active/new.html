@@ -11,7 +11,7 @@
     <h1 style="text-align: center">ACTIVE NEW</h1>
 
     <form th:action="@{/active/new}" method="post" th:object="${activeForm}">
-        <div th:replace="active/_form :: form"></div>
+        <div th:replace="~{active/_form :: form}"></div>
         <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
     </form>
 

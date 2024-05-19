@@ -1,4 +1,4 @@
-package pecunia_22.models.dto.Active;
+package pecunia_22.models.dto.pattern;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,10 +11,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ActiveDtoSelect {
-    @NotNull(message = "Select Active")
+public class PatternDtoCurrency {
+    @NotNull(message = "Select Pattern")
     private Long id;
-    private Integer activeCod;
+    private String pattern;
     private String name;
     private String description;
     private Timestamp created_at;

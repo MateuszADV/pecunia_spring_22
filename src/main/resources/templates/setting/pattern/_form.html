@@ -1,0 +1,29 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+    <table>
+        <tr>
+            <td>
+                <label>Pattern</label><br>
+<!--                <b th:if="${checkActive == true}" style="color: red; font-size: 15px">Podana wartość już istnieje w bazie<br></b>-->
+                <input class="input" type="text" th:field="*{pattern}" placeholder="Pattern" />
+                <div th:if="${#fields.hasErrors('pattern')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{pattern}" ></span>
+                </div>
+            </td>
+            <td>
+                <label>Name cod</label><br>
+                <input class="input" type="text" th:field="*{name}" placeholder="Name"/>
+<!--                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{name}" ></span>-->
+<!--                </div>-->
+            </td>
+        <tr>
+            <td>
+                <label>Description</label><br>
+                <div>
+                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+</header>

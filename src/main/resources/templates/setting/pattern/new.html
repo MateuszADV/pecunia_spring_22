@@ -8,10 +8,10 @@
 </head>
 <body>
 <div layout:fragment="content" class="container">
-    <h1 style="text-align: center">ACTIVE NEW</h1>
+    <h1 style="text-align: center">PATTERN NEW</h1>
 
-    <form th:action="@{/active/edit}" method="post" th:object="${activeForm}">
-        <div th:replace="~{active/_form :: form}"></div>
+    <form th:action="@{/pattern/new}" method="post" th:object="${patternForm}">
+        <div th:replace="~{setting/pattern/_form :: form}"></div>
         <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
     </form>
 
