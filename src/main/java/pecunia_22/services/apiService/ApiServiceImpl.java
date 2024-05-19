@@ -18,8 +18,8 @@ import java.util.List;
 public class ApiServiceImpl implements ApiService {
     @Override
     public ClientResponse clientResponse(String url) {
+
         Client client = ClientBuilder.newClient();
-        WebResource webResource = (WebResource) client.target(url);
         ClientResponse clientResponse = null;
 
        return clientResponse;
@@ -73,6 +73,19 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
+    public Invocation.Builder webResource(String url) {
+        Client client = ClientBuilder.newClient();
+        Invocation.Builder webResource = client.target(url).request();
+
+        if (webResource.get().getStatus() == 200) {
+            return webResource;
+        }
+        else{
+            throw new RuntimeException("Błąd pobrania... " + webResource.get().getStatusInfo() + " - " + webResource.get().getStatus());
+        }
+    }
+
+    @Override
     public GetRateCurrencyTableA getRateCurrencyTableA(String url, String[] codes) {
         GetRateCurrencyTableA getRateCurrencyTableA = new GetRateCurrencyTableA();
         Exchange exchange = new Exchange();
@@ -80,8 +93,9 @@ public class ApiServiceImpl implements ApiService {
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
 
         try {
-            Client client = ClientBuilder.newClient();
-            Invocation.Builder webResource = client.target(url).request();
+//            Client client = ClientBuilder.newClient();
+//            Invocation.Builder webResource = client.target(url).request();
+            Invocation.Builder webResource = webResource(url);
 
 //            ClientResponse clientResponse = clientResponse(url);
 //            String stringJson = clientResponse.getEntity(String.class);
@@ -119,6 +133,5 @@ public class ApiServiceImpl implements ApiService {
 
         }
         return getRateCurrencyTableA;
-//        return null;
     }
 }

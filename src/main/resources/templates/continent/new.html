@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Country New</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1 style="text-align: center">CONTINENT NEW</h1>
+
+    <form th:action="@{/continent/new}" method="post" th:object="${continentForm}">
+        <table>
+            <tr>
+                <td>Continent En</td>
+                <td><input class="input" type="text" th:field="*{continentEn}" placeholder="Continent En"/></td>
+            </tr>
+            <tr>
+                <td>Continent Pl</td>
+                <td><input class="input" type="text" th:field="*{continentPl}" placeholder="Continent Pl"/></td>
+            </tr>
+            <tr>
+                <td>Continent Code</td>
+                <td><input class="input" type="text" th:field="*{continentCode}" placeholder="Continenyt code"/></td>
+            </tr>
+
+        </table>
+
+        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+    </form>
+
+</div>
+</body>
+</html>

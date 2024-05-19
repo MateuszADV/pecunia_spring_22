@@ -62,7 +62,13 @@ public class HomeController {
         System.out.println("-----------START-------------------");
         System.out.println(webResource.get(String.class));
         String stringJson = webResource.get(String.class);
-        JSONArray jsonArray = new JSONArray(stringJson);
+
+        System.out.println("-----------------------------------------");
+        System.out.println(apiService.webResource(url).get());
+        System.out.println(apiService.webResource(url).get(String.class));
+        System.out.println(apiService.webResource(url).get().getStatus());
+        System.out.println("żłóńćąęś");
+        System.out.println("-----------------------------------------");
 
 //        System.out.println(JsonUtils.gsonPretty(webResource.get(Object.class)));
 
@@ -90,17 +96,9 @@ public class HomeController {
 
     @PostMapping("/registration")
     public String postRegistration(@ModelAttribute("userForm") @Valid RegistrationRequest request, BindingResult result, Model model){
-        System.out.println("--------------------********************************-----------------------------");
-//        System.out.println(registrationService.register(request));
-//        Boolean isValidEmail = emailValidator.test(request.getEmail());
-//        System.out.println(isValidEmail.toString());
-        System.out.println("--------------------NAPIS TESTOWY--------------------------");
-        System.out.println(request.toString());
-        System.out.println(result.getModel().toString());
         if (result.hasErrors()) {
             return "home/registration";
         }
-
         try {
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%TU COś POWINNO SIę DZIAć$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             registrationService.register(request);
