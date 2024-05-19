@@ -1,0 +1,25 @@
+<div th:fragment="pagination"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm">
+            <li class="page-item" >
+                <span class="page-link" style="background: black"> Total Rows: [[${totalItems}]]</span>
+            </li>
+            <li class="page-item">
+                <a class="page-link" style="background: black"  th:if="${currentPage > 1}" th:href="@{${pathPage}  + ${currentPage - 1} + '?currencyId=' + ${currencyId}}  + '&status=KOLEKCJA' ">PREV</a>
+                <span class="page-link" aria-current="page" style="background: darkgray" th:unless="${currentPage > 1}">Prev</span>
+            </li>
+            <block th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <li class="page-item">
+                    <a class="page-link active" th:if="${currentPage != i}" th:href="@{${pathPage} + ${i} + '?currencyId=' + ${currencyId}} + '&status=KOLEKCJA' ">[[${i}]]</a>
+                    <span class="page-link" aria-current="page" style="background: aqua" th:unless="${currentPage != i}">[[${i}]]</span>
+                </li>
+            </block>
+            <li class="page-item">
+                <a class="page-link" style="background: black"  th:if="${currentPage < totalPages}" th:href="@{${pathPage}  + ${currentPage + 1} + '?currencyId=' + ${currencyId}}  + '&status=KOLEKCJA' ">NEXT</a>
+                <span class="page-link" aria-current="page" style="background: darkgray" th:unless="${currentPage < totalPages}">Next</span>
+            </li>
+        </ul>
+    </nav>
+</div>
