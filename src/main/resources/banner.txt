@@ -16,5 +16,4 @@ ${AnsiColor.BRIGHT_MAGENTA}:: Description: ${Ansi.DEFAULT}(${info.app.descriptio
 ${AnsiColor.BRIGHT_BLUE}:: Maven Version :  ${Ansi.DEFAULT}(${info.maven.version})
 ${AnsiColor.BRIGHT_GREEN}:: PostgreSql Version :  ${Ansi.DEFAULT}(${info.postgresql.version})
 ${AnsiColor.BRIGHT_CYAN}:: Corporation Java :  ${Ansi.DEFAULT}(${info.java-vendor})
-
 ${Ansi.DEFAULT}

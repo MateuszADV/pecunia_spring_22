@@ -1,0 +1,28 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+    <table>
+        <tr>
+            <td>
+                <label>Making</label><br>
+                <input class="input" type="text" th:field="*{making}" placeholder="Making" />
+                <div th:if="${#fields.hasErrors('making')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{making}" ></span>
+                </div>
+            </td>
+            <td>
+                <label>Making Pl</label><br>
+                <input class="input" type="text" th:field="*{makingPl}" placeholder="Making Pl"/>
+<!--                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{name}" ></span>-->
+<!--                </div>-->
+            </td>
+        <tr>
+            <td>
+                <label>Description</label><br>
+                <div>
+                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+</header>
