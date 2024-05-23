@@ -16,4 +16,7 @@ ${AnsiColor.BRIGHT_MAGENTA}:: Description: ${Ansi.DEFAULT}(${info.app.descriptio
 ${AnsiColor.BRIGHT_BLUE}:: Maven Version :  ${Ansi.DEFAULT}(${info.maven.version})
 ${AnsiColor.BRIGHT_GREEN}:: PostgreSql Version :  ${Ansi.DEFAULT}(${info.postgresql.version})
 ${AnsiColor.BRIGHT_CYAN}:: Corporation Java :  ${Ansi.DEFAULT}(${info.java-vendor})
+${AnsiColor.CYAN}:: Tomcat Version :  ${Ansi.DEFAULT}(${info.tomcat.version})
+${AnsiColor.BRIGHT_YELLOW}:: Thymeleaf Version :  ${Ansi.DEFAULT}(${info.thymeleaf.version})
+${AnsiColor.BRIGHT_WHITE}:: Spring Security Version :  ${Ansi.DEFAULT}(${info.spring.security.version})
 ${Ansi.DEFAULT}
