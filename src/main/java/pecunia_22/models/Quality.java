@@ -28,6 +28,8 @@ public class Quality {
     private String quality;
     @Column(name = "quality_pl")
     private String qualityPl;
+//    @Column(columnDefinition="text")
+    @Column(length = 1024)
     private String description;
     @Column(name = "created_at")
     private Timestamp created_at;

@@ -4,38 +4,37 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 @Entity
-@Table(name = "boughts")
-public class Bought {
+@Table(name = "statuses")
+public class Status {
     @SequenceGenerator(
-            name = "boughts_sequence",
-            sequenceName = "boughts_sequence",
+            name = "statuses_sequence",
+            sequenceName = "statuses_sequence",
             allocationSize = 1
     )
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "boughts_sequence"
+            generator = "statuses_sequence"
     )
     private Long id;
-    private String name;
-    @Column(name = "full_name")
-    private String fullName;
-    @Column(length = 1024)
-//    @Column(columnDefinition="text")
+    private String status;
+    @Column(name = "status_pl")
+    private String statusPl;
     private String description;
     @Column(name = "created_at")
     private Timestamp created_at;
     @Column(name = "updated_at")
     private Timestamp updated_at;
 
-//    @OneToMany(mappedBy = "boughts", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    @OneToMany(mappedBy = "statuses", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //    private List<Note> notes;
 }

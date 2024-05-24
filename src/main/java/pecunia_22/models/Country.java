@@ -45,6 +45,8 @@ public class Country {
     @Column(name = "updated_at")
     private Timestamp updated_at;
     private Boolean exists;
+    @Column(length = 4096)
+//    @Column(columnDefinition="text")
     private String description;
 
     @ManyToOne
