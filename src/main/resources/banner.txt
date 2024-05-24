@@ -19,4 +19,5 @@ ${AnsiColor.BRIGHT_CYAN}:: Corporation Java :  ${Ansi.DEFAULT}(${info.java-vendo
 ${AnsiColor.CYAN}:: Tomcat Version :  ${Ansi.DEFAULT}(${info.tomcat.version})
 ${AnsiColor.BRIGHT_YELLOW}:: Thymeleaf Version :  ${Ansi.DEFAULT}(${info.thymeleaf.version})
 ${AnsiColor.BRIGHT_WHITE}:: Spring Security Version :  ${Ansi.DEFAULT}(${info.spring.security.version})
+${AnsiColor.GREEN}:: Hibernate Version :  ${Ansi.DEFAULT}(${info.spring.hibernate.version})
 ${Ansi.DEFAULT}
