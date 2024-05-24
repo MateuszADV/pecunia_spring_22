@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>New Quality</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1 style="text-align: center">QUALITY NEW</h1>
+
+    <form th:action="@{/quality/new}" method="post" th:object="${qualityForm}">
+        <div th:replace="~{setting/quality/_form :: form}"></div>
+        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+    </form>
+
+</div>
+</body>
+</html>
