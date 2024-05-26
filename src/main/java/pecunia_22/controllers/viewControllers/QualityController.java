@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import pecunia_22.models.Quality;
-import pecunia_22.models.dto.qualityDto.QualityDto;
-import pecunia_22.models.dto.qualityDto.QualityDtoForm;
-import pecunia_22.models.repositories.QualityRepository;
+import pecunia_22.models.dto.quality.QualityDto;
+import pecunia_22.models.dto.quality.QualityDtoForm;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import utils.JsonUtils;
 

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Edit Image Type</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1 style="text-align: center">IMAGE TYPE EDIT</h1>
+
+    <form th:action="@{/imageType/edit}" method="post" th:object="${imageTypeForm}">
+        <div th:replace="~{setting/imageType/_form :: form}"></div>
+        <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
+    </form>
+
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package pecunia_22.models.dto.qualityDto;
+package pecunia_22.models.dto.quality;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

@@ -1,5 +1,6 @@
-package pecunia_22.models.dto.qualityDto;
+package pecunia_22.models.dto.quality;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -10,7 +11,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class QualityDto {
+public class QualityDtoSelect {
+    @NotNull(message = "SELECT QUALITY")
     private Long id;
     private String quality;
     private String qualityPl;
