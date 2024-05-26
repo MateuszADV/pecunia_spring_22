@@ -1,6 +1,6 @@
-package pecunia_22.models.dto.qualityDto;
+package pecunia_22.models.dto.ImageType;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -11,11 +11,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class QualityDtoSelect {
-    @NotNull(message = "SELECT QUALITY")
+public class ImageTypeDtoForm {
     private Long id;
-    private String quality;
-    private String qualityPl;
+    @NotEmpty(message = "Pole nie może być puste")
+    private String type;
+    private String typePl;
     private String description;
     private Timestamp created_at;
     private Timestamp updated_at;
