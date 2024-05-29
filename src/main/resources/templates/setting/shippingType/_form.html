@@ -1,0 +1,35 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="form-row align-items-center">
+        <div class="col-md-4">
+            <label>Shipping Type En</label><br>
+            <input class="form-control form-control-sm mb-2" type="text"th:field="*{shippingTypeEn}" placeholder="Name"/>
+            <div th:if="${#fields.hasErrors('shippingTypeEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{shippingTypeEn}" ></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label>Shipping Type Pn</label><br>
+            <input class="form-control form-control-sm mb-2" type="text"th:field="*{shippingTypePl}" placeholder="Name"/>
+            <div th:if="${#fields.hasErrors('shippingTypePl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{shippingTypePl}" ></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label class="m-0">Shipping Coast</label>
+            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{shippingCost}" placeholder="0.00">
+            <div th:if="${#fields.hasErrors('shippingCost')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{shippingCost}" ></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col">
+            <label>Description</label><br>
+            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+        </div>
+    </div>
+    <hr class="my-2">
+</header>
