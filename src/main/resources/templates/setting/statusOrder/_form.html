@@ -1,0 +1,26 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="form-row align-items-center">
+        <div class="col-md-4">
+            <label>Status Order En</label><br>
+            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusEn}" placeholder="EN"/>
+            <div th:if="${#fields.hasErrors('statusEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{statusEn}" ></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label>Status Order Pl</label><br>
+            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusPl}" placeholder="PL"/>
+            <div th:if="${#fields.hasErrors('statusPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{statusPl}" ></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col">
+            <label>Description</label><br>
+            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+        </div>
+    </div>
+    <hr class="my-2">
+</header>
