@@ -1,8 +1,10 @@
 package pecunia_22.models.dto.continent;
 
 import lombok.*;
+import pecunia_22.models.dto.country.CountryGetDto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,5 +19,5 @@ public class ContinentCountriesDto {
     private String continentCode;
     private Timestamp created_at;
     private Timestamp updated_at;
-//    private List<CountryGetDto> countries;
+    private List<CountryGetDto> countries;
 }
