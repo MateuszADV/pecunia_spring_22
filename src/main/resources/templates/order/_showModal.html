@@ -1,0 +1,35 @@
+<header th:fragment="showModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: lightgray">
+                <h1 class="modal-title" id="exampleModalLabel">Order</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: antiquewhite">
+                <b>UUID: </b><span th:text="${customerOrder.customer.uniqueId}"></span><br>
+                <b>Name: </b><span th:text="${customerOrder.customer.name}"></span><br>
+                <b>Last Name: </b><span th:text="${customerOrder.customer.lastName}"></span><br>
+                <hr class="my-2">
+                <b>Id: </b><span th:text="${order.id}"></span><br>
+                <div th:class="${order.statusOrders.statusEn}">
+                    <b>Status Order: </b><span th:text="${order.statusOrders.statusPl}"></span><br>
+                </div>
+                <b>Nomber Order: </b><span th:text="${order.numberOrder}"></span><br>
+                <b>Date Ordcer: </b><span th:text="${order.dateOrder}"></span><br>
+                <b>Tracking Number: </b><span th:text="${order.trackingNumber}"></span><br>
+                <b>Shipping Type: </b><span th:text="${order.shippingTypes.shippingTypePl}"></span><br>
+                <hr class="my-2">
+                <b>Description:</b><br>
+                <span th:text="${order.description}"></span>
+
+<!--                <span th:text="${shippingType.description}"></span>-->
+            </div>
+            <div class="modal-footer" style="background: lightgray">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</header>

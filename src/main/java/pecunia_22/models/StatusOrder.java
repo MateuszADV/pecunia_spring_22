@@ -36,6 +36,6 @@ public class StatusOrder {
     @Column(name = "updated_at")
     private Timestamp updated_at;
 
-//    @OneToMany(mappedBy = "statusOrders", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    private List<Order> orders;
+    @OneToMany(mappedBy = "statusOrders", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Order> orders;
 }
