@@ -11,7 +11,7 @@
     <h1 style="text-align: center">COUNTRY NEW</h1>
 
     <form th:action="@{/country/edit}" method="post" th:object="${countryForm}">
-        <div th:replace="country/_form :: form"></div>
+        <div th:replace="~{country/_form :: form}"></div>
         <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
     </form>
 
