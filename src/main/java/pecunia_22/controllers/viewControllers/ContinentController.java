@@ -10,6 +10,7 @@ import pecunia_22.models.dto.continent.ContinentCountriesDto;
 import pecunia_22.models.dto.continent.ContinentDto;
 import pecunia_22.models.repositories.ContinentRepository;
 import pecunia_22.services.continentService.ContinentServiceImpl;
+import pecunia_22.services.countryService.CountryServiceImpl;
 import utils.JsonUtils;
 
 @Controller
@@ -18,7 +19,7 @@ public class ContinentController {
 
     private ContinentRepository continentRepository;
     private ContinentServiceImpl continentService;
-//    private CountryServiceImpl countryService;
+    private CountryServiceImpl countryService;
 
     @GetMapping("/continent")
     public String getIndex(ModelMap modelMap) {
@@ -57,7 +58,8 @@ public class ContinentController {
 //        }
 //        modelMap.addAttribute("continents", continentDtos);
 
-//        modelMap.addAttribute("continents", countryService.countryCounts());
+        //TODO
+        modelMap.addAttribute("continents", countryService.countryCounts());
     }
 
     @GetMapping("/continent/")

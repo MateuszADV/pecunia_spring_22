@@ -1,6 +1,5 @@
 package pecunia_22.services.continentService;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.Continent;
@@ -10,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ContinentServiceImpl implements ContinentService {
 
+    @Autowired
     private ContinentRepository continentRepository;
 
     @Override

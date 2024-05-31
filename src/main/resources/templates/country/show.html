@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Country SHOW</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1 style="text-align: center">COUNTRY SHOW</h1>
+
+<!--    <p th:text="${country}"></p>-->
+    <h2 th:text="${country.getCountryEn}"></h2>
+    <div style="float: left">
+        <textarea th:text="${json}" rows="15" cols="33" style="font-family: inherit; resize: none; color: black" disabled></textarea><br>
+<!--        <p th:text="${country.countryPl}"></p>-->
+    </div>
+    <div>
+        <img th:src="@{'/images/flags/' + ${country.getCountryEn} + '.png'}" style="width: 150px"/>
+    </div>
+
+</div>
+</body>
+</html>

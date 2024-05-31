@@ -1,0 +1,34 @@
+<header th:fragment="showModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: lightgray">
+                <h1 class="modal-title" id="exampleModalLabel">Country: <span th:text="${country.countryEn}"></span></h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: antiquewhite">
+                <b>Kontynent: </b><span th:text="${country.continents.continentEn}"></span><br>
+                <div>
+                    <img th:src="@{'/images/flags/' + ${country.getCountryEn} + '.png'}" style="width: 150px"/>
+                </div>
+                <b>Id: </b><span th:text="${country.id}"></span><br>
+                <b>Country En: </b><span th:text="${country.countryEn}"></span><br>
+                <b>Country Pl: </b><span th:text="${country.countryPl}"></span><br>
+                <b>Capital City: </b><span th:text="${country.capital_city}"></span><br>
+                <b>Alfa 2: </b><span th:text="${country.alfa_2}"></span><br>
+                <b>Alfa 3: </b><span th:text="${country.alfa_3}"></span><br>
+                <b>Numeric Code: </b><span th:text="${country.numeric_code}"></span><br>
+                <b>Iso Code: </b><span th:text="${country.iso_code}"></span><br>
+                <b>Exist: </b><span th:text="${country.exists}"></span><br>
+                <b><label>Description:</label></b><br>
+                <span th:text="${country.description}"></span>
+            </div>
+            <div class="modal-footer" style="background: lightgray">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</header>
