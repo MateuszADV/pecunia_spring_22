@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Country SHOW</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <h1 style="text-align: center">CURRENCY SHOW</h1>
+    <div style="display: flex;">
+        <a th:replace="~{fragments/button/_button-back :: back(back = '/currency/list/' + ${currency.countries.id})}"></a>
+    </div>
+<!--    <p th:text="${country}"></p>-->
+    <h2 th:text="${currency.countries.getCountryEn}"></h2>
+    <div style="float: left">
+        <textarea th:text="${json}" rows="25" cols="33" style="font-family: inherit; resize: none; color: black" disabled></textarea><br>
+<!--        <p th:text="${country.countryPl}"></p>-->
+    </div>
+    <div>
+        <img th:src="@{'/images/flags/' + ${currency.countries.getCountryEn} + '.png'}" style="width: 150px"/>
+    </div>
+
+</div>
+</body>
+</html>

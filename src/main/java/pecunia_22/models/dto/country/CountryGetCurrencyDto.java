@@ -2,8 +2,10 @@ package pecunia_22.models.dto.country;
 
 import lombok.*;
 import pecunia_22.models.dto.continent.ContinentDto;
+import pecunia_22.models.dto.currency.CurrencyDto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,5 +29,5 @@ public class CountryGetCurrencyDto {
     private Timestamp updated_at;
 
     private ContinentDto continents;
-//    private List<CurrencyDto> currencyDtos;
+    private List<CurrencyDto> currencyDtos;
 }

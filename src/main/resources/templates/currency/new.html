@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Country New</title>
+</head>
+    <body>
+        <div layout:fragment="content" class="container">
+            <h1 style="text-align: center">CURRENCY NEW</h1>
+
+            <form th:action="@{/currency/new}" method="post" th:object="${currencyForm}">
+                <div th:replace="~{currency/_form :: form}"></div>
+                <div>
+                    <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

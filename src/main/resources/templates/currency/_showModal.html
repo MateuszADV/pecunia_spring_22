@@ -1,0 +1,37 @@
+<header th:fragment="showModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: lightgray">
+                <h1 class="modal-title" id="exampleModalLabel">Currency</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="background: antiquewhite">
+                <div class="container" style="text-align: center; margin-top: 15px">
+                    <img th:src="@{'/images/flags/' + ${currency.countries.countryEn} + '.png'}" style="width: 100px"/><br>
+                    <h5 th:text="${country.countryEn}"></h5>
+                </div>
+                <b>Id: </b><span th:text="${currency.id}"></span><br>
+                <b>Cod: </b><span th:text="${currency.cod}"></span><br>
+                <b>Patern: </b><span th:text="${currency.pattern}"></span><br>
+                <b>Currency: </b><span th:text="${currency.currency}"></span><br>
+                <b>Change: </b><span th:text="${currency.change}"></span><br>
+                <b>Active:</b><br>
+                <b>- Active Code: </b><span th:text="${currency.actives.activeCod}"></span><br>
+                <b>- Name: </b><span th:text="${currency.actives.name}"></span><br>
+                <b>Currency Series: </b><span th:text="${currency.currencySeries}"></span><br>
+                <b>Pattern:</b><br>
+                <b>- Pattern: </b><span th:text="${currency.patterns.pattern}"></span><br>
+                <b>- Name: </b><span th:text="${currency.patterns.name}"></span><br>
+                <b><label>Description:</label></b><br>
+                <span th:text="${currency.description}"></span>
+            </div>
+            <div class="modal-footer" style="background: lightgray">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</header>
