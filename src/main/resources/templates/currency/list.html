@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Country</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">LISTA WALUT DANEGO PAńSTWA</h1>
+            <hr class="my-2">
+            <div class="container" style="text-align: center; margin-top: 15px">
+                <img th:src="@{'/images/flags/' + ${country.countryEn} + '.png'}" style="width: 100px"/><br>
+                <h5 th:text="${country.countryEn}"></h5>
+            </div>
+            <hr class="my-2">
+            <div style="display: flex;">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/currency')}"></a>
+            </div>
+            <a th:href="@{'/currency/new/' + '?countryId=' + ${country.id}}" class="btn btn-sm btn-primary">Add Currency to [[${country.countryEn}]]</a>
+            <div th:if="${country.getCurrencyDtos.size} == 0">
+                <hr class="my-2">
+                <h3>Brak Dodanych walut do państwa - [[${country.getCurrencyDtos.size}]]</h3>
+            </div>
+            <hr class="my-2">
+            <table class="table table-bordered table-hover table-sm">
+                <thead class="thead-dark">
+                <tr>
+                    <!--                <th>CON</th>-->
+                    <th>Lp:</th>
+                    <th>ID</th>
+                    <th>Pattern</th>
+                    <th>Seria</th>
+                    <th style="width: 160px">Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <Block th:each="currency, i : ${country.getCurrencyDtos}">
+                    <tr th:class="${currency.patterns.pattern}">
+                        <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
+                        <td th:text="${(i.index + 1)}" class="pt-1 pb-1"></td>
+                        <td th:text="${currency.id}" class="pt-1 pb-1"></td>
+                        <td th:text="${currency.patterns.pattern}" class="pt-1 pb-1"></td>
+                        <td class="pt-1 pb-1" style="font-size: 12px">
+                            [[${currency.currencySeries}]]  ([[${currency.id}]])
+                        </td>
+                        <td class="pt-1 pb-1">
+                            <a th:href="@{'/currency/show/' + ${currency.id}}" class="btn btn-sm btn-info" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#currency-' + ${currency.id}" >SHOW</a>
+                            <div class="modal fade" th:attr="id= 'currency-' + ${currency.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div th:replace="~{currency/_showModal :: showModal}"></div>
+                            </div>
+                            <a th:href="@{'/currency/edit/' + ${currency.id}}" class="btn btn-sm btn-primary" style="font-size: 10px">EDIT</a>
+                            <a th:href="@{'/currency/delete/' + ${currency.id} + '/' + ${country.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">DELETE</a>
+                        </td>
+                    </tr>
+                </Block>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+<!--        <div>-->
+<!--            <lu>-->
+<!--                <block th:each="currency : ${country.getCurrencies}">-->
+<!--                    <li th:text="${currency.id} + ' - ' + ${currency.pattern} + ' - ' + ${currency.currencySeries}"></li>-->
+<!--                </block>-->
+<!--            </lu>-->
+<!--        </div>-->
+
+
+
+<!--        <a th:href="@{/country/new}" class="btn btn-sm btn-primary">Add new Country</a>-->
+
+    </div>
+</body>
+</html>
