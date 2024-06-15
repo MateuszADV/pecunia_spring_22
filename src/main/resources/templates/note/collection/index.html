@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>CONTINENT</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">CONTINENT</h1>
+            <hr class="my-2">
+            <div>
+                <div class="row">
+                    <Block th:each="continent : ${continents}">
+                        <div class="col-sm-2" style="text-align: center; max-width: 100%">
+                            <div calss="container" style="margin: 15px">
+                                <a th:href="@{'/note/collection/country/?selectContinent=' + ${continent.continentEn}}">
+                                    <img th:src="@{'/images/continents/' + ${continent.code} + '.png'}" style="width: 150px"/>
+                                </a><br>
+                                <!--                            <span th:text="${continent.total}"></span>-->
+                            </div>
+                        </div>
+                    </Block>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
