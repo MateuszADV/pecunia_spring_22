@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Note Future</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Future Notes</h1>
+            <hr class="my-2">
+            <div style="display: flex;">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/future')}"></a>
+            </div>
+            <hr class="my-2">
+            <div class="container">
+                <Block th:each="note : ${futureNotesList}">
+                    <div class="container row bg-sell" style="background: lightgray; border-bottom: solid;border-color: darkgray;">
+                        <div class="page-header col-md-1" style="border-right: solid;border-color: darkgray;">
+                            <B>Id: [[${note.noteId}]] </B>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="modal-body row" style=" margin: 0px;">
+                                <div style="float: left; text-align: center; padding: 10px 10px 10px 10px">
+                                    <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#NoteAvers' + ${note.noteId}" >
+                                        <img th:src="${note.aversPath}" style="max-width: 100%; max-height: 150px"/>
+                                    </a>
+                                    <div class="modal fade" th:attr="id= 'NoteAvers' + ${note.noteId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{note/futureNote/_showModal :: showModal(image = ${note.aversPath})}"></div>
+                                    </div>
+                                </div>
+                                <hr class="my-2" style="border-color: black; width: 100%">
+                                <div style="float: left;  text-align: center; padding: 10px 10px 10px 10px">
+                                    <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#NoteReverse' + ${note.noteId}" >
+                                        <img th:src="${note.reversePath}" style="max-width: 100%; max-height: 150px"/>
+                                    </a>
+                                    <div class="modal fade" th:attr="id= 'NoteReverse' + ${note.noteId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{note/futureNote/_showModal :: showModal(image = ${note.reversePath})}"></div>
+                                    </div>
+                                </div>
+                                <hr class="my-2" style="border-color: black; width: 100%">
+                            </div>
+                            <div th:if="${note.width} != null">
+                                <strong>Dimension: </strong>
+                                <span th:text="${#numbers.formatDecimal(note.width,1,0)}"></span>
+                                <span> x </span>
+                                <span th:text="${#numbers.formatDecimal(note.height,1,0)}"></span>
+                                <span>mm</span>
+                            </div>
+                        </div>
+                        <div class="page-header col-md-6" >
+                            <strong th:text="${note.countryEn} + ':'"> </strong>
+                            <span th:text="${note.denomination >= 1 ? #numbers.formatDecimal(note.denomination,1,0,'COMMA') :  #numbers.formatDecimal(note.denomination,1,2,'COMMA')} + ' ' + ${note.nameCurrency}"></span><br>
+                            <strong>Date: </strong>
+                            <span th:text="${note.itemDate}"></span><br>
+                            <strong>Quality: </strong>
+                            <span th:text="${note.qualities.quality}"></span><br>
+                            <strong>Quantity: </strong>
+                            <span th:text="${note.quantity}"></span>
+                            <!--                        <span data-toggle="tooltip" data-placement="left" th:title="${note.qualities.description}"-->
+                            <!--                        style="background: red; color: black; padding: 0px 2px 0px 2px; text-decoration: none; cursor: help;"  >?</span>-->
+                            <br>
+                            <strong>Quantity: </strong>
+                            <!--                        <span th:text="${note.quantity} + ${note.unitQuantity}"></span><br>-->
+                            <span sec:authorize="hasAuthority('ADMIN')">
+                            <strong >Price Buy: </strong>
+                            <span th:text="${#numbers.formatDecimal(note.priceBuy,1,2)} + 'zł'"></span><br>
+                        </span>
+                            <strong>Description:</strong><br>
+                            <textarea th:readonly=true th:text="${note.description}" rows="5" style="resize: none; text-decoration: none; width: 100%; font-size: x-small; max-height: 250px"></textarea>
+                        </div>
+                        <div class="page-header col-md-2" style="border-left: solid;border-color: darkgray;">
+                            <div sec:authorize="hasAuthority('ADMIN')">
+                                przycis EDYTUJ
+                                <div style="background: orange">
+                                    <strong>Visible: </strong>
+                                    <span th:text="${note.visible}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Block>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
