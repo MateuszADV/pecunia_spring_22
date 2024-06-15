@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Note New</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">NOTE NEW</h1>
+            <hr class="my-2">
+            <form th:action="@{/note/new}" method="post" th:object="${noteForm}">
+                <div th:replace="note/_form :: form"></div>
+                <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+            </form>
+            <a th:replace="fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${noteForm.currencies.currencySeries} + '&curId=' + ${noteForm.currencies.id})"></a>
+        </div>
+    </div>
+</body>
+</html>

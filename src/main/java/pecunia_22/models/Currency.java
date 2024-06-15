@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -56,8 +57,8 @@ public class Currency {
     @JoinColumn(name = "pattern_id")
     private Pattern patterns;
 
-//    @OneToMany(mappedBy = "currencies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    private List<Note> notes;
+    @OneToMany(mappedBy = "currencies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Note> notes;
 //
 //    @OneToMany(mappedBy = "currencies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //    private List<Coin> coins;

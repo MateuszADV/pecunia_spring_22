@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Note New</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">NOTE EDIT</h1>
+            <hr class="my-2">
+            <form th:action="@{/note/edit}" method="post" th:object="${noteForm}">
+                <div>
+                    <label class="m-0">Id</label>
+                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>
+                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="created At" readonly/>
+                </div>
+                <div th:replace="note/_form :: form"></div>
+                <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
+            </form>
+            <hr class="my-2">
+            <div class="row row-cols-1" style="margin-left: 20px; margin-right: 20px; max-height: 100%">
+                <div th:replace="~{note/fragments/_lightBoxNote :: lightBox(note = ${noteInfoLightBox})}"></div>
+            </div>
+            <hr class="my-2">
+            <div style="display: block ruby">
+                <a th:replace="~{fragments/button/_button-show :: show(show = '/note/show/' + ${noteForm.id})}"></a>
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${noteForm.currencies.currencySeries} + '&curId=' + ${noteForm.currencies.id})}"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
