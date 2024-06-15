@@ -18,7 +18,7 @@
                     <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>
                     <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="created At" readonly/>
                 </div>
-                <div th:replace="note/_form :: form"></div>
+                <div th:replace="~{note/_form :: form}"></div>
                 <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
             </form>
             <hr class="my-2">
