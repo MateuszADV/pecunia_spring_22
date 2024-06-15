@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Note For Sell</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Notes</h1>
+            <hr class="my-2">
+            <div style="display: flex;">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/forSell')}"></a>
+            </div>
+            <hr class="my-2">
+            <div th:replace="~{note/fragments/_noteList :: noteList}"></div>
+        </div>
+    </div>
+</body>
+</html>
