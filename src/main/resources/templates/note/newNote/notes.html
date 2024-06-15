@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>New Notes</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h3 class="display-4" style="text-align: center">New Notes To Veryfication</h3>
+            <div style="display: flex;">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/newNotes')}"></a>
+            </div>
+            <hr class="my-2">
+            <div style="background: yellow; text-align: center">
+                <h3>Nowe banknoty do weryfikacji</h3>
+                <h4>Ilość Banknotów - [[${newNotesList.size}]]</h4>
+            </div>
+            <hr class="my-2">
+            <table class="table table-striped  table-hover" style="border-collapse: separate; border-spacing:0 20px;">
+                <Block th:each="note : ${newNotesList}">
+                    <tr>
+                        <td>
+                            <B>Id: [[${note.noteId}]] </B>
+                        </td>
+                        <td style="width:20%">
+                            <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#NoteAvers' + ${note.noteId}" >
+                                <img th:src="${note.aversPath}" style="max-width: 100%; max-height: 150px"/>
+                            </a>
+                            <div class="modal fade" th:attr="id= 'NoteAvers' + ${note.noteId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div th:replace="~{note/newNote/_showModal :: showModal}"></div>
+                            </div>
+                        </td>
+                        <td style="width:20%">
+                            <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#NoteAvers' + ${note.noteId}" >
+                                <img th:src="${note.reversePath}" style="max-width: 100%; max-height: 150px"/>
+                            </a>
+                            <div class="modal fade" th:attr="id= 'NoteAvers' + ${note.noteId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div th:replace="~{note/newNote/_showModal :: showModal}"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <strong th:text="${note.countryEn} + ':'"> </strong>
+                            <span th:text="${note.denomination >= 1 ? #numbers.formatDecimal(note.denomination,1,0,'COMMA') :  #numbers.formatDecimal(note.denomination,1,2,'COMMA')} + ' ' + ${note.nameCurrency}"></span><br>
+                            <strong>Date: </strong>
+                            <span th:text="${note.itemDate}"></span><br>
+                        </td>
+                        <td>
+                            <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/note/edit/' + ${note.noteId})}"></a>
+<!--                            <b class="btn btn-sm btn-primary">EDIT</b>-->
+                        </td>
+                    </tr>
+                </Block>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
