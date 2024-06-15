@@ -14,7 +14,7 @@
                                 <img th:src="${note.aversPath}" style="max-width: 100%; max-height: 150px"/>
                             </a>
                             <div class="modal fade" th:attr="id= 'NoteAvers' + ${note.noteId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div th:replace="note/forSell/_showModal :: showModal(image = ${note.aversPath})"></div>
+                                <div th:replace="~{note/forSell/_showModal :: showModal(image = ${note.aversPath})}"></div>
                             </div>
                         </div>
                         <hr class="my-2" style="border-color: black; width: 100%">
