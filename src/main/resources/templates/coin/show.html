@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>COIN SHOW</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">COIN SHOW</h1>
+<!--            <hr class="my-2">-->
+<!--            <div style="text-align: center">-->
+<!--                <h3 th:text="${coin.currencies.currencySeries}"></h3>-->
+<!--            </div>-->
+            <hr class="my-2">
+            <div class="container" style="display: inline-block">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/coin/coin_list/?currencySeries=' + ${coin.currencies.currencySeries} + '&curId=' + ${coin.currencies.id})}"></a>
+                <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/coin/edit/' + ${coin.id})}"></a>
+            </div>
+            <div th:replace="~{coin/fragments/_coin-show :: coin-show}"></div>
+        </div>
+    </div>
+</body>
+</html>

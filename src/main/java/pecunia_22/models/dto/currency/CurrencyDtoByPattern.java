@@ -1,6 +1,7 @@
 package pecunia_22.models.dto.currency;
 
 import lombok.*;
+import pecunia_22.models.dto.coin.CoinDtoByCurrency;
 import pecunia_22.models.dto.country.CountryDto;
 import pecunia_22.models.dto.note.NoteDtoByCurrency;
 
@@ -34,6 +35,6 @@ public class CurrencyDtoByPattern {
     Wyświetlanie walut według rodzaju (Pattern)
      */
     private List<NoteDtoByCurrency> notes;
-//    private List<CoinDtoByCurrency> coins;
+    private List<CoinDtoByCurrency> coins;
 //    private List<SecurityDtoByCurrency> securities;
 }

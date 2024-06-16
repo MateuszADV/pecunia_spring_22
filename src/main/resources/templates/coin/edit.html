@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Coin Edit</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <div class="jumbotron">
+        <h1 style="text-align: center">COIN EDIT</h1>
+        <hr class="my-2">
+        <form th:action="@{/coin/edit}" method="post" th:object="${coinForm}">
+            <div>
+                <label class="m-0">Id</label>
+                <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>
+                <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" readonly th:type="hidden"/>
+            </div>
+            <div th:replace="~{coin/_form :: form}"></div>
+            <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
+        </form>
+        <hr class="my-2">
+        <div class="row row-cols-1" style="margin-left: 20px; margin-right: 20px; max-height: 100%" >
+            <div th:replace="~{coin/fragments/_lightBoxCoin :: lightBox(coin = ${coinInfoLightBox})}"></div>
+            <div class="container col field" style="padding: 10px 10px 10px 10px">
+            </div>
+        </div>
+        <hr class="my-2">
+        <div class="container" style="display: inline-block">
+            <a th:replace="~{fragments/button/_button-show :: show(show = '/coin/show/' + ${coinForm.id})}"></a>
+            <a th:replace="~{fragments/button/_button-back :: back(back = '/coin/coin_list/?currencySeries=' + ${coinForm.currencies.currencySeries} + '&curId=' + ${coinForm.currencies.id})}"></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
