@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Coin For Sell</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Coins</h1>
+            <hr class="my-2">
+                <div style="display: flex;">
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/coin/forSell')}"></a>
+                </div>
+            <hr class="my-2">
+            <div class="container">
+                <Block th:each="coin : ${forSellCoinsList}">
+                    <div class="container row bg-sell" style="background: lightgray; border-bottom: solid;border-color: darkgray;">
+                        <div class="page-header col-md-1" style="border-right: solid;border-color: darkgray;">
+                            <B>Id: [[${coin.coinId}]] </B>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="modal-body row" style=" margin: 0px;">
+                                <div style="float: left; text-align: center; padding: 10px 10px 10px 10px">
+                                    <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#CoinAvers' + ${coin.coinId}" >
+                                        <img th:src="${coin.aversPath}" style="max-width: 100%; max-height: 150px"/>
+                                    </a>
+                                    <div class="modal fade" th:attr="id= 'CoinAvers' + ${coin.coinId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{coin/forSell/_showModalc :: showModal(image = ${coin.aversPath})}"></div>
+                                    </div>
+                                </div>
+                                <hr class="my-2" style="border-color: black; width: 100%">
+                                <div style="float: left;  text-align: center; padding: 10px 10px 10px 10px">
+                                    <a class="btn" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#CoinReverse' + ${coin.coinId}" >
+                                        <img th:src="${coin.reversePath}" style="max-width: 100%; max-height: 150px"/>
+                                    </a>
+                                    <div class="modal fade" th:attr="id= 'CoinReverse' + ${coin.coinId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{coin/forSell/_showModalc :: showModal(image = ${coin.reversePath})}"></div>
+                                    </div>
+                                </div>
+                                <hr class="my-2" style="border-color: black; width: 100%">
+                            </div>
+                            <div th:if="${coin.diameter} != null">
+                                <strong>Dimension: </strong><br>
+                                <strong>Diameter: </strong>
+                                <span th:text="${#numbers.formatDecimal(coin.diameter,1,0)}"></span>
+                                <span>mm</span><br>
+                                <strong>Thickness: </strong>
+                                <span th:text="${#numbers.formatDecimal(coin.thickness,1,0)}"></span>
+                                <span>mm</span><br>
+                                <strong>Weight: </strong>
+                                <span th:text="${#numbers.formatDecimal(coin.weight,1,0)}"></span>
+                                <span>g</span>
+                            </div>
+                        </div>
+                        <div class="page-header col-md-6" >
+                            <h4>Opis Monety</h4>
+                            <strong th:text="${coin.countryEn} + ':'"> </strong>
+                            <span th:text="${coin.denomination >= 1 ? #numbers.formatDecimal(coin.denomination,1,0,'COMMA') :  #numbers.formatDecimal(coin.denomination,1,2,'COMMA')} + ' ' + ${coin.nameCurrency}"></span><br>
+                            <strong>Date: </strong>
+                            <span th:text="${coin.itemDate}"></span><br>
+                            <strong>Quality: </strong>
+                            <span th:text="${coin.qualities.quality}"></span>
+                            <span data-toggle="tooltip" data-placement="left" th:title="${coin.qualities.description}"
+                                  style="background: red; color: black; padding: 0px 2px 0px 2px; text-decoration: none; cursor: help;"  >?</span>
+                            <br>
+                            <strong>Quantity: </strong>
+                            <span th:text="${coin.quantity} + ${coin.unitQuantity}"></span><br>
+                            <span sec:authorize="hasAuthority('ADMIN')">
+                            <strong >Price Buy: </strong>
+                            <span th:text="${#numbers.formatDecimal(coin.priceBuy,1,2)} + 'zł'"></span><br>
+                        </span>
+                            <strong>Price Sell: </strong>
+                            <span th:text="${#numbers.formatDecimal(coin.priceSell,1,2)} + 'zł'"></span><br>
+
+                            <strong>Composition:</strong><br>
+                            <textarea th:readonly=true th:text="${coin.composition}" rows="5" style="resize: none; text-decoration: none; width: 100%; font-size: x-small; max-height: 250px"></textarea>
+
+                            <strong>Description:</strong><br>
+                            <textarea th:readonly=true th:text="${coin.description}" rows="5" style="resize: none; text-decoration: none; width: 100%; font-size: x-small; max-height: 250px"></textarea>
+                        </div>
+                        <div class="page-header col-md-2" style="border-left: solid;border-color: darkgray;">
+                            <div sec:authorize="hasAuthority('ADMIN')">
+                                <div style="display: flex">
+                                    <a th:replace="~{fragments/button/_button-edit_icon_small :: edit_icon_small(edit = '/coin/edit/' + ${coin.coinId})}"></a>
+                                </div>
+                                <hr class="my-2" style="border-color: black; width: 100%">
+                                <div style="background: orange">
+                                    <strong>Visible: </strong>
+                                    <span th:text="${coin.visible}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Block>
+            </div>
+        </div>
+        </div>
+</body>
+</html>
