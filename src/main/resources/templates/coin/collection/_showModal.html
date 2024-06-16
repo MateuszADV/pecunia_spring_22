@@ -1,0 +1,37 @@
+<header th:fragment="showModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: lightgray">
+                <h3 class="modal-title" id="exampleModalLabel" th:text="${coin.currencies.currencySeries}"></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row" style="background: aliceblue; margin: 0px; display: flex; justify-content: center;">
+                <div style="float: left; text-align: center; padding: 10px 10px 10px 10px">
+                    <img th:src="${coin.aversPath}" style="max-width: 100%; max-height: 350px"/>
+                </div>
+                <div style="float: left;  text-align: center; padding: 10px 10px 10px 10px">
+                    <img th:src="${coin.reversePath}" style="max-width: 100%; max-height: 350px"/>
+                </div>
+            </div>
+            <div class="container" style="text-align: left">
+                <hr style="margin: 0; border-color: black">
+                <span th:text="${coin.denomination >= 1 ? #numbers.formatDecimal(coin.denomination,1,0,'COMMA') :  #numbers.formatDecimal(coin.denomination,1,2,'COMMA')} + ' ' + ${coin.nameCurrency}"></span><br>
+                <strong>Diameter: </strong>
+                <span th:text="${#numbers.formatDecimal(coin.diameter,1,0)} + 'mm'"></span><br>
+                <strong>Thickness: </strong>
+                <span th:text="${#numbers.formatDecimal(coin.thickness,1,0)} + 'mm'"></span><br>
+                <strong>Weight: </strong>
+                <span th:text="${#numbers.formatDecimal(coin.weight,1,2)} + 'g'"></span><br>
+                <strong>Quality: </strong>
+                <span th:text="${coin.qualities.quality}"></span><br>
+            </div>
+            <div class="modal-footer" style="background: lightgray">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</header>
