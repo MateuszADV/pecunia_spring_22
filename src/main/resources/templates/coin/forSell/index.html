@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Coin For Sell Country</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">COUNTRIES</h1>
+            <a th:href="@{'/coin/forSell/list/'}" class="btn btn-sm btn-info" style="font-size: 10px">Coin For Sell List</a>
+            <hr class="my-2">
+            <div class="container">
+                <div class="row">
+                    <Block th:each="country : ${countryByStatusList}">
+                        <div class="col-sm-2" style="width: 170px">
+                            <div calss="container" style="margin: 15px; width: 160px">
+                                <a th:href="@{'/coin/forSell/country/coins/' + ${country.countryId}}">
+                                    <img th:src="@{'/images/flags/' + ${country.countryEn} + '.png'}" style="width: 80px; max-height: 60px"/><br>
+                                    <span th:text="${country.countryEn + '(' + country.total + ')'}" style="font-size: small; display: flex"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </Block>
+                </div>
+            </div>
+            <hr class="my-2">
+        </div>
+    </div>
+</body>
+</html>

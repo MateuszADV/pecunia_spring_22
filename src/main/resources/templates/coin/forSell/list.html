@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Coin For Sell List</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Coin</h1>
+            <hr class="my-2">
+            <div class="container">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead class="thead-dark">
+                    <tr>
+                        <!--                <th>CON</th>-->
+                        <th>Lp:</th>
+                        <th>Id</th>
+                        <th>Country</th>
+                        <th>Denomination</th>
+                        <th>Currency</th>
+                        <th>Price Buy</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Bought</th>
+                        <th>Image</th>
+                        <th style="width: 150px">Akcja</th>
+                    </tr>
+                    </thead>
+                    <tbody th:with="totalPrice=0">
+                    <Block th:each="coin, i : ${forSellCoinsList}">
+                        <p th:with="totalPrice=${totalPrice + (coin.priceBuy * coin.quantity)}"></p>
+                        <tr>
+                            <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
+                            <td th:text="${i.index +1}"></td>
+                            <td th:text="${coin.coinId}"></td>
+                            <td th:text="${coin.countryEn}"></td>
+                            <td th:text="${#numbers.formatDecimal(coin.denomination,1,2)}"></td>
+                            <td th:text="${coin.nameCurrency}"></td>
+                            <td th:text="${#numbers.formatDecimal(coin.priceBuy,1,2)}"></td>
+                            <td th:text="${coin.quantity}"></td>
+                            <td th:text="${#numbers.formatDecimal((coin.priceSell),1,2) }"></td>
+                            <td th:text="${coin.bought}"></td>
+                            <td class="p-0 m-0" style="width: 100px">
+                                <div style="display: flex; justify-content: center" data-toggle="modal" th:attr="data-target='#CoinAvers' + ${coin.coinId}">
+                                    <div th:replace="~{fragments/_image-small :: image-small(image = ${coin.aversPath})}"></div>
+                                    <div th:replace="~{fragments/_image-small :: image-small(image = ${coin.reversePath})}"></div>
+                                </div>
+                                <div class="modal fade" th:attr="id= 'CoinAvers' + ${coin.coinId}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div th:replace="~{coin/newCoin/_showModal :: showModal}"></div>
+                                </div>
+                            </td>
+                            <td class="pt-1 pb-1">
+                                <a th:href="@{'/coin/edit/' + ${coin.coinId}}" class="btn btn-sm btn-primary" style="font-size: 10px">EDIT</a>
+                            </td>
+                        </tr>
+                    </Block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
