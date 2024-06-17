@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <title>Country</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h2 class="display-4" style="text-align: center" >SECURITIES COLECTION</H2>
+            <hr class="my-2">
+            <H4 th:text="${securities[0].currencies.currencySeries}" style="text-align: center; background: cornflowerblue" ></H4>
+            <hr class="my-2">
+            <div th:replace="~{fragments/_flag :: flag(country = ${securities[0].currencies.countries.countryEn})}"></div>
+            <hr class="my-2">
+            <div style="display: flex;">
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/security/collection/currency/?selectCountryId=' + ${securities[0].currencies.countries.id})}"></a>
+            </div>
+            <hr class="my-2">
+            <div class="form-row align-items-center">
+                <div class="form-row align-items-center">
+                    <th:block th:each="security : ${securities}">
+                        <div class="col-auto note-box">
+                            <div >
+                                <a th:href="@{'/security/collection/show/' + ${security.id}}" data-toggle="modal" th:attr="data-target='#Security-' + ${security.id}"
+                                   style="display: flex; justify-content: center">
+                                    <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.aversPath})}"></div>
+                                    <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.reversePath})}"></div>
+                                </a>
+                                <div class="modal fade" th:attr="id= 'Security-' + ${security.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div th:replace="~{security/collection/_showModal :: showModal}"></div>
+                                </div>
+                            </div>
+                            <div style="text-align: left; font-size: small">
+                                <span th:text="${security.denomination >= 1 ? #numbers.formatDecimal(security.denomination,1,0,'COMMA') :  #numbers.formatDecimal(security.denomination,1,2,'COMMA')} + ' ' + ${security.nameCurrency}"></span><br>
+                                <span th:text="${'Year: ' + security.itemDate}"></span><br>
+                                <span th:text="${'Quality: ' + security.qualities.quality}"></span><br>
+                                <span th:text="${'Status: ' + security.statuses.status}"></span>
+                                <div sec:authorize="hasAuthority('ADMIN')">
+                                    <!--                                    This content is only shown to ADMIN.-->
+                                    <p th:text="${'Visible: ' + security.visible}"></p>
+                                </div>
+                                <div style="margin-bottom: 5px">
+                                    <a th:href="@{'/security/collection/show/' + ${security.id}}" class="btn btn-sm btn-info" style="font-size: 10px">SHOW</a>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <hr class="my-2">
+            <div th:if="${totalPages} > 1">
+                <div th:replace="~{fragments/_pagination :: pagination(currencyId = ${securities[0].currencies.id})}"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
