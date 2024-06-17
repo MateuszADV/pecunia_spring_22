@@ -1,0 +1,70 @@
+<div th:fragment="security-show"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <hr class="my-2">
+    <div class="container">
+        <div style="text-align: center">
+            <h3 th:text="${security.currencies.currencySeries}"></h3>
+        </div>
+        <hr class="my-2">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+            <div class="col field " style="float: left">
+                <strong>Id: </strong>
+                <span th:text="${security.id}"></span><br>
+                <strong>Date Buy: </strong>
+                <span th:text="${security.dateBuy}"></span><br>
+                <strong>Bought: </strong>
+                <span th:if=" ${security.boughts} != null">
+                            <span th:text="${security.boughts.name}"></span>
+                        </span><br>
+                <strong>Visible: </strong>
+                <span th:text="${security.visible}"></span><br>
+                <strong>Created: </strong>
+                <span th:text="*{#calendars.format(security.created_at,'yyyy-MM-dd HH:mm:ss')}"></span><br>
+                <strong>Updated: </strong>
+                <span th:text="*{#calendars.format(security.updated_at,'yyyy-MM-dd HH:mm:ss')}"></span>
+                <hr class="my-2">
+            </div>
+            <div class="col field" style="float: left">
+                <strong>Denomination: </strong>
+                <span th:text="${#numbers.formatDecimal(security.denomination,1,0,'COMMA')}"></span>
+                <span th:text="${security.nameCurrency}"></span><br>
+                <strong>Data: </strong>
+                <span th:text="${security.itemDate}"></span><br>
+                <strong>Series: </strong>
+                <span th:text="${security.series}"></span><br>
+                <strong>Making: </strong>
+                <span th:text="${security.makings.making}"></span><br>
+                <strong>Image Type</strong>
+                <span th:text="${security.imageTypes.type}"></span><br>
+                <strong>Quality: </strong>
+                <span th:text="${security.qualities.quality}"></span><br>
+                <strong>Quantity: </strong>
+                <span th:text="${security.quantity}"></span>
+                <span th:text="${security.unitQuantity}"></span><br>
+                <strong> Actives: </strong>
+                <span th:text="${security.actives.name}"></span>
+                <hr class="my-2">
+            </div>
+            <div class="col field" style="float: left">
+                <strong>Width: </strong>
+                <span th:text="${#numbers.formatDecimal(security.width,1,0)} + 'mm'"></span><br>
+                <strong>Height: </strong>
+                <span th:text="${#numbers.formatDecimal(security.height,1,0)} + 'mm'"></span><br>
+                <strong>Price Buy: </strong>
+                <span th:text="${#numbers.formatDecimal(security.priceBuy,1,2)} + 'zł'"></span><br>
+                <strong>Price Sell: </strong>
+                <span th:text="${#numbers.formatDecimal(security.priceSell,1,2)} + 'zł'"></span><br>
+                <strong>Status: </strong>
+                <span th:text="${security.statuses.status}"></span><br>
+                <strong>Status Sell: </strong>
+                <span th:text="${security.statusSell}"></span>
+                <hr class="my-2">
+            </div>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div th:replace="security/fragments/_lightBoxSecurity :: lightBox"></div>
+    <div class="col field" style="padding: 10px 0px 10px 0px">
+        <textarea th:text="${security.description}" style="width: 100%; height: 150px; background: darkgray; resize: none" disable></textarea>
+    </div>
+</div>

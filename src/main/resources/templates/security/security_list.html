@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Security Currency</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron" style="padding-top: 10px">
+            <h1 class="display-4" style="text-align: center">Security</h1>
+            <hr class="my-2">
+                <div th:replace="~{fragments/_flag :: flag(country = ${currency.countries.countryEn})}"></div>
+                <hr class="my-2">
+            <div th:if="${securities.size} > 0">
+
+            <div style="text-align: center">
+                    <h3 th:text="${securities[0].currencies.currencySeries}"></h3>
+                </div>
+                <hr class="my-2">
+                <H3>Ilość Papierów wartościowych - [[${securities.size}]] </H3>
+                <hr class="my-2">
+            </div>
+                <div class="container" style="display: inline-block">
+                    <a th:href="@{'/security/new/?curId=' + ${currency.id}}" class="btn btn-sm btn-primary mr-1" style="float: left">Add new Security</a>
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/security/currency/' + ${currency.countries.countryEn})}"></a>
+                </div>
+
+            <hr class="my-2">
+            <div class="container">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead class="thead-dark">
+                    <tr>
+                        <!--                <th>CON</th>-->
+                        <th>Lp:</th>
+                        <th>Id</th>
+                        <th>Denomination</th>
+                        <th>Currency</th>
+                        <th>Status</th>
+                        <th>Image</th>
+                        <th style="width: 156px">Akcja</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <Block th:each="security, i : ${securities}">
+                        <tr>
+                            <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
+                            <td th:text="${i.index +1}"></td>
+                            <td th:text="${security.id}"></td>
+                            <td th:text="${#numbers.formatDecimal(security.denomination,1,2)}"></td>
+                            <td th:text="${security.nameCurrency}"></td>
+                            <td th:text="${security.statuses.status}"></td>
+                            <td class="p-0 m-0" style="width: 100px">
+                                <div style="display: flex; justify-content: center">
+                                    <div th:replace="~{fragments/_image-small :: image-small(image = ${security.aversPath})}"></div>
+                                    <div th:replace="~{fragments/_image-small :: image-small(image = ${security.reversePath})}"></div>
+                                </div>
+                            </td>
+                            <td class="pt-1 pb-1">
+                                <a th:replace="~{fragments/button/_button-show_icon_small :: show_icon_small(show = '/security/show/' + ${security.id})}"></a>
+                                <a th:replace="~{fragments/button/_button-edit_icon_small :: edit_icon_small(edit = '/security/edit/' + ${security.id})}"></a>
+<!--                                <a th:replace="fragments/button/_button-delete_icon_small :: delete_icon_small(delete = '/security/delete/' + ${security.id})"></a>-->
+                                <a th:href="@{'/security/delete/' + ${security.id}}" class="btn btn-sm btn-danger" style="font-size: 10px; float: right" data-toggle="modal" th:attr="data-target='#security' + ${security.id}" >DELETE</a>
+                                <div class="modal fade" th:attr="id= 'security' + ${security.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div th:replace="~{security/_confirmDeleteModal :: confirmDeleteModal}"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </Block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+<!--        <h3 th:text="${currency.countries.countryEn}"></h3>-->
+
+
+
+    </div>
+</body>
+</html>

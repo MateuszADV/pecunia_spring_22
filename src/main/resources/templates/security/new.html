@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Security New</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">SECURITY NEW</h1>
+            <hr class="my-2">
+            <form th:action="@{/security/new}" method="post" th:object="${securityForm}">
+                <div th:replace="~{security/_form :: form}"></div>
+                <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+            </form>
+            <a th:replace="~{fragments/button/_button-back :: back(back = '/security/security_list/?currencySeries=' + ${securityForm.currencies.currencySeries} + '&curId=' + ${securityForm.currencies.id})}"></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -4,6 +4,7 @@ import lombok.*;
 import pecunia_22.models.dto.coin.CoinDtoByCurrency;
 import pecunia_22.models.dto.country.CountryDto;
 import pecunia_22.models.dto.note.NoteDtoByCurrency;
+import pecunia_22.models.dto.security.SecurityDtoByCurrency;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -36,5 +37,5 @@ public class CurrencyDtoByPattern {
      */
     private List<NoteDtoByCurrency> notes;
     private List<CoinDtoByCurrency> coins;
-//    private List<SecurityDtoByCurrency> securities;
+    private List<SecurityDtoByCurrency> securities;
 }
