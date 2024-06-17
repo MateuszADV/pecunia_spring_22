@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Security Edit</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">SECURITY EDIT</h1>
+            <hr class="my-2">
+            <form th:action="@{/security/edit}" method="post" th:object="${securityForm}">
+                <div th:replace="security/_form :: form"></div>
+                <div class="form-row align-items-center">
+                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" readonly th:type="hidden" />
+                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="created At" readonly th:type="hidden" />
+                </div>
+                <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
+            </form>
+            <hr class="my-2">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                    <img th:src="${securityForm.aversPath}" style="max-width: 100%; max-height: 350px"/>
+                </div>
+                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                    <img th:src="${securityForm.reversePath}" style="max-width: 100%; max-height: 350px"/>
+                </div>
+
+                <div class="container col field" style="padding: 10px 10px 10px 10px">
+                </div>
+            </div>
+            <hr class="my-2">
+            <div style="display: block ruby">
+<!--                <a th:replace="fragments/button/_button-show :: show(show = '/security/show/' + ${securityForm.id})"></a>-->
+                <a th:replace="fragments/button/_button-back :: back(back = '/security/security_list/?currencySeries=' + ${securityForm.currencies.currencySeries} + '&curId=' + ${securityForm.currencies.id})"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
