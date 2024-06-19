@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Order Item</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Item For Sell</h1>
+
+            <div style="background: lightgreen">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#note" role="tab">Notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#coin" role="tab">Coins</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#bond" role="tab">Bonds</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Other</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tab panes -->
+            <div class="tab-content" style="background: darkgray">
+                <div class="tab-pane active shadow" id="note" role="tabpanel">
+                    <div th:replace="~{orderItem/_noteForSell :: forSell}"></div>
+                </div>
+                <div class="tab-pane shadow" id="coin" role="tabpanel">
+                    <div th:replace="~{orderItem/_coinForSell :: forSell}"></div>
+                </div>
+                <div class="tab-pane shadow" id="bond" role="tabpanel">
+                    <div th:replace="~{orderItem/_securityForSell :: forSell}"></div>
+                </div>
+                <div class="tab-pane" id="settings" role="tabpanel">
+                    <h3 style="text-align: center"> BRAK ELEMENTÓW DO WYśWITLENIA</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

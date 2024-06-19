@@ -1,0 +1,21 @@
+<header th:fragment="show"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <b>Currency: </b>
+    <span th:text="${orderItem.securities.denomination}"></span>
+    <span th:text="${orderItem.securities.nameCurrency}"></span>
+    <div th:if="${orderItem.securities.width} != null">
+        <b>Dimensions: </b>
+        <span th:text="${orderItem.securities.width}"></span>
+        <span>x</span>
+        <span th:text="${orderItem.securities.height}"></span>
+    </div>
+    <hr class="my-2">
+    <div style="text-align: center">
+        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+            <img th:src="${orderItem.securities.aversPath}" style="max-width: 49%; max-height: 350px"/>
+            <img th:src="${orderItem.securities.reversePath}" style="max-width: 49%; max-height: 350px"/>
+        </div>
+    </div>
+
+</header>

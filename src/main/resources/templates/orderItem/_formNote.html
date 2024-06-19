@@ -1,0 +1,102 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+
+<!--    <span th:text="${orderItemForm.orders}"></span><br>-->
+<!--    <span th:text="${orderForm.customers.lastName}"></span><br>-->
+<!--    <span th:text="${orderForm.customers.city}"></span><br>-->
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label class="m-0">Id Order</label>
+            <input type="text" th:field="*{orders.id}" th:readonly="id" class="form-control form-control-sm mb-1" style="width: auto"/>
+        </div>
+        <div class="col-auto">
+            <label class="m-0">Number Order</label>
+            <input th:value="${orderItemForm.orders.numberOrder}" th:readonly="numberOrder" class="form-control form-control-sm mb-1" style="width: auto"/>
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label class="m-0">Id</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{notes.id}" th:readonly="note.id"  placeholder="Pattern"  />
+        </div>
+        <div class="col-auto">
+            <label class="m-0">Pattern</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{pattern}" th:readonly="pattern"  placeholder="Pattern"  />
+        </div>
+        <div class="col-auto">
+            <label class="m-0">Id country</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{countries.id}" th:readonly="note.id"  placeholder="Country"  />
+        </div>
+        <div class="col-auto">
+            <label class="m-0">Country</label><br>
+            <b class="form-control form-control-sm mb-2" type="text" th:text="${orderItemForm.notes.currencies.countries.countryEn}" th:readonly="pattern"></b>
+        </div>
+    </div>
+    <hr class="my-2">
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label class="m-0">Country</label><br>
+                <b th:text="${orderItemForm.notes.currencies.countries.countryEn}" class="form-control form-control-sm mb-1" style="width: auto"></b>
+            </div>
+            <div class="col-auto">
+                <label class="m-0">Currency</label><br>
+                <b th:text="${orderItemForm.notes.denomination + orderItemForm.notes.nameCurrency}" class="form-control form-control-sm mb-1" style="width: auto"></b>
+            </div>
+            <div class="col-auto">
+<!--            <b th:text="${orderItemForm.notes.nameCurrency}" class="form-control form-control-sm mb-1" style="width: auto"></b>-->
+                <label class="m-0">Date</label><br>
+                <b th:text="${orderItemForm.notes.itemDate}" class="form-control form-control-sm mb-1" style="width: auto"></b>
+            </div>
+        </div>
+    <hr class="my-2">
+    <div class="form-row align-items-center">
+        <div class="col-md-1">
+            <label class="m-0">Availabla</label><br>
+            <b th:text="${orderItemForm.notes.quantity + orderItemForm.notes.unitQuantity }" class="form-control form-control-sm mb-2" type="text"  readonly></b>
+        </div>
+        <div class="col-md-1">
+            <label class="m-0">Quantity</label><br>
+            <input class="form-control form-control-sm mb-2" type="number" th:field="*{quantity}" min="1" th:max="${orderItemForm.notes.quantity}" placeholder="quantity"/>
+            <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{quantity}" ></span>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <label class="m-0">Unit</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{unitQuantity}" th:readonly="unitQuantity" style="width: 40px" placeholder="Unit"  />
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row align-items-center">
+        <div class="col-md-2">
+            <label class="m-0">Price</label><br>
+            <b th:text="${orderItemForm.notes.priceSell}" class="form-control form-control-sm mb-2" type="text"  readonly></b>
+        </div>
+        <div class="col-md-2">
+            <label class="m-0">Final Price</label>
+            <input class="form-control form-control-sm mb-2" type="number" min="0.00" step="0.01"  th:field="*{finalPrice}" placeholder="0.00">
+            <div th:if="${#fields.hasErrors('finalPrice')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{finalPrice}" ></span>
+            </div>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row align-items-center">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                <img th:src="${orderItemForm.notes.aversPath}" style="max-width: 100%; max-height: 350px"/>
+            </div>
+            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                <img th:src="${orderItemForm.notes.reversePath}" style="max-width: 100%; max-height: 350px"/>
+            </div>
+
+            <div class="container col field" style="padding: 10px 10px 10px 10px">
+                <div class="col">
+                    <label class="m-0">Description</label>
+                    <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-2">
+</header>
