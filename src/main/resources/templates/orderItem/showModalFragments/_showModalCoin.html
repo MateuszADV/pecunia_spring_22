@@ -1,0 +1,26 @@
+<header th:fragment="show"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <b>Currency: </b>
+    <span th:text="${orderItem.coins.denomination}"></span>
+    <span th:text="${orderItem.coins.nameCurrency}"></span>
+    <div th:if="${orderItem.coins.diameter} != null">
+        <b>Diameter: </b>
+        <span th:text="${orderItem.coins.diameter}"></span>
+        <span>mm</span><br>
+        <b>Thickness: </b>
+        <span th:text="${orderItem.coins.thickness}"></span>
+        <span>mm</span><br>
+        <b>Weight: </b>
+        <span th:text="${orderItem.coins.weight}"></span>
+        <span>gr</span><br>
+    </div>
+    <hr class="my-2">
+    <div style="text-align: center">
+        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+            <img th:src="${orderItem.coins.aversPath}" style="max-width: 49%; max-height: 350px"/>
+            <img th:src="${orderItem.coins.reversePath}" style="max-width: 49%; max-height: 350px"/>
+        </div>
+    </div>
+
+</header>

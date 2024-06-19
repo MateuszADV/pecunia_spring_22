@@ -1,0 +1,22 @@
+<header th:fragment="show"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <b>Currency: </b>
+    <span th:text="${orderItem.notes.denomination}"></span>
+    <span th:text="${orderItem.notes.nameCurrency}"></span><br>
+    <div th:if="${orderItem.notes.width} != null">
+        <b>Dimensions: </b>
+        <span th:text="${orderItem.notes.width}"></span>
+        <span>x</span>
+        <span th:text="${orderItem.notes.height}"></span>
+    </div>
+    <hr class="my-2">
+    <div style="text-align: center">
+        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+            <img th:src="${orderItem.notes.aversPath}" style="max-width: 49%; max-height: 350px"/>
+
+            <img th:src="${orderItem.notes.reversePath}" style="max-width: 49%; max-height: 350px"/>
+        </div>
+    </div>
+
+</header>
