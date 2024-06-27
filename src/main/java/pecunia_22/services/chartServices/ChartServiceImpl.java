@@ -80,11 +80,24 @@ public class ChartServiceImpl implements ChartService {
         Map<String, Object> mapObject = getYamlToObj(report);
         JSONObject jsonObject = new JSONObject(mapObject);
 
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX START XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println(jsonObject);
+        System.out.println(JsonUtils.gsonPretty(objects));
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<String> labels = new ArrayList();
         List<Integer> data = new ArrayList();
         for (Object[] object : objects) {
-            labels.add(object[0].toString());
-            data.add(Integer.valueOf(object[1].toString()));
+            if (object[0] instanceof String) {
+                System.out.println(object[0]);
+                System.out.println("Powinno byc NULL");
+                labels.add(object[0].toString());
+                data.add(Integer.valueOf(object[1].toString()));
+            } else {
+                labels.add("NULL");
+                data.add(Integer.valueOf(object[1].toString()));
+                System.out.println("Nie powinien byc NULL");
+            }
+
         }
         jsonObject.getJSONObject("chart").put("labels", labels);
         jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);

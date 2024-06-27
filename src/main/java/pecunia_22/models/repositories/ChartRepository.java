@@ -51,7 +51,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_note_bought() {
-        Query query = entityManager.createQuery("SELECT bou.name, COUNT(note.boughts) FROM Note note" +
+        Query query = entityManager.createQuery("SELECT bou.name, COUNT(CASE WHEN note.boughts IS NULL THEN 1 ELSE 0 END) FROM Note note" +
                 "  LEFT JOIN Bought bou" +
                 "    ON bou = note.boughts" +
                 " GROUP BY bou.name");
@@ -60,7 +60,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_notes_bought_country(String country) {
-        Query query = entityManager.createQuery("SELECT bou.name, COUNT(note.boughts) FROM Note note" +
+        Query query = entityManager.createQuery("SELECT bou.name, COUNT(CASE WHEN note.boughts IS NULL THEN 1 ELSE 0 END) FROM Note note" +
                 "  LEFT JOIN Currency cur" +
                 "    ON note.currencies = cur" +
                 "  LEFT JOIN Country  cou" +
