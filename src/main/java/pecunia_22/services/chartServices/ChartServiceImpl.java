@@ -88,14 +88,11 @@ public class ChartServiceImpl implements ChartService {
         List<Integer> data = new ArrayList();
         for (Object[] object : objects) {
             if (object[0] instanceof String) {
-                System.out.println(object[0]);
-                System.out.println("Powinno byc NULL");
                 labels.add(object[0].toString());
                 data.add(Integer.valueOf(object[1].toString()));
             } else {
                 labels.add("NULL");
                 data.add(Integer.valueOf(object[1].toString()));
-                System.out.println("Nie powinien byc NULL");
             }
 
         }

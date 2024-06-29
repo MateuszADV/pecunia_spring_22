@@ -13,7 +13,7 @@ public class ChartRepository {
     private EntityManager entityManager;
 
     public List<Object[]> my_report_continents_test() {
-        Query query = entityManager.createQuery("SELECT con.continentEn, COUNT(cou.continent) FROM Country cou " +
+        Query query = entityManager.createQuery("SELECT con.continentEn, COUNT(CASE WHEN cou.continent IS NULL THEN 1 ELSE 0 END) FROM Country cou " +
                 "LEFT JOIN Continent con " +
                 "ON cou.continents = con " +
                 "GROUP BY con.continentEn");
@@ -22,7 +22,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_note_currency_country(String country) {
-        Query query = entityManager.createQuery("SELECT cur.currencySeries, COUNT(note.currencies) FROM Note note" +
+        Query query = entityManager.createQuery("SELECT cur.currencySeries, COUNT(CASE WHEN note.currencies IS NULL THEN 1 ELSE 0 END) FROM Note note" +
                 "  LEFT JOIN Currency cur" +
                 "    ON note.currencies = cur" +
                 "  LEFT JOIN Country  cou" +
@@ -34,7 +34,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_object_status() {
-        Query query = entityManager.createQuery("SELECT stat.status, COUNT(note.statuses) FROM Note note" +
+        Query query = entityManager.createQuery("SELECT stat.status, COUNT(CASE WHEN note.statuses IS NULL THEN 1 ELSE 0 END) FROM Note note" +
                 "  LEFT JOIN Status stat" +
                 "    ON stat = note.statuses" +
                 " GROUP BY stat.status, note.statuses");
@@ -43,7 +43,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_coins_composition() {
-        Query query = entityManager.createQuery("SELECT coin.composition, COUNT(coin.composition) FROM Coin coin" +
+        Query query = entityManager.createQuery("SELECT coin.composition, COUNT(CASE WHEN coin.composition IS NULL THEN 1 ELSE 0 END) FROM Coin coin" +
                 " GROUP BY coin.composition" +
                 " ORDER BY coin.composition DESC ");
         List<Object[]> objects = query.getResultList();
@@ -90,7 +90,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_coin_bought() {
-        Query query = entityManager.createQuery("SELECT bou.name, COUNT(coin.boughts) FROM Coin coin" +
+        Query query = entityManager.createQuery("SELECT bou.name, COUNT(CASE WHEN coin.boughts IS NULL THEN 1 ELSE 0 END) FROM Coin coin" +
                 "  LEFT JOIN Bought bou" +
                 "    ON bou = coin.boughts" +
                 " GROUP BY bou.name");
@@ -99,7 +99,7 @@ public class ChartRepository {
     }
 
     public List<Object[]> my_report_coins_bought_country(String country) {
-        Query query = entityManager.createQuery("SELECT bou.name, COUNT(coin.boughts) FROM Coin coin" +
+        Query query = entityManager.createQuery("SELECT bou.name, COUNT(CASE WHEN coin.boughts IS NULL THEN 1 ELSE 0 END) FROM Coin coin" +
                 "  LEFT JOIN Currency cur" +
                 "    ON coin.currencies = cur" +
                 "  LEFT JOIN Country  cou" +
