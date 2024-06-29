@@ -4,12 +4,15 @@ package pecunia_22.services.apiService;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
-import org.apache.catalina.WebResource;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import utils.JsonUtils;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -133,5 +136,64 @@ public class ApiServiceImpl implements ApiService {
 
         }
         return getRateCurrencyTableA;
+    }
+
+    @Override
+    public GetMetalSymbol getMetalSymbol(String url) {
+        List<MetalSymbol> getSymbols = new ArrayList<>();
+        GetMetalSymbol getMetalSymbol = new GetMetalSymbol();
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        try {
+            Invocation.Builder webResource = webResource(url);
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray = new JSONArray(stringJson);
+            System.out.println(JsonUtils.gsonPretty(jsonArray));
+            System.out.println(jsonArray.length());
+            System.out.println(jsonArray.getJSONObject(0).get("symbol").toString());
+
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(webResource.accept("application/json").get().getStatusInfo());
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                MetalSymbol getSymbol = new MetalSymbol();
+                getSymbol.setSymbol(jsonArray.getJSONObject(i).get("symbol").toString());
+                getSymbol.setName(jsonArray.getJSONObject(i).get("name").toString());
+                getSymbols.add(getSymbol);
+            }
+
+            getMetalSymbol.setMetalSymbols(getSymbols);
+            getMetalSymbol.setApiResponseInfo(apiResponseInfo);
+            System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+            return getMetalSymbol;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbol) {
+        System.out.println(url);
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        MetalRate metalRate = new MetalRate();
+        System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+        try {
+            Invocation.Builder webResource = webResource(url + getMetalSymbol.getMetalSymbols().get(0).getSymbol());
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            String stringJson = webResource.get(String.class);
+            JSONObject jsonObject = new JSONObject(stringJson);
+            System.out.println(JsonUtils.gsonPretty(jsonObject));
+            metalRate.setSymbol(jsonObject.getString("symbol").toString());
+            metalRate.setName(jsonObject.getString("name").toString());
+            metalRate.setPrice(jsonObject.getFloat("price"));
+            metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
+            metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
+
+            System.out.println(metalRate);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

@@ -7,7 +7,6 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import lombok.AllArgsConstructor;
-import org.json.JSONArray;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import pecunia_22.models.dto.UserRegistration;
+import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
@@ -183,5 +183,19 @@ public class HomeController {
 
         System.out.println("---------------------TEST STOP------------------------");
         return "home/test";
+    }
+
+    @GetMapping("/metal")
+    public String getMetal(ModelMap modelMap){
+        modelMap.addAttribute("standardDate", new Date());
+        modelMap.addAttribute("metalRate","Metal Rate TEst");
+        String url = "https://api.gold-api.com/symbols";
+        apiService.getMetalSymbol(url);
+
+        GetMetalSymbol getMetalSymbol = apiService.getMetalSymbol(url);
+
+        apiService.getMetalRate("https://api.gold-api.com/price/", getMetalSymbol);
+
+        return "home/metal";
     }
 }
