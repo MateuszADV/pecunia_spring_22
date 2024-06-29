@@ -26,11 +26,15 @@ public class ChartApiController {
 
     public ChartRepository chartRepository;
 
-    @GetMapping("/report")
+    @GetMapping("/report/")
     public ResponseEntity<Object> getReport(@RequestParam("report") String report,
                                             @RequestParam("param") Optional<String> param) {
 
         System.out.println("PPPPPPPPPPPPPPPPPPPPP START PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+        System.out.println(report);
+        System.out.println(param);
+        System.out.println("PPPPPPPPPPPPPPPPPPPPP STOP PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+
 
         List<ReportMethod> reportMethods = chartService.reportMethodList(ChartRepository.class);
 
@@ -39,7 +43,7 @@ public class ChartApiController {
 
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println(JsonUtils.gsonPretty(reportMethodStream.get()));
-        System.out.println((reportMethodStream.get().getName().replace("_", " ")).replace("my report ", ""));
+        System.out.println((reportMethodStream.get().getName().replace("my_report ", "").replace("_", " ")));
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
         if (param.isPresent() && reportMethodStream.get().getQuality() == 1) {
