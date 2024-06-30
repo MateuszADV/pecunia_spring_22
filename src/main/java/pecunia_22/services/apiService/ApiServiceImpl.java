@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
 import utils.JsonUtils;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ApiServiceImpl implements ApiService {
@@ -79,7 +78,7 @@ public class ApiServiceImpl implements ApiService {
     public Invocation.Builder webResource(String url) {
         Client client = ClientBuilder.newClient();
         Invocation.Builder webResource = client.target(url).request();
-
+//        System.out.println(webResource.get().getHeaders().toString());
         if (webResource.get().getStatus() == 200) {
             return webResource;
         }
@@ -176,24 +175,50 @@ public class ApiServiceImpl implements ApiService {
     public GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbol) {
         System.out.println(url);
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
-        MetalRate metalRate = new MetalRate();
-        System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+        GetMetalRate getMetalRate = new GetMetalRate();
+        List<MetalRate> metalRates = new ArrayList<>();
+//        System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+        Invocation.Builder webResource = null;
         try {
-            Invocation.Builder webResource = webResource(url + getMetalSymbol.getMetalSymbols().get(0).getSymbol());
-            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
-            String stringJson = webResource.get(String.class);
-            JSONObject jsonObject = new JSONObject(stringJson);
-            System.out.println(JsonUtils.gsonPretty(jsonObject));
-            metalRate.setSymbol(jsonObject.getString("symbol").toString());
-            metalRate.setName(jsonObject.getString("name").toString());
-            metalRate.setPrice(jsonObject.getFloat("price"));
-            metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
-            metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
+            for (MetalSymbol metalSymbol : getMetalSymbol.getMetalSymbols()) {
+                webResource = webResource(url + metalSymbol.getSymbol());
+                apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+                String stringJson = webResource.get(String.class);
+                JSONObject jsonObject = new JSONObject(stringJson);
+//                System.out.println(JsonUtils.gsonPretty(jsonObject));
 
-            System.out.println(metalRate);
-        }catch (Exception e) {
+                MetalRate metalRate = new MetalRate();
+                metalRate.setSymbol(jsonObject.getString("symbol").toString());
+                metalRate.setName(jsonObject.getString("name").toString());
+                metalRate.setPrice(jsonObject.getFloat("price"));
+                metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
+                metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
+
+                metalRates.add(metalRate);
+            }
+
+            getMetalRate.setApiResponseInfo(apiResponseInfo);
+            getMetalRate.setMetalRates(metalRates);
+
+            metalRate(getMetalRate);
+            return getMetalRate;
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    private void metalRate(GetMetalRate getMetalRate) {
+        System.out.println(JsonUtils.gsonPretty(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString()));
+
+        if (Objects.equals(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString(), "OK")) {
+            System.out.println("_________________________________________________________________________________________________________________________");
+            System.out.printf("|- %-10s | %-10s | %-15s | %-40s | %-30s |%n", "Symbol", "Name", "Price", "UpdatedAt", "updatedAtReadable");
+            for (MetalRate metalRate : getMetalRate.getMetalRates()) {
+                System.out.println("|------------------------------------------------------------------------------------------------------------------------|");
+                System.out.printf("|- %-10s | %-10s | %-15s | %-40s | %-30s |%n", metalRate.getSymbol(), metalRate.getName(), metalRate.getPrice(), metalRate.getUpdateAt(), metalRate.getUpdatedAtReadable());
+            }
+            System.out.println("|------------------------------------------------------------------------------------------------------------------------|");
+        }
     }
 }

@@ -16,6 +16,10 @@
     <div class="jumbotron">
         <h1 th:text="${#dates.format(standardDate, 'yyyy-MM-dd HH:mm')}" style="text-align: center"></h1>
         <h1 th:text="${metalRate}" style="text-align: center"></h1>
+        <p th:text="${metalPrice.getApiResponseInfo().getResponseStatusInfo().getStatusCode()}"></p>
+<!--        <div th:if="${metalPrice.getApiResponseInfo().getResponseStatusInfo().getStatusCode() == 200}">-->
+<!--            <p> WSZYSTKO OK</p>-->
+<!--        </div>-->
     </div>
 </div>
 </body>

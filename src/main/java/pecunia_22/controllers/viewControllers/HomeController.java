@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import pecunia_22.models.dto.UserRegistration;
+import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
 import pecunia_22.registration.RegistrationRequest;
@@ -190,12 +191,13 @@ public class HomeController {
         modelMap.addAttribute("standardDate", new Date());
         modelMap.addAttribute("metalRate","Metal Rate TEst");
         String url = "https://api.gold-api.com/symbols";
-        apiService.getMetalSymbol(url);
+//        apiService.getMetalSymbol(url);
 
         GetMetalSymbol getMetalSymbol = apiService.getMetalSymbol(url);
 
-        apiService.getMetalRate("https://api.gold-api.com/price/", getMetalSymbol);
+        GetMetalRate getMetalRate = apiService.getMetalRate("https://api.gold-api.com/price/", getMetalSymbol);
 
+        modelMap.addAttribute("metalPrice", getMetalRate);
         return "home/metal";
     }
 }
