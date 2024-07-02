@@ -173,6 +173,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbol) {
+        Long startA = System.currentTimeMillis();
         System.out.println(url);
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
         GetMetalRate getMetalRate = new GetMetalRate();
@@ -183,11 +184,7 @@ public class ApiServiceImpl implements ApiService {
             for (MetalSymbol metalSymbol : getMetalSymbol.getMetalSymbols()) {
                 Long start = System.currentTimeMillis();
                 webResource = webResource(url + metalSymbol.getSymbol());
-                Long stop = System.currentTimeMillis();
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-                System.out.println(stop - start);
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-                apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+
                 String stringJson = webResource.get(String.class);
                 JSONObject jsonObject = new JSONObject(stringJson);
 //                System.out.println(JsonUtils.gsonPretty(jsonObject));
@@ -199,15 +196,24 @@ public class ApiServiceImpl implements ApiService {
                 metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
                 metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
 
-
-
                 metalRates.add(metalRate);
+                Long stop = System.currentTimeMillis();
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+                System.out.println(stop - start);
+                System.out.println( " - - - CZAS - - -  ");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
             }
 
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             getMetalRate.setApiResponseInfo(apiResponseInfo);
             getMetalRate.setMetalRates(metalRates);
 
             metalRate(getMetalRate);
+            Long stopA = System.currentTimeMillis();
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+            System.out.println(stopA - startA);
+            System.out.println("CZAS-A");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
             return getMetalRate;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -216,6 +222,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     private void metalRate(GetMetalRate getMetalRate) {
+        Long startB = System.currentTimeMillis();
         System.out.println(JsonUtils.gsonPretty(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString()));
 
         if (Objects.equals(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString(), "OK")) {
@@ -227,5 +234,10 @@ public class ApiServiceImpl implements ApiService {
             }
             System.out.println("|------------------------------------------------------------------------------------------------------------------------|");
         }
+        Long stopB = System.currentTimeMillis();
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+        System.out.println(stopB - startB);
+        System.out.println("CZAS-B");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
     }
 }
