@@ -89,6 +89,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetRateCurrencyTableA getRateCurrencyTableA(String url, String[] codes) {
+        Long startNBP = System.currentTimeMillis();
         GetRateCurrencyTableA getRateCurrencyTableA = new GetRateCurrencyTableA();
         Exchange exchange = new Exchange();
         List<Rate> rates = new ArrayList<>();
@@ -130,6 +131,8 @@ public class ApiServiceImpl implements ApiService {
             getRateCurrencyTableA.setExchange(exchange);
             getRateCurrencyTableA.getExchange().setRates(rates);
             getRateCurrencyTableA.setApiResponseInfo(apiResponseInfo);
+            Long stopNBP = System.currentTimeMillis();
+            System.out.println(stopNBP-startNBP);
         }catch (Exception e) {
             System.out.println(e.getMessage());
 
