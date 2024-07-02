@@ -181,7 +181,12 @@ public class ApiServiceImpl implements ApiService {
         Invocation.Builder webResource = null;
         try {
             for (MetalSymbol metalSymbol : getMetalSymbol.getMetalSymbols()) {
+                Long start = System.currentTimeMillis();
                 webResource = webResource(url + metalSymbol.getSymbol());
+                Long stop = System.currentTimeMillis();
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+                System.out.println(stop - start);
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
                 apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
                 String stringJson = webResource.get(String.class);
                 JSONObject jsonObject = new JSONObject(stringJson);
@@ -193,6 +198,8 @@ public class ApiServiceImpl implements ApiService {
                 metalRate.setPrice(jsonObject.getFloat("price"));
                 metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
                 metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
+
+
 
                 metalRates.add(metalRate);
             }
