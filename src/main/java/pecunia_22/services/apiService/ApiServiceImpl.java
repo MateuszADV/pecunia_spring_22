@@ -4,6 +4,7 @@ package pecunia_22.services.apiService;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -248,12 +249,30 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public GetMoneyMetals getMoneyMetal(String url) {
 
+//        Client client = ClientBuilder.newClient();
+//        Invocation.Builder webResource = client.target(url).request();
+//        Invocation.Builder webResource = client.target(url);
+//        System.out.println(webResource.get().getStatus());
+//        System.out.println(webResource.get().getDate());
+//        System.out.println(JsonUtils.gsonPretty(webResource.get().getEntity()));
+//        System.out.println(webResource.get().getStatusInfo());
+//        System.out.println(JsonUtils.gsonPretty(webResource.get().getHeaders()));
+//        System.out.println(webResource.get());
+
+//        System.out.println(client.target(url).request());
+
         Client client = ClientBuilder.newClient();
-        Invocation.Builder webResource = client.target(url).request();
-        System.out.println(webResource.get().getStatus());
-        System.out.println(webResource.get().getDate());
-        System.out.println(JsonUtils.gsonPretty(webResource.get().getEntity()));
-        System.out.println(webResource);
+        String entity = client.target("https://www.moneymetals.com/api/spot-prices.json")
+                .request(MediaType.APPLICATION_JSON).header("application/json", "true").get(String.class);
+
+        String json = entity.toString();
+        JSONObject jsonObject = new JSONObject(json);
+        System.out.println(JsonUtils.gsonPretty(jsonObject));
+        System.out.println(jsonObject.getLong("time"));
+        System.out.println(jsonObject.getJSONObject("spot_prices").length());
+//        String jsonArra = jsonObject.get("spot_prices").toString();
+//        System.out.println(jsonObject.get("spot_prices"));
+//        String objects = jsonArra;
 
         return null;
     }
