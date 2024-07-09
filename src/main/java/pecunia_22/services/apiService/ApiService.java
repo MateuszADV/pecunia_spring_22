@@ -3,8 +3,8 @@ package pecunia_22.services.apiService;
 import jakarta.ws.rs.client.Invocation;
 import org.glassfish.jersey.client.ClientResponse;
 import org.springframework.stereotype.Service;
-import pecunia_22.models.others.GetApiMetal;
-import pecunia_22.models.others.GetRateCurrencyTableA;
+import pecunia_22.models.others.*;
+import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 
 @Service
 public interface ApiService {
@@ -13,4 +13,7 @@ public interface ApiService {
 
     Invocation.Builder webResource(String url);
     GetRateCurrencyTableA getRateCurrencyTableA(String url, String[] codes);
+    GetMetalSymbol getMetalSymbol(String url);
+    GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbols);
+    GetMoneyMetals getMoneyMetal(String url);
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Metal Price</title>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+
+    <div class="container" style="text-align: center">
+        <img src="images/pecunia.png" style="width: 100px"/>
+        <img src="images/logo2.png" style="width: 15%"/>
+
+    </div>
+    <div class="jumbotron">
+        <h1 th:text="${#dates.format(standardDate, 'yyyy-MM-dd HH:mm')}" style="text-align: center"></h1>
+        <h1 th:text="${metalRate}" style="text-align: center"></h1>
+        <p th:text="${metalPrice.getApiResponseInfo().getResponseStatusInfo().getStatusCode()}"></p>
+<!--        <div th:if="${metalPrice.getApiResponseInfo().getResponseStatusInfo().getStatusCode() == 200}">-->
+<!--            <p> WSZYSTKO OK</p>-->
+<!--        </div>-->
+        <div th:if="${metalPrice.getApiResponseInfo().getResponseStatusInfo().getStatusCode()} == 200 ">
+            <table class="table table-striped table-bordered table-hover table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <td>Symbol</td>
+                        <td>Name</td>
+                        <td>Price</td>
+                        <td>UpdatedAt</td>
+                        <td>Updated At Readable </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <Block th:each="metal, i : ${metalPrice.getMetalRates()}">
+                        <tr>
+                            <td th:text="${metal.getSymbol()}"></td>
+                            <td th:text="${metal.getName()}"></td>
+                            <td th:text="${metal.getPrice()}"></td>
+                            <td th:text="${metal.getUpdateAt()}"></td>
+                            <td th:text="${metal.getUpdatedAtReadable()}"></td>
+                        </tr>
+                    </Block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

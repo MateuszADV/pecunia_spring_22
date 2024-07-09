@@ -4,15 +4,18 @@ package pecunia_22.services.apiService;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
-import org.apache.catalina.WebResource;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
+import utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ApiServiceImpl implements ApiService {
@@ -76,7 +79,7 @@ public class ApiServiceImpl implements ApiService {
     public Invocation.Builder webResource(String url) {
         Client client = ClientBuilder.newClient();
         Invocation.Builder webResource = client.target(url).request();
-
+//        System.out.println(webResource.get().getHeaders().toString());
         if (webResource.get().getStatus() == 200) {
             return webResource;
         }
@@ -87,6 +90,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetRateCurrencyTableA getRateCurrencyTableA(String url, String[] codes) {
+        Long startNBP = System.currentTimeMillis();
         GetRateCurrencyTableA getRateCurrencyTableA = new GetRateCurrencyTableA();
         Exchange exchange = new Exchange();
         List<Rate> rates = new ArrayList<>();
@@ -128,10 +132,129 @@ public class ApiServiceImpl implements ApiService {
             getRateCurrencyTableA.setExchange(exchange);
             getRateCurrencyTableA.getExchange().setRates(rates);
             getRateCurrencyTableA.setApiResponseInfo(apiResponseInfo);
+            Long stopNBP = System.currentTimeMillis();
+            System.out.println(stopNBP-startNBP);
         }catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
         return getRateCurrencyTableA;
+    }
+
+    @Override
+    public GetMetalSymbol getMetalSymbol(String url) {
+        List<MetalSymbol> getSymbols = new ArrayList<>();
+        GetMetalSymbol getMetalSymbol = new GetMetalSymbol();
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        try {
+            Invocation.Builder webResource = webResource(url);
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray = new JSONArray(stringJson);
+            System.out.println(JsonUtils.gsonPretty(jsonArray));
+            System.out.println(jsonArray.length());
+            System.out.println(jsonArray.getJSONObject(0).get("symbol").toString());
+
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(webResource.accept("application/json").get().getStatusInfo());
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                MetalSymbol getSymbol = new MetalSymbol();
+                getSymbol.setSymbol(jsonArray.getJSONObject(i).get("symbol").toString());
+                getSymbol.setName(jsonArray.getJSONObject(i).get("name").toString());
+                getSymbols.add(getSymbol);
+            }
+
+            getMetalSymbol.setMetalSymbols(getSymbols);
+            getMetalSymbol.setApiResponseInfo(apiResponseInfo);
+            System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+            return getMetalSymbol;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbol) {
+        Long startA = System.currentTimeMillis();
+        System.out.println(url);
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        GetMetalRate getMetalRate = new GetMetalRate();
+        List<MetalRate> metalRates = new ArrayList<>();
+//        System.out.println(JsonUtils.gsonPretty(getMetalSymbol));
+        Invocation.Builder webResource = null;
+        try {
+            for (MetalSymbol metalSymbol : getMetalSymbol.getMetalSymbols()) {
+                Long start = System.currentTimeMillis();
+                webResource = webResource(url + metalSymbol.getSymbol());
+
+                String stringJson = webResource.get(String.class);
+                JSONObject jsonObject = new JSONObject(stringJson);
+//                System.out.println(JsonUtils.gsonPretty(jsonObject));
+
+                MetalRate metalRate = new MetalRate();
+                metalRate.setSymbol(jsonObject.getString("symbol").toString());
+                metalRate.setName(jsonObject.getString("name").toString());
+                metalRate.setPrice(jsonObject.getFloat("price"));
+                metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
+                metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
+
+                metalRates.add(metalRate);
+                Long stop = System.currentTimeMillis();
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+                System.out.println(stop - start);
+                System.out.println( " - - - CZAS - - -  ");
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+            }
+
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            getMetalRate.setApiResponseInfo(apiResponseInfo);
+            getMetalRate.setMetalRates(metalRates);
+
+            metalRate(getMetalRate);
+            Long stopA = System.currentTimeMillis();
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+            System.out.println(stopA - startA);
+            System.out.println("CZAS-A");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+            return getMetalRate;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private void metalRate(GetMetalRate getMetalRate) {
+        Long startB = System.currentTimeMillis();
+        System.out.println(JsonUtils.gsonPretty(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString()));
+
+        if (Objects.equals(getMetalRate.getApiResponseInfo().getResponseStatusInfo().toString(), "OK")) {
+            System.out.println("_________________________________________________________________________________________________________________________");
+            System.out.printf("|- %-10s | %-10s | %-15s | %-40s | %-30s |%n", "Symbol", "Name", "Price", "UpdatedAt", "updatedAtReadable");
+            for (MetalRate metalRate : getMetalRate.getMetalRates()) {
+                System.out.println("|------------------------------------------------------------------------------------------------------------------------|");
+                System.out.printf("|- %-10s | %-10s | %-15s | %-40s | %-30s |%n", metalRate.getSymbol(), metalRate.getName(), metalRate.getPrice(), metalRate.getUpdateAt(), metalRate.getUpdatedAtReadable());
+            }
+            System.out.println("|------------------------------------------------------------------------------------------------------------------------|");
+        }
+        Long stopB = System.currentTimeMillis();
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+        System.out.println(stopB - startB);
+        System.out.println("CZAS-B");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+    }
+
+    @Override
+    public GetMoneyMetals getMoneyMetal(String url) {
+
+        Client client = ClientBuilder.newClient();
+        Invocation.Builder webResource = client.target(url).request();
+        System.out.println(webResource.get().getStatus());
+        System.out.println(webResource.get().getDate());
+        System.out.println(JsonUtils.gsonPretty(webResource.get().getEntity()));
+        System.out.println(webResource);
+
+        return null;
     }
 }
