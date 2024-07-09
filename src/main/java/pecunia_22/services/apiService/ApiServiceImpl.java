@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -242,5 +243,18 @@ public class ApiServiceImpl implements ApiService {
         System.out.println(stopB - startB);
         System.out.println("CZAS-B");
         System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+    }
+
+    @Override
+    public GetMoneyMetals getMoneyMetal(String url) {
+
+        Client client = ClientBuilder.newClient();
+        Invocation.Builder webResource = client.target(url).request();
+        System.out.println(webResource.get().getStatus());
+        System.out.println(webResource.get().getDate());
+        System.out.println(JsonUtils.gsonPretty(webResource.get().getEntity()));
+        System.out.println(webResource);
+
+        return null;
     }
 }

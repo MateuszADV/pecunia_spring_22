@@ -200,4 +200,11 @@ public class HomeController {
         modelMap.addAttribute("metalPrice", getMetalRate);
         return "home/metal";
     }
+
+    @GetMapping("/moneyMetal")
+    public String getMonyeMetal(ModelMap modelMap) {
+
+        apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        return "home/moneyMetal";
+    }
 }
