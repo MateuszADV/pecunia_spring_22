@@ -20,6 +20,7 @@ import pecunia_22.models.dto.UserRegistration;
 import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
+import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
 import pecunia_22.security.config.UserCheckLoged;
@@ -204,7 +205,10 @@ public class HomeController {
     @GetMapping("/moneyMetal")
     public String getMonyeMetal(ModelMap modelMap) {
 
-        apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        modelMap.addAttribute("rates", getMoneyMetals);
+
+
         return "home/moneyMetal";
     }
 }

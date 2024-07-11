@@ -2,6 +2,7 @@ package pecunia_22.models.others.moneyMetals;
 
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -10,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class GetMoneyMetals {
-    private Long time;
+    private Date time;
     private List<MoneyMetal> moneyMetalList;
 }
