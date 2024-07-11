@@ -246,9 +246,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetMoneyMetals getMoneyMetal(String url) {
-        Client client = ClientBuilder.newClient();
-        String entity = client.target("https://www.moneymetals.com/api/spot-prices.json")
-                .request(MediaType.APPLICATION_JSON).header("application/json", "true").get(String.class);
+        final String entity = getJsonString();
 
         GetMoneyMetals getMoneyMetals = new GetMoneyMetals();
         List<MoneyMetal> moneyMetals = new ArrayList<>();
@@ -257,41 +255,49 @@ public class ApiServiceImpl implements ApiService {
             String json = entity.toString();
             JSONObject jsonObject = new JSONObject(json);
             System.out.println(JsonUtils.gsonPretty(jsonObject));
-            System.out.println(jsonObject.getLong("time"));
-            Long milliSec = jsonObject.getLong("time");
-            System.out.println(milliSec);
 
-//            JSONArray jsonArray = new JSONArray(jsonObject.getJSONObject("spot_prices"));
-            System.out.println(jsonObject.keys());
-            System.out.println(jsonObject.getJSONObject("spot_prices").toMap());
+            Long milliSec = jsonObject.getLong("time");
+
+//            System.out.println(jsonObject.keys());
+//            System.out.println(jsonObject.getJSONObject("spot_prices").toMap());
             Map<String, Object> rate = jsonObject.getJSONObject("spot_prices").toMap();
-            System.out.println(rate);
-            for (String key : rate.keySet()) {
-                System.out.println(key + ":" + rate.get(key));
-            }
+
+//            for (String key : rate.keySet()) {
+//                System.out.println(key + ":" + rate.get(key));
+//            }
             Date res = new Date(milliSec);
-            System.out.println(res);
-            System.out.println("=========================================================================");
-            System.out.printf("|- %-10s | %-10s |%n", "Name", "Price");
-            System.out.println("-------------------------");
+
             rate.forEach((k, v) -> {
                 moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())));
-                System.out.printf("|- %-10s | %10s |%n", k, v);
             });
 
             getMoneyMetals.setTime(res);
             getMoneyMetals.setMoneyMetalList(moneyMetals);
 
-            System.out.println(JsonUtils.gsonPretty(getMoneyMetals));
-
-            System.out.println("=========================================================================");
-
+            moneyMetal(rate);
             return  getMoneyMetals;
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
         return null;
+    }
+
+    private static String getJsonString() {
+        try {
+            Client client = ClientBuilder.newClient();
+            String entity = client.target("https://www.moneymetals.com/api/spot-prices.json")
+                    .request(MediaType.APPLICATION_JSON).header("application/json", "true").get(String.class);
+            return entity;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private void moneyMetal(Map<String, Object> rate) {
+        System.out.printf("|- %-10s | %-10s |%n", "Name", "Price");
+        System.out.println("|--------------------------|");
+        rate.forEach((k, v) -> System.out.printf("|- %-10s | %10s |%n", k, v));
+        System.out.println("|--------------------------|");
     }
 }

@@ -205,7 +205,13 @@ public class HomeController {
     @GetMapping("/moneyMetal")
     public String getMonyeMetal(ModelMap modelMap) {
 
+        Long start = System.currentTimeMillis();
         GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        Long stop = System.currentTimeMillis();
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+        System.out.println(stop - start);
+        System.out.println("-----------CZAS----------");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
         modelMap.addAttribute("rates", getMoneyMetals);
 
 

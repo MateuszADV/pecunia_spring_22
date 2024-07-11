@@ -15,8 +15,9 @@
     </div>
     <div class="jumbotron">
         <H1 style="text-align: center">------- MANEY METAL --------</H1>
-        <h4 th:text="${rates.getTime()}"></h4>
-        <div>
+
+        <div th:if="${rates != null}">
+            <h4 th:text="${rates.getTime()}"></h4>
             <table class="table table-striped table-bordered table-hover table-sm" style="width: auto">
                 <thead class="thead-dark">
                 <tr style="width: 300px">
