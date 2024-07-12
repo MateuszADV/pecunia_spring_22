@@ -20,6 +20,7 @@ import pecunia_22.models.dto.UserRegistration;
 import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
+import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
 import pecunia_22.security.config.UserCheckLoged;
@@ -204,7 +205,16 @@ public class HomeController {
     @GetMapping("/moneyMetal")
     public String getMonyeMetal(ModelMap modelMap) {
 
-        apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        Long start = System.currentTimeMillis();
+        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+        Long stop = System.currentTimeMillis();
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+        System.out.println(stop - start);
+        System.out.println("-----------CZAS----------");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+        modelMap.addAttribute("rates", getMoneyMetals);
+
+
         return "home/moneyMetal";
     }
 }

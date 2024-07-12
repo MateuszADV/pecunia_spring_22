@@ -4,18 +4,17 @@ package pecunia_22.services.apiService;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
+import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ApiServiceImpl implements ApiService {
@@ -247,14 +246,58 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetMoneyMetals getMoneyMetal(String url) {
+        final String entity = getJsonString();
 
-        Client client = ClientBuilder.newClient();
-        Invocation.Builder webResource = client.target(url).request();
-        System.out.println(webResource.get().getStatus());
-        System.out.println(webResource.get().getDate());
-        System.out.println(JsonUtils.gsonPretty(webResource.get().getEntity()));
-        System.out.println(webResource);
+        GetMoneyMetals getMoneyMetals = new GetMoneyMetals();
+        List<MoneyMetal> moneyMetals = new ArrayList<>();
 
+        try {
+            String json = entity.toString();
+            JSONObject jsonObject = new JSONObject(json);
+            System.out.println(JsonUtils.gsonPretty(jsonObject));
+
+            Long milliSec = jsonObject.getLong("time");
+
+//            System.out.println(jsonObject.keys());
+//            System.out.println(jsonObject.getJSONObject("spot_prices").toMap());
+            Map<String, Object> rate = jsonObject.getJSONObject("spot_prices").toMap();
+
+//            for (String key : rate.keySet()) {
+//                System.out.println(key + ":" + rate.get(key));
+//            }
+            Date res = new Date(milliSec);
+
+            rate.forEach((k, v) -> {
+                moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())));
+            });
+
+            getMoneyMetals.setTime(res);
+            getMoneyMetals.setMoneyMetalList(moneyMetals);
+
+            moneyMetal(rate);
+            return  getMoneyMetals;
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return null;
+    }
+
+    private static String getJsonString() {
+        try {
+            Client client = ClientBuilder.newClient();
+            String entity = client.target("https://www.moneymetals.com/api/spot-prices.json")
+                    .request(MediaType.APPLICATION_JSON).header("application/json", "true").get(String.class);
+            return entity;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private void moneyMetal(Map<String, Object> rate) {
+        System.out.printf("|- %-10s | %-10s |%n", "Name", "Price");
+        System.out.println("|--------------------------|");
+        rate.forEach((k, v) -> System.out.printf("|- %-10s | %10s |%n", k, v));
+        System.out.println("|--------------------------|");
     }
 }
