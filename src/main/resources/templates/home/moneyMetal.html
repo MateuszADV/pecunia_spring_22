@@ -16,24 +16,26 @@
     <div class="jumbotron">
         <H1 style="text-align: center">------- MANEY METAL --------</H1>
 
-        <div th:if="${rates != null}">
+        <div th:if="${rates != null}" style="text-align: -moz-center">
             <h4 th:text="${rates.getTime()}"></h4>
-            <table class="table table-striped table-bordered table-hover table-sm" style="width: auto">
-                <thead class="thead-dark">
-                <tr style="width: 300px">
-                    <td>Name</td>
-                    <td>Price</td>
-                </tr>
-                </thead>
-                <tbody>
-                <Block th:each="rate, i : ${rates.getMoneyMetalList()}">
-                    <tr>
-                        <td th:text="${rate.getName()}" style="text-align: right; padding-left: 10px"></td>
-                        <td th:text="${#numbers.formatDecimal(rate.getPrice(),1,2,'COMMA')}" style="text-align: right; padding-left: 10px"></td>
-                    </tr>
-                </Block>
-                </tbody>
-            </table>
+            <div class="mx-auto table-responsive-sm ">
+                <table class="table table-striped table-bordered table-hover table-sm" style="width: auto">
+                    <thead class="thead-dark">
+                        <tr style="width: 300px">
+                            <td>Name</td>
+                            <td>Price</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <Block th:each="rate, i : ${rates.getMoneyMetalList()}">
+                            <tr>
+                                <td th:text="${rate.getName()}" style="text-align: right; padding-left: 10px"></td>
+                                <td th:text="${#numbers.formatDecimal(rate.getPrice(),1,2,'COMMA')}" style="text-align: right; padding-left: 10px"></td>
+                            </tr>
+                        </Block>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
