@@ -21,7 +21,7 @@
                         <th>Setting</th>
                         <th>Parameter</th>
                         <th>desctiption</th>
-                        <th>Action</th>
+                        <th style="width: 160px">Action</th>
                     </tr>
                 </thead>
             <tbody>
@@ -32,14 +32,17 @@
                         <td th:text="${setting.setting}" class="pt-1 pb-1"></td>
                         <td th:text="${setting.parameter}" class="pt-1 pb-1"></td>
                         <td th:text="${setting.description}" class="pt-1 pb-1"></td>
-    <!--                    <td class="pt-1 pb-1">-->
-    <!--                        <a th:href="@{'/making/show/' + ${making.id}}" class="btn btn-sm btn-info" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#' + ${making.making} + '-' + ${making.id}" >SHOW</a>-->
-    <!--                        <div class="modal fade" th:attr="id= ${making.making} + '-' + ${making.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-    <!--                            <div th:replace="~{setting/making/_showModal :: showModal}"></div>-->
-    <!--                        </div>-->
-    <!--                        <a th:href="@{'/making/edit/' + ${making.id}}" class="btn btn-sm btn-primary" style="font-size: 10px" >EDIT</a>-->
-    <!--                        <a th:href="@{'/making/delete/' + ${making.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">Delete</a>-->
-    <!--                    </td>-->
+                        <td class="pt-1 pb-1">
+                            <a th:href="@{'/setting/show/' + ${setting.id}}" class="btn btn-sm btn-info" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#setting-' + ${setting.id}" >SHOW</a>
+                            <div class="modal fade" th:attr="id= 'setting-' + ${setting.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div th:replace="~{setting/setting/_showModal :: showModal}"></div>
+                            </div>
+                            <a th:href="@{'/setting/edit/' + ${setting.id}}" class="btn btn-sm btn-primary" style="font-size: 10px" >EDIT</a>
+                            <a th:href="@{'/setting/delete/' + ${setting.id}}" class="btn btn-sm btn-danger" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#setting' + ${setting.id}" >Delete</a>
+                            <div class="modal fade" th:attr="id= 'setting' + ${setting.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div th:replace="~{setting/setting/_confirmDeleteModal :: confirmDeleteModal}"></div>
+                            </div>
+                        </td>
                     </tr>
                 </Block>
             </tbody>

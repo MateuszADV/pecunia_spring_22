@@ -7,14 +7,18 @@
     <title>New Seting</title>
 </head>
 <body>
-<div layout:fragment="content" class="container">
-    <h1 style="text-align: center">SETTING NEW</h1>
-
-    <form th:action="@{/setting/new}" method="post" th:object="${settingForm}">
-        <div th:replace="~{setting/setting/_form :: form}"></div>
-        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
-    </form>
-
-</div>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">Setting NEW</h1>
+            <hr class="my-2">
+        <form th:action="@{/setting/new}" method="post" th:object="${settingForm}">
+            <div th:replace="~{setting/setting/_form :: form}"></div>
+            <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+        </form>
+            <div>
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/setting')}"></a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
