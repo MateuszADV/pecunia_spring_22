@@ -238,7 +238,6 @@ public class CoinController {
         for (Bought bought : boughts) {
             boughtDtos.add(new ModelMapper().map(bought, BoughtDto.class));
         }
-
         List<Active> actives = activeService.getAllActive();
         List<ActiveDtoSelect> activeDtoSelects = new ArrayList<>();
         for (Active active : actives) {

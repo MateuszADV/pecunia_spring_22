@@ -222,6 +222,7 @@ public class NoteController {
         Note note = new ModelMapper().map(noteForm, Note.class);
         noteRepository.save(note);
 
+        noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(), note.getId());
 //        return getNoteList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
         return "redirect:/note/note_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
 
