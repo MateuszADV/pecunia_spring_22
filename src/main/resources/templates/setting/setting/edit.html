@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Edit Shipping</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4" style="text-align: center">EDIT Setting</h1>
+            <hr class="my-2">
+            <div class="container">
+                <div>
+                    <form th:action="@{/setting/edit}" method="post" th:object="${settingForm}">
+                        <div class="form-row align-items-center">
+                            <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" readonly th:type="hidden" />
+                            <input class="form-control form-control-sm mb-2" type="text" th:field="*{createdAt}" placeholder="created At" readonly th:type="hidden" />
+                        </div>
+                        <div th:replace="~{setting/setting/_form :: form}"></div>
+                        <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
+                    </form>
+                </div>
+                <div>
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/setting')}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

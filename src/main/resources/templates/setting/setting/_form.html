@@ -1,0 +1,37 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+
+    <div class="form-row align-items-center">
+        <div class="col-md-4">
+            <label>Name</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{name}" placeholder="Name" />
+            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{name}" ></span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label>Setting</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{setting}" placeholder="Setting" />
+            <div th:if="${#fields.hasErrors('setting')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{setting}" ></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col">
+                <label>Parameter</label><br>
+                <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{parameter}" placeholder="Parameter"></textarea>
+<!--                <div th:if="${#fields.hasErrors('parameter')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{Parameter}" ></span>-->
+<!--                </div>-->
+        </div>
+    </div>
+    <div class="form-row align-items-center">
+        <div class="col">
+            <label>Description</label><br>
+            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+        </div>
+    </div>
+    <hr class="my-2">
+</header>
