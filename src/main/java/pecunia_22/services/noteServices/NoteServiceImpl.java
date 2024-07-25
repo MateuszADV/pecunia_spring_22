@@ -161,4 +161,11 @@ public class NoteServiceImpl implements NoteService {
         }
         return countryByStatusList;
     }
+
+    @Override
+    public void updateNote(Note note) {
+        noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(),
+                note.getBoughts().getId(), note.getItemDate(), note.getQuantity(), note.getUnitQuantity(), note.getActives().getId(), note.getPriceBuy(), note.getPriceSell(),
+                note.getId());
+    }
 }

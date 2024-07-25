@@ -208,8 +208,10 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5 " +
-                   "where note.id = ?6")
+    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5, " +
+                   "note.boughts.id = ?6, note.itemDate = ?7, note.quantity = ?8, note.unitQuantity = ?9, note.actives.id = ?10, note.priceBuy = ?11, note.priceSell = ?12 "+
+                   "where note.id = ?13")
     void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
                     Long noteId);
 }

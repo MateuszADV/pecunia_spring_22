@@ -38,6 +38,6 @@ public class Active {
     @OneToMany(mappedBy = "actives", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Currency> currencies;
 
-    @OneToMany(mappedBy = "actives", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Note> notes;
+//    @OneToMany(mappedBy = "actives", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    private List<Note> notes;
 }

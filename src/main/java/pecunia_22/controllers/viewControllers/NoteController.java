@@ -220,9 +220,12 @@ public class NoteController {
         System.out.println("++++++++++++++++++++++++++++++STOP+++++++++++++++++++++++++++++++");
 
         Note note = new ModelMapper().map(noteForm, Note.class);
-        noteRepository.save(note);
 
-        noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(), note.getId());
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+//        noteRepository.save(note);
+        noteService.updateNote(note);
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
 //        return getNoteList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
         return "redirect:/note/note_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
 
