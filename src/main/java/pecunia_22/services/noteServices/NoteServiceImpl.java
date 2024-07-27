@@ -166,6 +166,8 @@ public class NoteServiceImpl implements NoteService {
     public void updateNote(Note note) {
         noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(),
                 note.getBoughts().getId(), note.getItemDate(), note.getQuantity(), note.getUnitQuantity(), note.getActives().getId(), note.getPriceBuy(), note.getPriceSell(),
+                note.getMakings().getId(), note.getQualities().getId(), note.getWidth(), note.getHeight(), note.getStatuses().getId(), note.getImageTypes().getId(),
+                note.getStatusSell(), note.getVisible(), note.getDescription(), note.getAversPath(), note.getReversePath(),
                 note.getId());
     }
 }
