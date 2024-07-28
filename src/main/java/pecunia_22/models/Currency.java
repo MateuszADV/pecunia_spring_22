@@ -27,10 +27,10 @@ public class Currency {
     )
     private Long id;
     private String cod;
-    private String pattern;
+//    private String pattern;       Usunieta Kolumna
     private String currency;
     private String change;
-    private Integer active;
+//    private Integer active;       Usunięta kolumna
     @Column(name = "data_exchange")
     private String dataExchange;
     @Column(name = "currency_series")
