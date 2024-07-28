@@ -1,12 +1,15 @@
 package pecunia_22.models.repositories;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Coin;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -160,4 +163,21 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             "          coin.priceBuy, coin.priceSell, coin.quantity, coin.unitQuantity, coin.visible, coin.description, coin.aversPath, coin.reversePath " +
             " ORDER BY cou.countryEn, coin.denomination")
     List<Object[]> getCoinsByStatus(String status, Long countrtyId);
+
+    //    *******************
+    //    ****COIN UPDATE****
+    //    *******************
+
+    @Transactional
+    @Modifying
+    @Query(value = "update Coin coin set     coin.currencies.id = ?1, coin.denomination = ?2, coin.dateBuy = ?3,      coin.nameCurrency = ?4, coin.series = ?5, " +
+                   "coin.boughts.id = ?6,    coin.itemDate = ?7,      coin.quantity = ?8,     coin.unitQuantity = ?9, coin.actives.id = ?10,  coin.priceBuy = ?11, coin.priceSell = ?12, " +
+                   "coin.qualities.id = ?13, coin.diameter = ?14,     coin.thickness = ?15,   coin.weight = ?16,      coin.statuses.id = ?17, coin.imageTypes.id = ?18, " +
+                   "coin.statusSell = ?19,   coin.visible = ?20,      coin.composition = ?21, coin.description = ?22, coin.aversPath = ?23,   coin.reversePath = ?24 "+
+                   "where coin.id = ?25")
+    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
+                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
+                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
+                    Long coinId);
 }

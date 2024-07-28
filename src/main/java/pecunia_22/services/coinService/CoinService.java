@@ -3,6 +3,7 @@ package pecunia_22.services.coinService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.Coin;
+import pecunia_22.models.Note;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetCoinsByStatus;
@@ -27,4 +28,6 @@ public interface CoinService {
     List<GetCoinsByStatus> getCoinsByStatus(String status, String statusSell);
 
     Page<Coin> findCoinPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
+
+    void updateCoin(Coin coin);
 }
