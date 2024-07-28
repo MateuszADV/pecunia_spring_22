@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,6 +37,6 @@ public class Bought {
     @Column(name = "updated_at")
     private Timestamp updated_at;
 
-//    @OneToMany(mappedBy = "boughts", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    private List<Note> notes;
+    @OneToMany(mappedBy = "boughts", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Note> notes;
 }

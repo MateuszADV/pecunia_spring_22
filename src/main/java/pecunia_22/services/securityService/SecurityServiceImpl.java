@@ -121,4 +121,13 @@ public class SecurityServiceImpl implements SecurityService {
             return this.securityRepository.securityPageable(currencyId, status, true, pageable);
         }
     }
+
+    @Override
+    public void updateSecurity(Security security) {
+        securityRepository.updateSecurity(security.getCurrencies().getId(), security.getDenomination(), security.getDateBuy(), security.getNameCurrency(), security.getSeries(),
+                security.getBoughts().getId(), security.getItemDate(), security.getQuantity(), security.getUnitQuantity(), security.getActives().getId(), security.getPriceBuy(), security.getPriceSell(),
+                security.getMakings().getId(), security.getQualities().getId(), security.getWidth(), security.getHeight(), security.getStatuses().getId(), security.getImageTypes().getId(),
+                security.getStatusSell(), security.getVisible(), security.getDescription(), security.getAversPath(), security.getReversePath(),
+                security.getId());
+    }
 }

@@ -226,7 +226,16 @@ public class SecurityController {
         }
         Currency currency = currencyService.getCurrencyById(securityForm.getCurrencies().getId());
         Security security = new ModelMapper().map(securityForm, Security.class);
-        securityService.saveSecurity(security);
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+        Long start = System.currentTimeMillis();
+//        securityService.saveSecurity(security);
+        securityService.updateSecurity(security);
+
+        Long stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
+
         return "redirect:/security/security_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
     }
 

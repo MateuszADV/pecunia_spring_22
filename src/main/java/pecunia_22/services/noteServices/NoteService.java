@@ -31,4 +31,6 @@ public interface NoteService {
     List<GetNotesByStatus> getNoteByStatus(String status, Long countryId);
 
     List<CountryByStatus> getCountryByStatusNote(String status);
+
+    void updateNote(Note note);
 }

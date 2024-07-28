@@ -194,7 +194,15 @@ public class CoinController {
         System.out.println("++++++++++++++++++++++++++++++STOP+++++++++++++++++++++++++++++++");
 
         Coin coin = new ModelMapper().map(coinForm, Coin.class);
-        coinService.saveCoin(coin);
+
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+        Long start = System.currentTimeMillis();
+//        coinService.saveCoin(coin);
+        coinService.updateCoin(coin);
+        Long stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
 
 //        return getcoinList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
         return "redirect:/coin/coin_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
@@ -238,7 +246,6 @@ public class CoinController {
         for (Bought bought : boughts) {
             boughtDtos.add(new ModelMapper().map(bought, BoughtDto.class));
         }
-
         List<Active> actives = activeService.getAllActive();
         List<ActiveDtoSelect> activeDtoSelects = new ArrayList<>();
         for (Active active : actives) {

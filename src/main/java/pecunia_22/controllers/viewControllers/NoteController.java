@@ -22,6 +22,7 @@ import pecunia_22.models.dto.note.NoteDtoForm;
 import pecunia_22.models.dto.quality.QualityDtoSelect;
 import pecunia_22.models.dto.status.StatusDtoSelect;
 import pecunia_22.models.others.variable.VariableForm;
+import pecunia_22.models.repositories.CurrencyRepository;
 import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.services.active.ActiveServiceImpl;
 import pecunia_22.services.boughtService.BoughtServiceImpl;
@@ -45,6 +46,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NoteController {
 
+    private final CurrencyRepository currencyRepository;
     private NoteRepository noteRepository;
     private NoteServiceImpl noteService;
     private CountryServiceImpl countryService;
@@ -98,8 +100,11 @@ public class NoteController {
                               @RequestParam(value = "curId") Long  currencyId,
                               HttpServletRequest request,
                               ModelMap modelMap) {
+        System.out.println("--------------GET CURRENCY BY ID-----------------------");
         Currency currency = currencyService.getCurrencyById(currencyId);
+        System.out.println("---------------------------------------------------------");
         CurrencyDtoByPattern currencyDtoByPattern = new ModelMapper().map(currency, CurrencyDtoByPattern.class);
+        System.out.println("--------------Stop Get Currency By Id------------------");
         List<Note> notes = noteService.getNoteByCurrencyId(currencyId);
         List<NoteDtoByCurrency> noteDtoByCurrencies = new ArrayList();
         for (Note note : notes) {
@@ -220,8 +225,15 @@ public class NoteController {
         System.out.println("++++++++++++++++++++++++++++++STOP+++++++++++++++++++++++++++++++");
 
         Note note = new ModelMapper().map(noteForm, Note.class);
-        noteRepository.save(note);
 
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+        Long start = System.currentTimeMillis();
+//        noteRepository.save(note);
+        noteService.updateNote(note);
+        Long stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
 //        return getNoteList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
         return "redirect:/note/note_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
 

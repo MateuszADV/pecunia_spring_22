@@ -2,6 +2,7 @@ package pecunia_22.services.securityService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import pecunia_22.models.Note;
 import pecunia_22.models.Security;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
@@ -26,4 +27,6 @@ public interface SecurityService {
     List<CountryByStatus> getCountryByStatus(String status, String role);
     List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role);
     Page<Security> findSecurityPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
+
+    void updateSecurity(Security security);
 }

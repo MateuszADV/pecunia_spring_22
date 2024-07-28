@@ -1,12 +1,16 @@
 package pecunia_22.models.repositories;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Note;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -197,4 +201,21 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "WHERE note.currencies.id = ?1 AND stat = note.statuses  AND note.visible = ?3 " +
             "ORDER BY note.denomination")
     Page<Note> notePageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
+
+//    *******************
+//    ****NOTE UPDATE****
+//    *******************
+
+    @Transactional
+    @Modifying
+    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5, " +
+                   "note.boughts.id = ?6, note.itemDate = ?7, note.quantity = ?8, note.unitQuantity = ?9, note.actives.id = ?10, note.priceBuy = ?11, note.priceSell = ?12, " +
+                   "note.makings.id = ?13, note.qualities.id = ?14, note.width = ?15, note.height = ?16, note.statuses.id = ?17, note.imageTypes.id = ?18, " +
+                   "note.statusSell = ?19, note.visible = ?20, note.description = ?21, note.aversPath = ?22, note.reversePath = ?23 "+
+                   "where note.id = ?24")
+    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
+                    Long making, Long quality, Integer width, Integer height, Long status, Long imageType,
+                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath,
+                    Long noteId);
 }
