@@ -64,8 +64,8 @@ public class CurrencyController {
         CountryGetCurrencyDto countryGetCurrencyDto = new ModelMapper().map(country, CountryGetCurrencyDto.class);
 
         countryGetCurrencyDto.setCurrencyDtos(currencyDtos);
-        System.out.println(countryGetCurrencyDto.getCurrencyDtos().size());
-        System.out.println(JsonUtils.gsonPretty(countryGetCurrencyDto));
+//        System.out.println(countryGetCurrencyDto.getCurrencyDtos().size());
+//        System.out.println(JsonUtils.gsonPretty(countryGetCurrencyDto));
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         modelMap.addAttribute("country", countryGetCurrencyDto);
         return "currency/list";
@@ -155,7 +155,7 @@ public class CurrencyController {
         modelMap.addAttribute("currencyForm", currencyDtoForm);
         System.out.println("+++++++++++++++++Strat Currency Edit++++++++++++++");
         System.out.println(currencyId);
-        System.out.println(JsonUtils.gsonPretty(currencyDtoForm));
+//        System.out.println(JsonUtils.gsonPretty(currencyDtoForm));
         return "currency/edit";
     }
 
