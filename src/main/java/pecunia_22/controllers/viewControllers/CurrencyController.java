@@ -64,8 +64,8 @@ public class CurrencyController {
         CountryGetCurrencyDto countryGetCurrencyDto = new ModelMapper().map(country, CountryGetCurrencyDto.class);
 
         countryGetCurrencyDto.setCurrencyDtos(currencyDtos);
-        System.out.println(countryGetCurrencyDto.getCurrencyDtos().size());
-        System.out.println(JsonUtils.gsonPretty(countryGetCurrencyDto));
+//        System.out.println(countryGetCurrencyDto.getCurrencyDtos().size());
+//        System.out.println(JsonUtils.gsonPretty(countryGetCurrencyDto));
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         modelMap.addAttribute("country", countryGetCurrencyDto);
         return "currency/list";
@@ -102,14 +102,6 @@ public class CurrencyController {
             currencyParameters(currencyForm, modelMap);
             return "currency/new";
         }
-
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%TEST%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        Active active = activeService.getActiveById(currencyForm.getActives().getId());
-        Pattern pattern = patternService.getPatternById(currencyForm.getPatterns().getId());
-        currencyForm.setActive(active.getActiveCod());
-        currencyForm.setPattern(pattern.getPattern());
-        System.out.println(currencyForm);
-        System.out.println(JsonUtils.gsonPretty(currencyForm));
 
         Currency currency = new ModelMapper().map(currencyForm, Currency.class);
 
@@ -163,7 +155,7 @@ public class CurrencyController {
         modelMap.addAttribute("currencyForm", currencyDtoForm);
         System.out.println("+++++++++++++++++Strat Currency Edit++++++++++++++");
         System.out.println(currencyId);
-        System.out.println(JsonUtils.gsonPretty(currencyDtoForm));
+//        System.out.println(JsonUtils.gsonPretty(currencyDtoForm));
         return "currency/edit";
     }
 
@@ -194,18 +186,19 @@ public class CurrencyController {
             return "currency/edit";
         }
 
-        Pattern pattern = patternService.getPatternById(currencyForm.getPatterns().getId());
-        Active active = activeService.getActiveById(currencyForm.getActives().getId());
         currencyForm.setId(currencyTemp.get().getId());
         currencyForm.setCreated_at(currencyTemp.get().getCreated_at());
-        currencyForm.setPattern(pattern.getPattern());
-        currencyForm.setActive(active.getActiveCod());
+
         Currency currency = new ModelMapper().map(currencyForm, Currency.class);
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+        Long start = System.currentTimeMillis();
+
         currencyService.saveCurrency(currency);
 
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%START EDIT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        System.out.println(JsonUtils.gsonPretty(currencyForm));
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%STOP EDIT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        Long stop = System.currentTimeMillis();
+        System.out.println("miliSec - " + (stop - start) + "ms");
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
 
 //        return getCountryCurrency(currencyForm.getCountries().getId(), modelMap);
         return "redirect:/currency/list/" + currencyForm.getCountries().getId();

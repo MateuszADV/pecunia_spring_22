@@ -235,7 +235,7 @@ public class CoinController {
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPattern());
+        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
         List<CurrencyDto> currencyDtos = new ArrayList<>();
         for (Currency currency1 : currenciesList) {
             currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));

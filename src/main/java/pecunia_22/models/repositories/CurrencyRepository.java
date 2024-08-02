@@ -14,7 +14,7 @@ import java.util.List;
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
     @Query(value = "SELECT cur FROM Currency cur " +
             "WHERE cur.countries.id = ?1 " +
-            "AND cur.pattern = ?2 " +
+            "AND cur.patterns.pattern = ?2 " +
             "ORDER BY cur.currencySeries ASC ")
     List<Currency> getCurrencyByCountryByPattern(Long countryId, String pattern);
 
