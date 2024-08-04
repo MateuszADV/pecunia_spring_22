@@ -311,6 +311,7 @@ public class ApiServiceImpl implements ApiService {
             String stringJson = webResource.get(String.class);
             JSONArray jsonArray = new JSONArray(stringJson);
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             System.out.println(JsonUtils.gsonPretty(jsonArray));
 
             List<Object[]> objects = new ArrayList<>();

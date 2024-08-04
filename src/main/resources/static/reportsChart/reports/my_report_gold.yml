@@ -1,0 +1,79 @@
+#CHartJS 3.6.0
+report:
+  name: "my_report_continents_test"
+chart:
+  datasets:
+    label: 'Kurs złota 1oz'
+    backgroundColor: ['rgb(39, 122, 205, 0.5)']
+    borderWidth: 1
+    borderColor: 'black'
+    hoverBackgroundColor: ['rgb(39, 122, 205)']
+  options:
+    animations:
+      tension:
+        duration: 1000
+        easing: 'linear'
+        from: 1
+        to: 0
+        loop: true
+    plugins:
+      customCanvasBackgroundColor:
+        color: 'red'
+      title:
+        display: true
+        text: 'Przykładowy wykres'
+        color: 'blue'
+        font:
+          weight: 'bold'
+          size: 20
+      subtitle:
+        display: true
+        text: 'Kurs złota'
+        color: 'green'
+        font:
+          weight: 'bold'
+          size: 30
+      legend:
+#        Wyświetlanie legeny
+        display: true
+        labels:
+          color: 'black'
+          font:
+            size: 12
+            family: 'Helvetica Neue'
+    scales:
+      y:
+        min: 0
+        beginAtZero: true
+        max: 15000
+        title:
+          display: true
+          text: 'Cena'
+          color: 'blue'
+          font:
+            size: 20
+            weight: 'bold'
+            lineHeight: 1.2
+        ticks:
+          color: 'green'
+        grid:
+#          color: 'black'   # Kolor lini siatki 'y'
+          tickColor: 'red'
+#          borderColor: 'red'
+          offset: true
+      x:
+        title:
+          display: true
+          text: 'Data'
+          color: 'green'
+          font:
+            size: 20
+            weight: 'bold'
+            lineHeight: 1.2
+        ticks:
+          color: 'brown'
+        grid:
+#          color: 'black'    # Kolor lini siatki 'x'
+          tickColor: 'red'
+#          borderColor: 'red'
+          offset: true

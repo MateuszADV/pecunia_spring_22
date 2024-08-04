@@ -86,11 +86,11 @@ public class ChartServiceImpl implements ChartService {
         System.out.println(JsonUtils.gsonPretty(objects));
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<String> labels = new ArrayList();
-        List<Integer> data = new ArrayList();
+        List<Object> data = new ArrayList();
         for (Object[] object : objects) {
             if (object[0] instanceof String) {
                 labels.add(object[0].toString());
-                data.add(Integer.valueOf(object[1].toString()));
+                data.add((object[1]));
             } else {
                 labels.add("NULL");
                 data.add(Integer.valueOf(object[1].toString()));
