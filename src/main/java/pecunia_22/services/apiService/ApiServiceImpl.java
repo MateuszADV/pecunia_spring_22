@@ -1,6 +1,5 @@
 package pecunia_22.services.apiService;
 
-
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
@@ -10,10 +9,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.NBP.GetGoldRateNBP;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -299,5 +300,34 @@ public class ApiServiceImpl implements ApiService {
         System.out.println("|--------------------------|");
         rate.forEach((k, v) -> System.out.printf("|- %-10s | %10s |%n", k, v));
         System.out.println("|--------------------------|");
+    }
+
+    @Override
+    public List<Object[]> getGoldRateNBP(String url) {
+
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        try {
+            Invocation.Builder webResource = webResource(url);
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray = new JSONArray(stringJson);
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(jsonArray));
+
+            List<Object[]> objects = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Object[] object = {jsonArray.getJSONObject(i).get("data"),
+                        jsonArray.getJSONObject(i).get("cena")};
+                objects.add(object);
+            }
+
+            System.out.println((objects.size()));
+            System.out.println(JsonUtils.gsonPretty(objects));
+            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            return objects;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 }
