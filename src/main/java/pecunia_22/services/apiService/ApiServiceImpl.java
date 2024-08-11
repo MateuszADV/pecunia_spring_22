@@ -303,9 +303,10 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public List<Object[]> getGoldRateNBP(String url) {
+    public List<GetGoldRateNBP> getGoldRateNBP(String url) {
 
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        List<GetGoldRateNBP>getGoldRateNBPList = new ArrayList<>();
         try {
             Invocation.Builder webResource = webResource(url);
             String stringJson = webResource.get(String.class);
@@ -314,17 +315,22 @@ public class ApiServiceImpl implements ApiService {
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             System.out.println(JsonUtils.gsonPretty(jsonArray));
 
-            List<Object[]> objects = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
-                Object[] object = {jsonArray.getJSONObject(i).get("data"),
-                        jsonArray.getJSONObject(i).get("cena")};
-                objects.add(object);
+                GetGoldRateNBP getGoldRateNBP = new GetGoldRateNBP();
+                getGoldRateNBP.setDate(jsonArray.getJSONObject(i).get("data").toString());
+                getGoldRateNBP.setPrice(jsonArray.getJSONObject(i).getDouble("cena") * 31.1034768);
+
+                getGoldRateNBPList.add(getGoldRateNBP);
             }
 
-            System.out.println((objects.size()));
-            System.out.println(JsonUtils.gsonPretty(objects));
+            System.out.println(getGoldRateNBPList.size());
+            System.out.println(JsonUtils.gsonPretty(getGoldRateNBPList));
             System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            return objects;
+            for(int i = 1; getGoldRateNBPList.size() > i; i++) {
+                System.out.print(i + "   ");
+                System.out.println(((getGoldRateNBPList.get(i).getPrice() / getGoldRateNBPList.get(i - 1).getPrice()) -1) * 100);
+            }
+            return getGoldRateNBPList;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

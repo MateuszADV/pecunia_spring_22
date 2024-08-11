@@ -19,5 +19,5 @@ public interface ApiService {
     GetMetalSymbol getMetalSymbol(String url);
     GetMetalRate getMetalRate(String url, GetMetalSymbol getMetalSymbols);
     GetMoneyMetals getMoneyMetal(String url);
-    List<Object[]> getGoldRateNBP(String url);
+    List<GetGoldRateNBP> getGoldRateNBP(String url);
 }

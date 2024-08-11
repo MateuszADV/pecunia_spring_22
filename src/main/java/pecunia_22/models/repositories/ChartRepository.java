@@ -145,7 +145,6 @@ public class ChartRepository {
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             System.out.println(JsonUtils.gsonPretty(jsonArray));
 
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 Object[] object = {jsonArray.getJSONObject(i).get("data"),
                         jsonArray.getJSONObject(i).getDouble("cena") *  31.1034768};
