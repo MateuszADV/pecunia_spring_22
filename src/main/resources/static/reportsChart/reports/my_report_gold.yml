@@ -6,6 +6,7 @@ chart:
     label: 'Kurs złota 1oz'
     backgroundColor: ['rgb(39, 122, 205, 0.5)']
     borderWidth: 1
+    pointRadius: 0
     borderColor: 'black'
     hoverBackgroundColor: ['rgb(39, 122, 205)']
   options:
@@ -45,7 +46,7 @@ chart:
       y:
         min: 0
         beginAtZero: true
-        max: 15000
+        max: 12000
         title:
           display: true
           text: 'Cena'
