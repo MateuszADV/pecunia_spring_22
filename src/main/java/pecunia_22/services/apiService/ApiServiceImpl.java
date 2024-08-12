@@ -1,5 +1,7 @@
 package pecunia_22.services.apiService;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
@@ -15,6 +17,10 @@ import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
 
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service
@@ -336,5 +342,59 @@ public class ApiServiceImpl implements ApiService {
         }
 
         return null;
+    }
+
+    @Override
+    public void GoldPriceStatistics(String apiUrl) {
+//        String apiUrl = "http://api.nbp.pl/api/cenyzlota/last/255";
+        List<Double> prices = new ArrayList<>();
+        Map<Double, String> priceDateMap = new HashMap<>();
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(responseBody);
+
+            for (JsonNode node : rootNode) {
+                double price = node.get("cena").asDouble() * 31.1034768;
+                String date = node.get("data").asText();
+                prices.add(price);
+                priceDateMap.put(price, date);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!prices.isEmpty()) {
+            double sum = prices.stream().mapToDouble(Double::doubleValue).sum();
+            double average = sum / prices.size();
+            double median = calculateMedian(prices);
+            double min = Collections.min(prices);
+            double max = Collections.max(prices);
+
+            System.out.println("Average price: " + average);
+            System.out.println("Median price: " + median);
+            System.out.println("Minimum price: " + min + " on " + priceDateMap.get(min));
+            System.out.println("Maximum price: " + max + " on " + priceDateMap.get(max));
+        } else {
+            System.out.println("No data available.");
+        }
+    }
+
+    private static double calculateMedian(List<Double> prices) {
+        Collections.sort(prices);
+        int size = prices.size();
+        if (size % 2 == 0) {
+            return (prices.get(size / 2 - 1) + prices.get(size / 2)) / 2.0;
+        } else {
+            return prices.get(size / 2);
+        }
     }
 }
