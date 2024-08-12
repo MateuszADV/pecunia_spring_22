@@ -143,7 +143,7 @@ public class ChartRepository {
             JSONArray jsonArray = new JSONArray(stringJson);
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
-            System.out.println(JsonUtils.gsonPretty(jsonArray));
+//            System.out.println(JsonUtils.gsonPretty(jsonArray));
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 Object[] object = {jsonArray.getJSONObject(i).get("data"),
@@ -152,7 +152,7 @@ public class ChartRepository {
             }
 
             System.out.println((objects.size()));
-            System.out.println(JsonUtils.gsonPretty(objects));
+//            System.out.println(JsonUtils.gsonPretty(objects));
             System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             return objects;
         } catch (Exception e) {

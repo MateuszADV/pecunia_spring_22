@@ -81,9 +81,9 @@ public class ChartServiceImpl implements ChartService {
         JSONObject jsonObject = new JSONObject(mapObject);
 
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX START XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println(jsonObject);
-        System.out.println(objects);
-        System.out.println(JsonUtils.gsonPretty(objects));
+//        System.out.println(jsonObject);
+//        System.out.println(objects);
+//        System.out.println(JsonUtils.gsonPretty(objects));
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<String> labels = new ArrayList();
         List<Object> data = new ArrayList();

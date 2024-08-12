@@ -319,7 +319,7 @@ public class ApiServiceImpl implements ApiService {
             JSONArray jsonArray = new JSONArray(stringJson);
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
-            System.out.println(JsonUtils.gsonPretty(jsonArray));
+//            System.out.println(JsonUtils.gsonPretty(jsonArray));
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 GetGoldRateNBP getGoldRateNBP = new GetGoldRateNBP();
@@ -330,7 +330,7 @@ public class ApiServiceImpl implements ApiService {
             }
 
             System.out.println(getGoldRateNBPList.size());
-            System.out.println(JsonUtils.gsonPretty(getGoldRateNBPList));
+//            System.out.println(JsonUtils.gsonPretty(getGoldRateNBPList));
             System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             for(int i = 1; getGoldRateNBPList.size() > i; i++) {
                 System.out.print(i + "   ");
