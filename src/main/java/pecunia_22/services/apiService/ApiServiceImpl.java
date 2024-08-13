@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
 import pecunia_22.models.others.NBP.GetGoldRateNBP;
+import pecunia_22.models.others.NBP.PriceStatistics;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
@@ -334,7 +335,9 @@ public class ApiServiceImpl implements ApiService {
             System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             for(int i = 1; getGoldRateNBPList.size() > i; i++) {
                 System.out.print(i + "   ");
-                System.out.println(((getGoldRateNBPList.get(i).getPrice() / getGoldRateNBPList.get(i - 1).getPrice()) -1) * 100);
+                double change = ((getGoldRateNBPList.get(i).getPrice() / getGoldRateNBPList.get(i - 1).getPrice()) -1);
+                System.out.println(change);
+                getGoldRateNBPList.get(i).setChange(change);
             }
             return getGoldRateNBPList;
         } catch (Exception e) {
@@ -345,15 +348,17 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public void GoldPriceStatistics(String apiUrl) {
+    public List<PriceStatistics>PriceStatistics(String apiUrl, Integer quantityDays) {
 //        String apiUrl = "http://api.nbp.pl/api/cenyzlota/last/255";
         List<Double> prices = new ArrayList<>();
         Map<Double, String> priceDateMap = new HashMap<>();
 
+        List<PriceStatistics> priceStatisticsList = new ArrayList<>();
+
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
+                    .uri(URI.create(apiUrl + quantityDays))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -379,13 +384,19 @@ public class ApiServiceImpl implements ApiService {
             double min = Collections.min(prices);
             double max = Collections.max(prices);
 
+            priceStatisticsList.add(new PriceStatistics("average", average));
             System.out.println("Average price: " + average);
+            priceStatisticsList.add(new PriceStatistics("median", median));
             System.out.println("Median price: " + median);
+            priceStatisticsList.add(new PriceStatistics("min", min, priceDateMap.get(min)));
             System.out.println("Minimum price: " + min + " on " + priceDateMap.get(min));
+            priceStatisticsList.add(new PriceStatistics("max", max, priceDateMap.get(max)));
             System.out.println("Maximum price: " + max + " on " + priceDateMap.get(max));
         } else {
             System.out.println("No data available.");
         }
+
+        return priceStatisticsList;
     }
 
     private static double calculateMedian(List<Double> prices) {

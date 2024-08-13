@@ -12,4 +12,5 @@ import java.util.Date;
 public class GetGoldRateNBP {
     private String date;
     private Double price;
+    private Double change;
 }
