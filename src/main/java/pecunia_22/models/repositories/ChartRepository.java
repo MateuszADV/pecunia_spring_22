@@ -3,12 +3,25 @@ package pecunia_22.models.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.ws.rs.client.Invocation;
+import org.json.JSONArray;
 import org.springframework.stereotype.Repository;
+import pecunia_22.models.others.ApiResponseInfo;
+import pecunia_22.services.apiService.ApiServiceImpl;
+import utils.JsonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ChartRepository {
+
+    private ApiServiceImpl apiService;
+
+    public ChartRepository(ApiServiceImpl apiService) {
+        this.apiService = apiService;
+    }
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -117,6 +130,35 @@ public class ChartRepository {
                 " GROUP BY function('to_char', coin.created_at, 'YYYY-MM')  " +
                 " ORDER BY function('to_char', coin.created_at, 'YYYY-MM')");
         List<Object[]> objects = query.getResultList();
+        return objects;
+    }
+
+    public List<Object[]> my_report_gold() {
+        String url = "http://api.nbp.pl/api/cenyzlota/last/255";
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        List<Object[]> objects = new ArrayList<>();
+        try {
+            Invocation.Builder webResource = apiService.webResource(url);
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray = new JSONArray(stringJson);
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
+//            System.out.println(JsonUtils.gsonPretty(jsonArray));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Object[] object = {jsonArray.getJSONObject(i).get("data"),
+                        jsonArray.getJSONObject(i).getDouble("cena") *  31.1034768};
+                objects.add(object);
+            }
+
+            System.out.println((objects.size()));
+//            System.out.println(JsonUtils.gsonPretty(objects));
+            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            return objects;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return objects;
     }
 }

@@ -265,3 +265,9 @@ img.hover-shadow {
 /*    !* font-size: 20px; *!*/
 /*}*/
 
+.arrow-up {
+    color: lightgreen;
+}
+.arrow-down {
+    color: orangered;
+}

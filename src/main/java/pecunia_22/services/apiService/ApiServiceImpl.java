@@ -1,6 +1,7 @@
 package pecunia_22.services.apiService;
 
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
@@ -10,10 +11,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.NBP.GetGoldRateNBP;
+import pecunia_22.models.others.NBP.PriceStatistics;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
 
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service
@@ -299,5 +307,105 @@ public class ApiServiceImpl implements ApiService {
         System.out.println("|--------------------------|");
         rate.forEach((k, v) -> System.out.printf("|- %-10s | %10s |%n", k, v));
         System.out.println("|--------------------------|");
+    }
+
+    @Override
+    public List<GetGoldRateNBP> getGoldRateNBP(String url) {
+
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        List<GetGoldRateNBP>getGoldRateNBPList = new ArrayList<>();
+        try {
+            Invocation.Builder webResource = webResource(url);
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray = new JSONArray(stringJson);
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
+//            System.out.println(JsonUtils.gsonPretty(jsonArray));
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                GetGoldRateNBP getGoldRateNBP = new GetGoldRateNBP();
+                getGoldRateNBP.setDate(jsonArray.getJSONObject(i).get("data").toString());
+                getGoldRateNBP.setPrice(jsonArray.getJSONObject(i).getDouble("cena") * 31.1034768);
+
+                getGoldRateNBPList.add(getGoldRateNBP);
+            }
+
+            System.out.println(getGoldRateNBPList.size());
+//            System.out.println(JsonUtils.gsonPretty(getGoldRateNBPList));
+            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            for(int i = 1; getGoldRateNBPList.size() > i; i++) {
+                System.out.print(i + "   ");
+                double change = ((getGoldRateNBPList.get(i).getPrice() / getGoldRateNBPList.get(i - 1).getPrice()) -1);
+                System.out.println(change);
+                getGoldRateNBPList.get(i).setChange(change);
+            }
+            return getGoldRateNBPList;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<PriceStatistics>PriceStatistics(String apiUrl, Integer quantityDays) {
+//        String apiUrl = "http://api.nbp.pl/api/cenyzlota/last/255";
+        List<Double> prices = new ArrayList<>();
+        Map<Double, String> priceDateMap = new HashMap<>();
+
+        List<PriceStatistics> priceStatisticsList = new ArrayList<>();
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl + quantityDays))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(responseBody);
+
+            for (JsonNode node : rootNode) {
+                double price = node.get("cena").asDouble() * 31.1034768;
+                String date = node.get("data").asText();
+                prices.add(price);
+                priceDateMap.put(price, date);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!prices.isEmpty()) {
+            double sum = prices.stream().mapToDouble(Double::doubleValue).sum();
+            double average = sum / prices.size();
+            double median = calculateMedian(prices);
+            double min = Collections.min(prices);
+            double max = Collections.max(prices);
+
+            priceStatisticsList.add(new PriceStatistics("average", average));
+            System.out.println("Average price: " + average);
+            priceStatisticsList.add(new PriceStatistics("median", median));
+            System.out.println("Median price: " + median);
+            priceStatisticsList.add(new PriceStatistics("min", min, priceDateMap.get(min)));
+            System.out.println("Minimum price: " + min + " on " + priceDateMap.get(min));
+            priceStatisticsList.add(new PriceStatistics("max", max, priceDateMap.get(max)));
+            System.out.println("Maximum price: " + max + " on " + priceDateMap.get(max));
+        } else {
+            System.out.println("No data available.");
+        }
+
+        return priceStatisticsList;
+    }
+
+    private static double calculateMedian(List<Double> prices) {
+        Collections.sort(prices);
+        int size = prices.size();
+        if (size % 2 == 0) {
+            return (prices.get(size / 2 - 1) + prices.get(size / 2)) / 2.0;
+        } else {
+            return prices.get(size / 2);
+        }
     }
 }
