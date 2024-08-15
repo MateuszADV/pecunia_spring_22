@@ -99,13 +99,13 @@ public class ChartServiceImpl implements ChartService {
             }
 
         }
-//        jsonObject.getJSONObject("chart").put("labels", labels);
-//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
+        jsonObject.getJSONObject("chart").put("labels", labels);
+        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
 //        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
 
-        jsonObject.getJSONObject("chart").put("labels", labels);
-        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
-        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+//        jsonObject.getJSONObject("chart").put("labels", labels);
+//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
+//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
 
 //        jsonObject.getJSONArray("chart").getJSONObject(0).put("labels", labels);
 //        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("data", data);
