@@ -1,7 +1,9 @@
 package pecunia_22.services.chartServices;
 
 import com.google.gson.Gson;
+import jakarta.json.JsonArray;
 import lombok.AllArgsConstructor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
@@ -97,8 +99,18 @@ public class ChartServiceImpl implements ChartService {
             }
 
         }
+//        jsonObject.getJSONObject("chart").put("labels", labels);
+//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
+//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
+
         jsonObject.getJSONObject("chart").put("labels", labels);
-        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
+        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
+        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+
+//        jsonObject.getJSONArray("chart").getJSONObject(0).put("labels", labels);
+//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("data", data);
+//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+
 
         Object object = new Gson().fromJson(String.valueOf(jsonObject), Object.class);
 

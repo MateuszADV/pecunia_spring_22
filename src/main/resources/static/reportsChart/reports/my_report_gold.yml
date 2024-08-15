@@ -44,7 +44,7 @@ chart:
             family: 'Helvetica Neue'
     scales:
       y:
-        min: 0
+        min: 5000
         beginAtZero: true
         max: 12000
         title:
