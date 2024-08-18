@@ -15,6 +15,7 @@ import utils.JsonUtils;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,40 +102,46 @@ public class ChartServiceImpl implements ChartService {
         }
 
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
+        System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
+
         JSONArray datasets = new JSONArray();
         JSONObject dataset = new JSONObject();
+        JSONObject dataset1 = new JSONObject();
         dataset.put("data", data);
         dataset.put("label", "KONTYNENTY TEST");
         System.out.println(dataset);
         datasets.put(dataset);
-        datasets.put(dataset);
+
+        dataset1.put("data", new int[]{2, 3, 6, 8, 13, 18, 8});
+        dataset1.put("label", "testy");
+        datasets.put(dataset1);
         System.out.println(datasets);
 
 
-//        jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
-//        jsonObject.getJSONObject("chart").put("labels", labels);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
+
+        jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
+        jsonObject.getJSONObject("chart").put("labels", labels);
+        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
+        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset1);
 //        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
 
 
-        jsonObject.getJSONObject("chart").put("datasets", new JSONObject());
-        jsonObject.getJSONObject("chart").put("labels", labels);
-        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
-        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
-
-        System.out.println(jsonObject.getJSONObject("chart").getJSONObject("datasets"));
+//        jsonObject.getJSONObject("chart").put("datasets", new JSONObject());
 //        jsonObject.getJSONObject("chart").put("labels", labels);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
+//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
 
-//        jsonObject.getJSONArray("chart").getJSONObject(0).put("labels", labels);
-//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("data", data);
-//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+
+
+
+//        System.out.println(jsonObject.getJSONObject("chart").getJSONObject("datasets"));
+
 
 
         Object object = new Gson().fromJson(String.valueOf(jsonObject), Object.class);
+
+
 
         System.out.println("TU JESTEM");
         return object;

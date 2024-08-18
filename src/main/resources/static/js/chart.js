@@ -56,13 +56,17 @@ fetch(chartUrl)
             var datasets = chartData.chart.datasets;
             var options = chartData.chart.options;
             console.log("Report Name - " + reportName);
+            console.log(datasets)
+            console.log("----------------START------------------")
+            console.log(chartData.chart.datasets.at(0))
+            console.log("----------------STOP-------------------")
             console.log("PRZYKLADOWY TEKST test testu 6789123456");
             console.log(chartData)
             new Chart(ctx, {
                 type: typeChart,
                 data: {
                     labels: labels,
-                    datasets:[datasets]
+                    datasets: datasets
                 },
                 options: options
             });
