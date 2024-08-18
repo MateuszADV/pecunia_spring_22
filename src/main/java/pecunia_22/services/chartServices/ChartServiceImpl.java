@@ -99,10 +99,32 @@ public class ChartServiceImpl implements ChartService {
             }
 
         }
+
+        System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
+        JSONArray datasets = new JSONArray();
+        JSONObject dataset = new JSONObject();
+        dataset.put("data", data);
+        dataset.put("label", "KONTYNENTY TEST");
+        System.out.println(dataset);
+        datasets.put(dataset);
+        datasets.put(dataset);
+        System.out.println(datasets);
+
+
+//        jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
+//        jsonObject.getJSONObject("chart").put("labels", labels);
+//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
+//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
+//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
+        System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
+
+
+        jsonObject.getJSONObject("chart").put("datasets", new JSONObject());
         jsonObject.getJSONObject("chart").put("labels", labels);
         jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
-//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
+        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
 
+        System.out.println(jsonObject.getJSONObject("chart").getJSONObject("datasets"));
 //        jsonObject.getJSONObject("chart").put("labels", labels);
 //        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
 //        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
