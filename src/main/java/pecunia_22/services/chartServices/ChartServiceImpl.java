@@ -85,13 +85,14 @@ public class ChartServiceImpl implements ChartService {
 
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX START XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 //        System.out.println(jsonObject);
-//        System.out.println(objects);
-//        System.out.println(JsonUtils.gsonPretty(objects));
+        System.out.println(objects.size());
+        System.out.println(JsonUtils.gsonPretty(objects));
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         List<String> labels = new ArrayList();
         List<Object> data = new ArrayList();
         for (Object[] object : objects) {
             if (object[0] instanceof String) {
+                System.out.println(object.length);
                 labels.add(object[0].toString());
                 data.add((object[1]));
             } else {
