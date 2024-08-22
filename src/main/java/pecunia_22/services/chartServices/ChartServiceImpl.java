@@ -88,13 +88,19 @@ public class ChartServiceImpl implements ChartService {
         System.out.println(objects.size());
         System.out.println(JsonUtils.gsonPretty(objects));
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        List<String> labels = new ArrayList();
+        List<Object> labels = new ArrayList();
         List<Object> data = new ArrayList();
+        List<Object> data1 = new ArrayList();
+        List<Object> data2 = new ArrayList();
+
+        List<List<Object>> data5 = new ArrayList();
         for (Object[] object : objects) {
             if (object[0] instanceof String) {
                 System.out.println(object.length);
                 labels.add(object[0].toString());
                 data.add((object[1]));
+                data1.add((object[2]));
+                data2.add((object[3]));
             } else {
                 labels.add("NULL");
                 data.add(Integer.valueOf(object[1].toString()));
@@ -102,20 +108,67 @@ public class ChartServiceImpl implements ChartService {
 
         }
 
+//        *******************TEST***************************
+        System.out.println("*******************TEST***************************");
+        for (Object[] object : objects) {
+            List<Object> data4 = new ArrayList();
+            if (object[0] instanceof String) {
+                System.out.println(object.length);
+
+                for (int i = 0; i < object.length; i++) {
+//                    System.out.println(object[i]);
+                    data4.add(object[i]);
+                }
+            }
+
+            data5.add(data4);
+        }
+
+        System.out.println(data5);
+        System.out.println("*******************KONIEC***************************");
+
+//        *******************KONIEC*************************
+
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
         System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
+
+        JSONArray hoverBackgroundColor = new JSONArray();
+        JSONArray backgroundColor = new JSONArray();
+
+        hoverBackgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("hoverBackgroundColor"));
+        backgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("backgroundColor"));
+
+        System.out.println("===============KOLOR======================");
+        System.out.println(hoverBackgroundColor.length());
+        System.out.println(hoverBackgroundColor.getJSONArray(0).get(0));
+        System.out.println("===============KOLOR======================");
+
 
         JSONArray datasets = new JSONArray();
         JSONObject dataset = new JSONObject();
         JSONObject dataset1 = new JSONObject();
+        JSONObject dataset2 = new JSONObject();
+
         dataset.put("data", data);
-        dataset.put("label", "KONTYNENTY TEST");
+        dataset.put("label", "KOLEKCJA");
+//        dataset.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0).get(0));
+//        dataset.put("backgroundColor", backgroundColor.getJSONArray(0).get(0));
         System.out.println(dataset);
         datasets.put(dataset);
 
-        dataset1.put("data", new int[]{2, 3, 6, 8, 13, 18, 8});
-        dataset1.put("label", "testy");
+        dataset1.put("data", data1);
+        dataset1.put("label", "FOR SELL");
+//        dataset1.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0).get(1));
+//        dataset1.put("backgroundColor", backgroundColor.getJSONArray(0).get(1));
+//        dataset1.put("type","line");
         datasets.put(dataset1);
+        System.out.println(datasets);
+
+        dataset2.put("data", data2);
+        dataset2.put("label", "SOLD");
+//        dataset2.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0).get(2));
+//        dataset2.put("backgroundColor", backgroundColor.getJSONArray(0).get(2));
+        datasets.put(dataset2);
         System.out.println(datasets);
 
 
@@ -124,6 +177,7 @@ public class ChartServiceImpl implements ChartService {
         jsonObject.getJSONObject("chart").put("labels", labels);
         jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
         jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset1);
+        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset2);
 //        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
 
