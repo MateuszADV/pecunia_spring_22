@@ -181,4 +181,22 @@ public class ChartRepository {
         List<Object[]> objects = query.getResultList();
         return objects;
     }
+
+//    public List<Object[]> my_report_test() {
+//        Query query = entityManager.createQuery("SELECT stat.status," +
+//                "  SUM(CASE mak.making WHEN 'Papier' THEN 1 ELSE 0 END) AS PAPIER," +
+//                "  SUM(CASE mak.making WHEN 'Polimer' THEN 1 ELSE 0 END) AS Polimer," +
+//                "  SUM(CASE mak.making WHEN 'Hybryda' THEN 1 ELSE 0 END) AS Hybryda," +
+//                "  SUM(CASE mak.making WHEN 'Other' THEN 1 ELSE 0 END) AS Other" +
+//                " FROM Note note" +
+//                " LEFT JOIN Making mak" +
+//                "   ON note.makings = mak" +
+//                " LEFT JOIN Status stat" +
+//                "   ON note.statuses = stat " +
+//                "WHERE stat.status IN ('KOLEKCJA', 'FOR SELL', 'SOLD', 'NEW', 'FUTURE', 'OTHER' )" +
+//                "GROUP BY stat.status " +
+//                "ORDER BY stat.status DESC");
+//        List<Object[]> objects = query.getResultList();
+//        return objects;
+//    }
 }

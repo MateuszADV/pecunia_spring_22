@@ -63,7 +63,7 @@ chart:
       x:
         title:
           display: true
-          text: 'STATUS'
+          text: 'MAKING'
           color: 'green'
           font:
             size: 20
