@@ -88,14 +88,21 @@ public class ChartServiceImpl implements ChartService {
         System.out.println("======================++++++++++++++++++++++++++++");
 
         System.out.println(objects.size());
-        System.out.println(objects.get(0).length);
-        Object[][] dane = new Object[objects.get(0).length][objects.size()];
+        System.out.println("Jaki jest object");
+        System.out.println(objects);
 
 
-        for (int i = 0; i < objects.size() ; i++) {
-           for (int j = 0; objects.get(0).length > j; j++) {
-                dane[j][i] = objects.get(i)[j];
-           }
+
+        Object[][] dane;
+        if (objects.size() > 0) {
+            dane = new Object[objects.get(0).length][objects.size()];
+            for (int i = 0; i < objects.size(); i++) {
+                for (int j = 0; objects.get(0).length > j; j++) {
+                    dane[j][i] = objects.get(i)[j];
+                }
+            }
+        } else {
+            dane = null;
         }
         System.out.println(JsonUtils.gsonPretty(dane));
         System.out.println("======================++++++++++++++++++++++++++++");
@@ -158,45 +165,33 @@ public class ChartServiceImpl implements ChartService {
         JSONArray datasets = new JSONArray();
 
         for (int i = 1; dane.length > i; i++) {
-            JSONObject dataset = new JSONObject();
-            System.out.println(dane.length);
-            dataset.put("data", dane[i]);
+            if (dane[0][0] instanceof String) {
+                JSONObject dataset = new JSONObject();
+//                System.out.println(dane.length);
+                dataset.put("data", dane[i]);
 //            dataset.put("label", "label- " + i);
-            if (dane.length == 2) {
-                dataset.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0));
-                dataset.put("backgroundColor", backgroundColor.getJSONArray(0));
-                System.out.println("KOLORY DO ZMIANY");
-            }else {
-                dataset.put("hoverBackgroundColor", hoverBackgroundColor.getJSONArray(0).get(i));
-                dataset.put("backgroundColor", backgroundColor.getJSONArray(0).get(i));
+                if (dane.length == 2) {
+                    dataset.put("hoverBackgroundColor", hoverBackgroundColor.getJSONArray(0));
+                    dataset.put("backgroundColor", backgroundColor.getJSONArray(0));
+                    System.out.println("KOLORY DO ZMIANY");
+                } else {
+                    dataset.put("hoverBackgroundColor", hoverBackgroundColor.getJSONArray(0).get(i));
+                    dataset.put("backgroundColor", backgroundColor.getJSONArray(0).get(i));
+                }
+                dataset.put("label", label.getJSONArray(0).get(i - 1));
+                dataset.put("hoverOffset", 4);
+                dataset.put("borderColor", backgroundColor.get(0));
+                datasets.put(dataset);
             }
-            dataset.put("label", label.getJSONArray(0).get(i-1));
-            dataset.put("hoverOffset", 4);
-            dataset.put("borderColor", backgroundColor.get(0));
-            datasets.put(dataset);
+            else {
+//                labels.add("NULL");
+//                data.add(Integer.valueOf(object[1].toString()));
+                System.out.println("-----------BŁĄD-----------------");
+            }
         }
 
-
-
-//        dataset1.put("data", dane[2]);
-//        dataset1.put("label", "FOR SELL");
-//        dataset1.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0).get(2));
-//        dataset1.put("backgroundColor", backgroundColor.getJSONArray(0).get(2));
-//        dataset1.put("hoverOffset", 4);
-//        dataset1.put("borderColor", backgroundColor.get(0));
-////        dataset1.put("type","line");
-//        datasets.put(dataset1);
-//        System.out.println(datasets);
-//
-//        dataset2.put("data", data2);
-//        dataset2.put("label", "SOLD");
-//        dataset2.put("hoverBackgroundColor",hoverBackgroundColor.getJSONArray(0).get(2));
-//        dataset2.put("backgroundColor", backgroundColor.getJSONArray(0).get(2));
-//        datasets.put(dataset2);
         System.out.println(JsonUtils.gsonPretty(datasets));
         System.out.println(datasets.length());
-
-
 
         jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
 //        jsonObject.getJSONObject("chart").put("labels", labels);
