@@ -85,13 +85,9 @@ public class ChartServiceImpl implements ChartService {
 
         System.out.println("*******************TEST START***************************");
 
-        System.out.println("======================++++++++++++++++++++++++++++");
-
         System.out.println(objects.size());
         System.out.println("Jaki jest object");
         System.out.println(objects);
-
-
 
         Object[][] dane;
         if (objects.size() > 0) {
@@ -104,25 +100,9 @@ public class ChartServiceImpl implements ChartService {
         } else {
             dane = null;
         }
-        System.out.println(JsonUtils.gsonPretty(dane));
-        System.out.println("======================++++++++++++++++++++++++++++");
-
-
-//        for (int i = 0; i < objects.size() ; i++) {
-//            System.out.println(objects.get(0).length);
-////            System.out.println(objects.get(i));
-//            for (int j = 0; j < objects.get(i).length; j++) {
-////                System.out.println(objects.toString());
-//            }
-//        }
 
         System.out.println("*******************TEST KONIEC***************************");
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX START XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-//        System.out.println(jsonObject);
-//        System.out.println(objects.size());
-//        System.out.println(JsonUtils.gsonPretty(objects));
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 //        List<Object> labels = new ArrayList();
 //        List<Object> data = new ArrayList();
 //        List<Object> data1 = new ArrayList();
@@ -143,14 +123,12 @@ public class ChartServiceImpl implements ChartService {
 //
 //        }
 
-
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
         System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
 
         JSONArray hoverBackgroundColor = new JSONArray();
         JSONArray backgroundColor = new JSONArray();
         JSONArray label = new JSONArray();
-
 
         hoverBackgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("hoverBackgroundColor"));
         backgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("backgroundColor"));
@@ -194,17 +172,13 @@ public class ChartServiceImpl implements ChartService {
         System.out.println(datasets.length());
 
         jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
-//        jsonObject.getJSONObject("chart").put("labels", labels);
         jsonObject.getJSONObject("chart").put("labels", dane[0]);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").put(dataset1);
 
         for (int i = 0; datasets.length() > i; i++) {
             jsonObject.getJSONObject("chart").getJSONArray("datasets").put(datasets.get(i));
         }
 
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
-
 
         Object object = new Gson().fromJson(String.valueOf(jsonObject), Object.class);
 
