@@ -86,8 +86,9 @@ public class ChartServiceImpl implements ChartService {
         System.out.println("*******************TEST START***************************");
 
         System.out.println(objects.size());
+        System.out.println(objects.get(0).length);
         System.out.println("Jaki jest object");
-        System.out.println(objects);
+        System.out.println(JsonUtils.gsonPretty(objects));
 
         Object[][] dane;
         if (objects.size() > 0) {
@@ -99,6 +100,7 @@ public class ChartServiceImpl implements ChartService {
             }
         } else {
             dane = null;
+            System.out.println("DODANA WARTOŚĆ NULL");
         }
 
         System.out.println("*******************TEST KONIEC***************************");
@@ -138,12 +140,14 @@ public class ChartServiceImpl implements ChartService {
         System.out.println(hoverBackgroundColor.length());
         System.out.println(hoverBackgroundColor.getJSONArray(0));
         System.out.println(label.getJSONArray(0));
+
         System.out.println("===============KOLOR======================");
 
         JSONArray datasets = new JSONArray();
 
         for (int i = 1; dane.length > i; i++) {
-            if (dane[0][0] instanceof String) {
+            try {
+//            if (dane[0][0] instanceof String) {
                 JSONObject dataset = new JSONObject();
 //                System.out.println(dane.length);
                 dataset.put("data", dane[i]);
@@ -160,15 +164,17 @@ public class ChartServiceImpl implements ChartService {
                 dataset.put("hoverOffset", 4);
                 dataset.put("borderColor", backgroundColor.get(0));
                 datasets.put(dataset);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            else {
-//                labels.add("NULL");
-//                data.add(Integer.valueOf(object[1].toString()));
-                System.out.println("-----------BŁĄD-----------------");
-            }
+//            else {
+////                labels.add("NULL");
+////                data.add(Integer.valueOf(object[1].toString()));
+//                System.out.println("-----------BŁĄD-----------------");
+//            }
         }
 
-        System.out.println(JsonUtils.gsonPretty(datasets));
+        System.out.println(JsonUtils.gsonPretty(dane));
         System.out.println(datasets.length());
 
         jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
