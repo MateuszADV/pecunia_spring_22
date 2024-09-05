@@ -126,7 +126,7 @@ public class ChartServiceImpl implements ChartService {
 //        }
 
         System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
-        System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
+//        System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
 
         JSONArray hoverBackgroundColor = new JSONArray();
         JSONArray backgroundColor = new JSONArray();
@@ -174,7 +174,7 @@ public class ChartServiceImpl implements ChartService {
 //            }
         }
 
-        System.out.println(JsonUtils.gsonPretty(dane));
+//        System.out.println(JsonUtils.gsonPretty(dane));
         System.out.println(datasets.length());
 
         jsonObject.getJSONObject("chart").put("datasets", new JSONArray());

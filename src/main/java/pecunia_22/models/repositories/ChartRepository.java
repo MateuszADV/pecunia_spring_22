@@ -182,21 +182,24 @@ public class ChartRepository {
         return objects;
     }
 
-//    public List<Object[]> my_report_test() {
-//        Query query = entityManager.createQuery("SELECT stat.status," +
-//                "  SUM(CASE mak.making WHEN 'Papier' THEN 1 ELSE 0 END) AS PAPIER," +
-//                "  SUM(CASE mak.making WHEN 'Polimer' THEN 1 ELSE 0 END) AS Polimer," +
-//                "  SUM(CASE mak.making WHEN 'Hybryda' THEN 1 ELSE 0 END) AS Hybryda," +
-//                "  SUM(CASE mak.making WHEN 'Other' THEN 1 ELSE 0 END) AS Other" +
-//                " FROM Note note" +
-//                " LEFT JOIN Making mak" +
-//                "   ON note.makings = mak" +
-//                " LEFT JOIN Status stat" +
-//                "   ON note.statuses = stat " +
-//                "WHERE stat.status IN ('KOLEKCJA', 'FOR SELL', 'SOLD', 'NEW', 'FUTURE', 'OTHER' )" +
-//                "GROUP BY stat.status " +
-//                "ORDER BY stat.status DESC");
-//        List<Object[]> objects = query.getResultList();
-//        return objects;
-//    }
+    public List<Object[]> my_report_test2() {
+        Query query = entityManager.createQuery("SELECT qual.quality," +
+                "  SUM(CASE stat.status WHEN 'KOLEKCJA' THEN 1 ELSE 0 END) AS KOLEKCJA," +
+                "  SUM(CASE stat.status WHEN 'FOR SELL' THEN 1 ELSE 0 END) AS FOR_SELL," +
+                "  SUM(CASE stat.status WHEN 'SOLD' THEN 1 ELSE 0 END) AS SOLD," +
+                "  SUM(CASE stat.status WHEN 'NEW' THEN 1 ELSE 0 END) AS NEW," +
+                "  SUM(CASE stat.status WHEN 'FUTURE' THEN 1 ELSE 0 END) AS FUTURE," +
+                "  SUM(CASE stat.status WHEN 'OTHER' THEN 1 ELSE 0 END) AS OTHER" +
+                " FROM Note note" +
+                " LEFT JOIN Quality qual" +
+                " ON note.qualities = qual" +
+                " LEFT JOIN Status stat" +
+                "   ON note.statuses = stat " +
+                "WHERE qual.quality IN (SELECT qua.quality FROM Quality qua)" +
+                "GROUP BY qual.quality ");
+//                "ORDER BY mak.making DESC");
+        List<Object[]> objects = query.getResultList();
+        return objects;
+    }
+
 }
