@@ -107,8 +107,6 @@ public class ChartServiceImpl implements ChartService {
 
 //        List<Object> labels = new ArrayList();
 //        List<Object> data = new ArrayList();
-//        List<Object> data1 = new ArrayList();
-//        List<Object> data2 = new ArrayList();
 
 //        List<List<Object>> data5 = new ArrayList();
 //        for (Object[] object : objects) {
@@ -116,8 +114,6 @@ public class ChartServiceImpl implements ChartService {
 //                System.out.println(object.length);
 //                labels.add(object[0].toString());
 //                data.add(object[1]);
-//                data1.add((object[2]));
-////                data2.add((object[3]));
 //            } else {
 //                labels.add("NULL");
 //                data.add(Integer.valueOf(object[1].toString()));

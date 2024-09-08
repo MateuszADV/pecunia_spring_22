@@ -367,6 +367,15 @@ public class ApiServiceImpl implements ApiService {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(responseBody);
 
+
+            // --------------- TESTY ----------------------------
+//            System.out.println(JsonUtils.gsonPretty(responseBody));
+            System.out.println(JsonUtils.gsonPretty(response.statusCode()));
+            JSONArray goldRate = new JSONArray(responseBody);
+            System.out.println(JsonUtils.gsonPretty(goldRate.getJSONObject(100).get("cena")));
+//            System.out.println(JsonUtils.gsonPretty(rootNode));
+            // --------------- TESTY KONIEC -----------------------
+
             for (JsonNode node : rootNode) {
                 double price = node.get("cena").asDouble() * 31.1034768;
                 String date = node.get("data").asText();
