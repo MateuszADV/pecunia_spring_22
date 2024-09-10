@@ -15,6 +15,7 @@ import utils.JsonUtils;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class ChartServiceImpl implements ChartService {
                 reportMethods.add(new ReportMethod(method.getName(), method.getParameters().length));
             }
         }
-        System.out.println("|-----------------------------------------------------------------------------------------------------------------------|");
+        System.out.println("|---------------------------------------------------------------------------------------------------------------------|");
 
         System.out.println(JsonUtils.gsonPretty(reportMethods));
         return reportMethods;
@@ -82,35 +83,104 @@ public class ChartServiceImpl implements ChartService {
         Map<String, Object> mapObject = getYamlToObj(report);
         JSONObject jsonObject = new JSONObject(mapObject);
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX START XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-//        System.out.println(jsonObject);
-//        System.out.println(objects);
-//        System.out.println(JsonUtils.gsonPretty(objects));
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX STOP XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        List<String> labels = new ArrayList();
-        List<Object> data = new ArrayList();
-        for (Object[] object : objects) {
-            if (object[0] instanceof String) {
-                labels.add(object[0].toString());
-                data.add((object[1]));
-            } else {
-                labels.add("NULL");
-                data.add(Integer.valueOf(object[1].toString()));
+        System.out.println("*******************TEST START***************************");
+
+        System.out.println(objects.size());
+        System.out.println(objects.get(0).length);
+        System.out.println("Jaki jest object");
+        System.out.println(JsonUtils.gsonPretty(objects));
+
+        Object[][] dane;
+        if (objects.size() > 0) {
+            dane = new Object[objects.get(0).length][objects.size()];
+            for (int i = 0; i < objects.size(); i++) {
+                for (int j = 0; objects.get(0).length > j; j++) {
+                    dane[j][i] = objects.get(i)[j];
+                }
             }
-
+        } else {
+            dane = null;
+            System.out.println("DODANA WARTOŚĆ NULL");
         }
-        jsonObject.getJSONObject("chart").put("labels", labels);
-        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("data", data);
-//        jsonObject.getJSONObject("chart").getJSONObject("datasets").put("label", "KONTYNENTY TEST");
 
-//        jsonObject.getJSONObject("chart").put("labels", labels);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("data", data);
-//        jsonObject.getJSONObject("chart").getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+        System.out.println("*******************TEST KONIEC***************************");
 
-//        jsonObject.getJSONArray("chart").getJSONObject(0).put("labels", labels);
-//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("data", data);
-//        jsonObject.getJSONArray("chart").getJSONObject(0).getJSONArray("datasets").getJSONObject(0).put("label", "KONTYNENTY TEST");
+//        List<Object> labels = new ArrayList();
+//        List<Object> data = new ArrayList();
 
+//        List<List<Object>> data5 = new ArrayList();
+//        for (Object[] object : objects) {
+//            if (object[0] instanceof String) {
+//                System.out.println(object.length);
+//                labels.add(object[0].toString());
+//                data.add(object[1]);
+//            } else {
+//                labels.add("NULL");
+//                data.add(Integer.valueOf(object[1].toString()));
+//            }
+//
+//        }
+
+        System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
+//        System.out.println((JsonUtils.gsonPretty(jsonObject.getJSONObject("chart").getJSONObject("datasets"))));
+
+        JSONArray hoverBackgroundColor = new JSONArray();
+        JSONArray backgroundColor = new JSONArray();
+        JSONArray label = new JSONArray();
+
+        hoverBackgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("hoverBackgroundColor"));
+        backgroundColor.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("backgroundColor"));
+        label.put(jsonObject.getJSONObject("chart").getJSONObject("datasets").getJSONArray("label"));
+
+        System.out.println("===============KOLOR======================");
+        System.out.println(hoverBackgroundColor.length());
+        System.out.println(hoverBackgroundColor.getJSONArray(0));
+        System.out.println(label.getJSONArray(0));
+
+        System.out.println("===============KOLOR======================");
+
+        JSONArray datasets = new JSONArray();
+
+        for (int i = 1; dane.length > i; i++) {
+            try {
+//            if (dane[0][0] instanceof String) {
+                JSONObject dataset = new JSONObject();
+//                System.out.println(dane.length);
+                dataset.put("data", dane[i]);
+//            dataset.put("label", "label- " + i);
+                if (dane.length == 2) {
+                    dataset.put("hoverBackgroundColor", hoverBackgroundColor.getJSONArray(0));
+                    dataset.put("backgroundColor", backgroundColor.getJSONArray(0));
+                    System.out.println("KOLORY DO ZMIANY");
+                } else {
+                    dataset.put("hoverBackgroundColor", hoverBackgroundColor.getJSONArray(0).get(i));
+                    dataset.put("backgroundColor", backgroundColor.getJSONArray(0).get(i));
+                }
+                dataset.put("label", label.getJSONArray(0).get(i - 1));
+                dataset.put("hoverOffset", 4);
+                dataset.put("borderColor", backgroundColor.get(0));
+                datasets.put(dataset);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+//            else {
+////                labels.add("NULL");
+////                data.add(Integer.valueOf(object[1].toString()));
+//                System.out.println("-----------BŁĄD-----------------");
+//            }
+        }
+
+//        System.out.println(JsonUtils.gsonPretty(dane));
+        System.out.println(datasets.length());
+
+        jsonObject.getJSONObject("chart").put("datasets", new JSONArray());
+        jsonObject.getJSONObject("chart").put("labels", dane[0]);
+
+        for (int i = 0; datasets.length() > i; i++) {
+            jsonObject.getJSONObject("chart").getJSONArray("datasets").put(datasets.get(i));
+        }
+
+        System.out.println("===================================JSONObject++++++++++++++++++++++++++++++++++++++D");
 
         Object object = new Gson().fromJson(String.valueOf(jsonObject), Object.class);
 

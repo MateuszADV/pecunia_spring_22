@@ -161,4 +161,45 @@ public class ChartRepository {
 
         return objects;
     }
+
+    public List<Object[]> my_report_test() {
+        Query query = entityManager.createQuery("SELECT mak.making," +
+                "  SUM(CASE stat.status WHEN 'KOLEKCJA' THEN 1 ELSE 0 END) AS KOLEKCJA," +
+                "  SUM(CASE stat.status WHEN 'FOR SELL' THEN 1 ELSE 0 END) AS FOR_SELL," +
+                "  SUM(CASE stat.status WHEN 'SOLD' THEN 1 ELSE 0 END) AS SOLD," +
+                "  SUM(CASE stat.status WHEN 'NEW' THEN 1 ELSE 0 END) AS NEW," +
+                "  SUM(CASE stat.status WHEN 'FUTURE' THEN 1 ELSE 0 END) AS FUTURE," +
+                "  SUM(CASE stat.status WHEN 'OTHER' THEN 1 ELSE 0 END) AS OTHER" +
+                " FROM Note note" +
+                " LEFT JOIN Making mak" +
+                "   ON note.makings = mak" +
+                " LEFT JOIN Status stat" +
+                "   ON note.statuses = stat " +
+                "WHERE mak.making IN ('Papier', 'Polimer', 'Hybryda', 'Other' )" +
+                "GROUP BY mak.making " +
+                "ORDER BY mak.making DESC");
+        List<Object[]> objects = query.getResultList();
+        return objects;
+    }
+
+    public List<Object[]> my_report_test2() {
+        Query query = entityManager.createQuery("SELECT qual.quality," +
+                "  SUM(CASE stat.status WHEN 'KOLEKCJA' THEN 1 ELSE 0 END) AS KOLEKCJA," +
+                "  SUM(CASE stat.status WHEN 'FOR SELL' THEN 1 ELSE 0 END) AS FOR_SELL," +
+                "  SUM(CASE stat.status WHEN 'SOLD' THEN 1 ELSE 0 END) AS SOLD," +
+                "  SUM(CASE stat.status WHEN 'NEW' THEN 1 ELSE 0 END) AS NEW," +
+                "  SUM(CASE stat.status WHEN 'FUTURE' THEN 1 ELSE 0 END) AS FUTURE," +
+                "  SUM(CASE stat.status WHEN 'OTHER' THEN 1 ELSE 0 END) AS OTHER" +
+                " FROM Note note" +
+                " LEFT JOIN Quality qual" +
+                " ON note.qualities = qual" +
+                " LEFT JOIN Status stat" +
+                "   ON note.statuses = stat " +
+                "WHERE qual.quality IN (SELECT qua.quality FROM Quality qua)" +
+                "GROUP BY qual.quality ");
+//                "ORDER BY mak.making DESC");
+        List<Object[]> objects = query.getResultList();
+        return objects;
+    }
+
 }

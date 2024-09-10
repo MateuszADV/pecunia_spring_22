@@ -3,7 +3,7 @@ report:
   name: "my_report_continents_test"
 chart:
   datasets:
-    label: 'Kurs złota 1oz'
+    label: ['Kurs złota 1oz']
     backgroundColor: ['rgb(39, 122, 205, 0.5)']
     borderWidth: 1
     pointRadius: 0

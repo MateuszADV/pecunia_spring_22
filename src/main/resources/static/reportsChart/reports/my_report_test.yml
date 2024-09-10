@@ -1,27 +1,34 @@
-#CHartJS 3.6.0
+#CHartJS 4.1.2
 report:
-  name: "my_report_object_status"
+  name: "my_report_test"
 chart:
   datasets:
-    label: ['Ilość Banknotow']
-    backgroundColor: ['rgb(39, 122, 205, 0.5)', 'rgb(0, 0, 0, 0.5)', 'rgb(243, 248, 98, 0.5)', 'rgb(221, 12, 23, 0.5)', 'rgb(229, 184, 70, 0.5)', 'rgb(30, 201, 27, 0.5)', 'rgb(160, 160, 160, 0.5)']
-    borderWidth: 1
-    borderColor: 'black'
-    hoverBackgroundColor: ['rgb(39, 122, 205)', 'rgb(0, 0, 0)', 'rgb(243, 248, 98)', 'rgb(221, 12, 23)', 'rgb(229, 184, 70)', 'rgb(30, 201, 27)', 'rgb(160, 160, 160)']
+      label: ['KOLEKCJA', 'FOR SELL', 'SOLD', 'NEW', 'FUTURE', 'OTHER']
+      backgroundColor: ['rgb(39, 122, 205, 0.5)', 'rgb(0, 0, 0, 0.5)', 'rgb(243, 248, 98, 0.5)', 'rgb(221, 12, 23, 0.5)', 'rgb(229, 184, 70, 0.5)', 'rgb(30, 201, 27, 0.5)', 'rgb(160, 160, 160, 0.5)']
+#      borderWidth: 1
+      borderColor: 'black'
+      hoverBackgroundColor: ['rgb(39, 122, 205)', 'rgb(0, 0, 0)', 'rgb(243, 248, 98)', 'rgb(221, 12, 23)', 'rgb(229, 184, 70)', 'rgb(30, 201, 27)', 'rgb(160, 160, 160)']
   options:
+#    animations:
+#      tension:
+#        duration: 1000
+#        easing: 'linear'
+#        from: 1
+#        to: 0
+#        loop: true
     plugins:
       customCanvasBackgroundColor:
         color: 'red'
       title:
         display: true
-        text: 'Wykres Tstowy'
+        text: 'Przykładowy wykres'
         color: 'blue'
         font:
           weight: 'bold'
           size: 20
       subtitle:
         display: true
-        text: 'Ilość Banknotów'
+        text: 'Ilość banknotów'
         color: 'green'
         font:
           weight: 'bold'
@@ -40,7 +47,7 @@ chart:
         beginAtZero: true
         title:
           display: true
-          text: 'Liczba Banknotów'
+          text: 'Ilość banknotów'
           color: 'blue'
           font:
             size: 20
@@ -52,11 +59,11 @@ chart:
 #          color: 'black'   # Kolor lini siatki 'y'
           tickColor: 'red'
 #          borderColor: 'red'
-          offset: false
+          offset: true
       x:
         title:
           display: true
-          text: 'Status'
+          text: 'MAKING'
           color: 'green'
           font:
             size: 20

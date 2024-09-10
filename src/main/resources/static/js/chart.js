@@ -20,28 +20,56 @@ if (param) {
     console.log("parametr jest pusty")
 }
 
+// fetch(chartUrl)
+//     .then(function(response) {
+//         response.json().then(data => {
+//             var ctx = document.getElementById('myChart').getContext('2d');
+//             // var chartData = [[${chartData}]];
+//             var chartData = data;
+//             var labels = chartData.chart.labels;
+//             var datasets  = chartData.chart.datasets;
+//             var options = chartData.chart.options;
+//             console.log("Report Name - " + reportName);
+//             console.log("PRZYKLADOWY TEKST test testu 6789123456");
+//             console.log(chartData)
+//             new Chart(ctx, {
+//                 type: typeChart,
+//                 data: {
+//                     labels: labels,
+//                     datasets: [datasets]
+//                 },
+//                 options: options
+//             });
+//         })
+//             // .catch(error => console.log("Błąd: ", error));
+//         console.log("JAKIS BLAD")
+//     });
+//
+
+const ctx = document.getElementById('myChart');
+
 fetch(chartUrl)
     .then(function(response) {
         response.json().then(data => {
-            var ctx = document.getElementById('myChart').getContext('2d');
-            // var chartData = [[${chartData}]];
             var chartData = data;
             var labels = chartData.chart.labels;
-            var datasets  = chartData.chart.datasets;
+            var datasets = chartData.chart.datasets;
             var options = chartData.chart.options;
             console.log("Report Name - " + reportName);
+            console.log(datasets)
+            console.log("----------------START------------------")
+            console.log(chartData.chart.datasets.at(0))
+            console.log("----------------STOP-------------------")
             console.log("PRZYKLADOWY TEKST test testu 6789123456");
             console.log(chartData)
             new Chart(ctx, {
                 type: typeChart,
                 data: {
                     labels: labels,
-                    datasets: [datasets]
+                    datasets: datasets
                 },
                 options: options
             });
         })
-            // .catch(error => console.log("Błąd: ", error));
-        console.log("JAKIS BLAD")
-    });
+    })
 
