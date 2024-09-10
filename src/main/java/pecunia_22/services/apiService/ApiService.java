@@ -4,8 +4,10 @@ import jakarta.ws.rs.client.Invocation;
 import org.glassfish.jersey.client.ClientResponse;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.NBP.ExchangeCurrency;
 import pecunia_22.models.others.NBP.GetGoldRateNBP;
 import pecunia_22.models.others.NBP.PriceStatistics;
+import pecunia_22.models.others.NBP.RateCurrency;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 
 import java.util.List;
@@ -23,4 +25,6 @@ public interface ApiService {
 
     List<GetGoldRateNBP> getGoldRateNBP(String url);
     List<PriceStatistics> PriceStatistics(String apiUrl, Integer quantityDays);
+
+    ExchangeCurrency exchangeCurrency(String cod);
 }

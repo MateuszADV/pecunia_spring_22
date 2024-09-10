@@ -11,8 +11,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
+import pecunia_22.models.others.NBP.ExchangeCurrency;
 import pecunia_22.models.others.NBP.GetGoldRateNBP;
 import pecunia_22.models.others.NBP.PriceStatistics;
+import pecunia_22.models.others.NBP.RateCurrency;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
@@ -416,5 +418,34 @@ public class ApiServiceImpl implements ApiService {
         } else {
             return prices.get(size / 2);
         }
+    }
+
+    @Override
+    public ExchangeCurrency exchangeCurrency(String cod) {
+        List<RateCurrency> rateCurrencies = new ArrayList<>();
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
+        try {
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/a/" +cod + "/last/12/?format=json");
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
+            String stringJson = webResource.get(String.class);
+            JSONObject jsonObject = new JSONObject(stringJson);
+            JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("rates"));
+
+            for (int i = 0; jsonArray.length() > i; i++) {
+                RateCurrency rateCurrency = new RateCurrency();
+                rateCurrency.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
+                rateCurrency.setMid(jsonArray.getJSONObject(i).getDouble("mid"));
+                rateCurrencies.add(rateCurrency);
+            }
+            exchangeCurrency.setCurrency(jsonObject.getString("currency"));
+            exchangeCurrency.setCode(jsonObject.getString("code"));
+            exchangeCurrency.setRateCurrencies(rateCurrencies);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return exchangeCurrency;
     }
 }

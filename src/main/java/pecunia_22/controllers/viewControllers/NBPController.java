@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import pecunia_22.models.others.NBP.ExchangeCurrency;
 import pecunia_22.models.others.NBP.GetGoldRateNBP;
 import pecunia_22.models.others.NBP.PriceStatistics;
+import pecunia_22.models.others.NBP.RateCurrency;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
@@ -43,5 +45,13 @@ public class NBPController {
         return "nbp/index";
     }
 
+    @GetMapping("nbp-rate-currency")
+    public String getRateCurrency(ModelMap modelMap) {
+        ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("EUR");
+
+        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
+        modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
+        return "nbp/rate-currency";
+    }
 
 }
