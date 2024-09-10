@@ -72,7 +72,7 @@ public class ChartServiceImpl implements ChartService {
                 reportMethods.add(new ReportMethod(method.getName(), method.getParameters().length));
             }
         }
-        System.out.println("|-----------------------------------------------------------------------------------------------------------------------|");
+        System.out.println("|---------------------------------------------------------------------------------------------------------------------|");
 
         System.out.println(JsonUtils.gsonPretty(reportMethods));
         return reportMethods;
