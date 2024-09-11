@@ -11,4 +11,6 @@ public class RateCurrency {
     private String no;
     private String effectiveDate;
     private Double mid;
+    private Double bid;
+    private Double ask;
 }

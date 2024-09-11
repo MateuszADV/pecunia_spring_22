@@ -7,6 +7,8 @@ import jakarta.ws.rs.client.Invocation;
 import org.json.JSONArray;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.others.ApiResponseInfo;
+import pecunia_22.models.others.NBP.ExchangeCurrency;
+import pecunia_22.models.others.NBP.RateCurrency;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
@@ -152,7 +154,7 @@ public class ChartRepository {
             }
 
             System.out.println((objects.size()));
-//            System.out.println(JsonUtils.gsonPretty(objects));
+            System.out.println(JsonUtils.gsonPretty(objects));
             System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             return objects;
         } catch (Exception e) {
@@ -202,4 +204,17 @@ public class ChartRepository {
         return objects;
     }
 
+    public List<Object[]> my_report_currency_rate() {
+        ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
+        exchangeCurrency = apiService.exchangeCurrency("A", "USD");
+        List<Object[]> objects = new ArrayList<>();
+        for (RateCurrency rateCurrency : exchangeCurrency.getRateCurrencies()) {
+            Object[] object = {rateCurrency.getEffectiveDate(),
+//                               rateCurrency.getBid(),
+                               rateCurrency.getMid() };
+            objects.add(object);
+        }
+
+        return objects;
+    }
 }

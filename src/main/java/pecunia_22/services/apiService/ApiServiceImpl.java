@@ -421,12 +421,12 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ExchangeCurrency exchangeCurrency(String cod) {
+    public ExchangeCurrency exchangeCurrency(String table, String cod) {
         List<RateCurrency> rateCurrencies = new ArrayList<>();
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
         ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
         try {
-            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/a/" +cod + "/last/12/?format=json");
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/255/?format=json");
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             String stringJson = webResource.get(String.class);
@@ -436,7 +436,12 @@ public class ApiServiceImpl implements ApiService {
             for (int i = 0; jsonArray.length() > i; i++) {
                 RateCurrency rateCurrency = new RateCurrency();
                 rateCurrency.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
-                rateCurrency.setMid(jsonArray.getJSONObject(i).getDouble("mid"));
+                if (table.toUpperCase().equals("C")) {
+                    rateCurrency.setAsk(jsonArray.getJSONObject(i).getDouble("ask"));
+                    rateCurrency.setBid(jsonArray.getJSONObject(i).getDouble("bid"));
+                } else {
+                    rateCurrency.setMid(jsonArray.getJSONObject(i).getDouble("mid"));
+                }
                 rateCurrencies.add(rateCurrency);
             }
             exchangeCurrency.setCurrency(jsonObject.getString("currency"));
@@ -446,6 +451,7 @@ public class ApiServiceImpl implements ApiService {
             System.out.println(e.getMessage());
         }
 
+        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
         return exchangeCurrency;
     }
 }

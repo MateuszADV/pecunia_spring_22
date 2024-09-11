@@ -26,5 +26,5 @@ public interface ApiService {
     List<GetGoldRateNBP> getGoldRateNBP(String url);
     List<PriceStatistics> PriceStatistics(String apiUrl, Integer quantityDays);
 
-    ExchangeCurrency exchangeCurrency(String cod);
+    ExchangeCurrency exchangeCurrency(String table, String cod);
 }

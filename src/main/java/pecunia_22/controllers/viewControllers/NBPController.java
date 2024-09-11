@@ -47,7 +47,7 @@ public class NBPController {
 
     @GetMapping("nbp-rate-currency")
     public String getRateCurrency(ModelMap modelMap) {
-        ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("EUR");
+        ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("c", "EUR");
 
         System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
         modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
