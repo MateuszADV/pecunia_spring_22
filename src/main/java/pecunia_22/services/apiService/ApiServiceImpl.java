@@ -11,15 +11,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.others.*;
-import pecunia_22.models.others.NBP.ExchangeCurrency;
-import pecunia_22.models.others.NBP.GetGoldRateNBP;
-import pecunia_22.models.others.NBP.PriceStatistics;
-import pecunia_22.models.others.NBP.RateCurrency;
+import pecunia_22.models.others.NBP.*;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import utils.JsonUtils;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -426,7 +422,7 @@ public class ApiServiceImpl implements ApiService {
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
         ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
         try {
-            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/255/?format=json");
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/10/?format=json");
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             String stringJson = webResource.get(String.class);
@@ -451,7 +447,57 @@ public class ApiServiceImpl implements ApiService {
             System.out.println(e.getMessage());
         }
 
-        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
+//        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
         return exchangeCurrency;
+    }
+
+    @Override
+    public GetRateCurrency getRateCurrency(String table) {
+        GetRateCurrency getRateCurrency = new GetRateCurrency();
+        List<Exchange> exchangeList = new ArrayList<>();
+
+        String[] codes = {"USD", "EUR", "CHF", "GBP"};
+
+        System.out.println(codes.toString());
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
+        try {
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/tables/" + table + "/last/10?format=json");
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray  = new JSONArray(stringJson);
+
+            for (int i = 0; jsonArray.length() > i; i++) {
+                Exchange exchange = new Exchange();
+                exchange.setTable(jsonArray.getJSONObject(i).getString("table"));
+                exchange.setNo(jsonArray.getJSONObject(i).getString("no"));
+                exchange.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
+
+                JSONArray jsonRates = jsonArray.getJSONObject(i).getJSONArray("rates");
+                List<Rate> rates = new ArrayList<>();
+                for (int j = 0; j < jsonRates.length(); j++) {
+                    String code = jsonRates.getJSONObject(j).getString("code");
+
+                    Rate rate = new Rate();
+//                    if (code.equals("EUR") || code.equals("USD")) {
+                    for (String s : codes) {
+                        if (code.equals(s)) {
+                            rate.setMid(jsonRates.getJSONObject(j).getDouble("mid"));
+                            rate.setCod(jsonRates.getJSONObject(j).getString("code"));
+                            rate.setCurrency(jsonRates.getJSONObject(j).getString("currency"));
+                            rates.add(rate);
+                        }
+                    }
+                    exchange.setRates(rates);
+                }
+                exchangeList.add(exchange);
+            }
+            getRateCurrency.setExchangeList(exchangeList);
+            getRateCurrency.setApiResponseInfo(apiResponseInfo);
+//            System.out.println(JsonUtils.gsonPretty(getRateCurrency));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return getRateCurrency;
     }
 }

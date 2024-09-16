@@ -1,6 +1,7 @@
 package pecunia_22.models.others;
 
 import lombok.*;
+import pecunia_22.models.others.NBP.Exchange;
 
 @Getter
 @Setter

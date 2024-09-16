@@ -1,4 +1,4 @@
-package pecunia_22.models.others;
+package pecunia_22.models.others.NBP;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

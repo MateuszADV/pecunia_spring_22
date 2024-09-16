@@ -1,4 +1,4 @@
-package pecunia_22.models.others;
+package pecunia_22.models.others.NBP;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -18,4 +18,6 @@ public class Rate {
     private String cod;
     @JsonProperty("mid")
     private Double mid;
+    private Double bid;
+    private Double ask;
 }

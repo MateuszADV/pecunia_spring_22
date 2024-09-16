@@ -1,7 +1,6 @@
 package pecunia_22.models.others.NBP;
 
 import lombok.*;
-import pecunia_22.models.others.Rate;
 
 import java.util.List;
 
