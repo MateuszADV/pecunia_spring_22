@@ -1,7 +1,5 @@
 package pecunia_22.controllers.viewControllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,12 +8,6 @@ import pecunia_22.models.others.NBP.*;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -27,16 +19,16 @@ public class NBPController {
     @GetMapping("/nbp")
     public String getIndex(ModelMap modelMap) {
 
-        List<GetGoldRateNBP> getGoldRateNBPList = new ArrayList<>();
-        getGoldRateNBPList = apiService.getGoldRateNBP("http://api.nbp.pl/api/cenyzlota/last/11");
+        List<GetGoldRateNBP> getGoldRateNBPList;
+        getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/11");
 
         getGoldRateNBPList.removeFirst();
         modelMap.addAttribute("npbGoldList", getGoldRateNBPList);
 
 //        ************* STATYSTYKA **********************
 
-        List<PriceStatistics> priceStatisticsList = new ArrayList<>();
-        priceStatisticsList = apiService.PriceStatistics("http://api.nbp.pl/api/cenyzlota/last/", 255);
+        List<PriceStatistics> priceStatisticsList;
+        priceStatisticsList = apiService.PriceStatistics("https://api.nbp.pl/api/cenyzlota/last/", 255);
 
         modelMap.addAttribute("priceStatistics", priceStatisticsList);
         return "nbp/index";
