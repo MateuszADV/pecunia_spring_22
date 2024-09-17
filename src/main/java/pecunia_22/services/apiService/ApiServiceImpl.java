@@ -6,14 +6,19 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.MediaType;
+import lombok.AllArgsConstructor;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pecunia_22.models.dto.seting.SettingDto;
 import pecunia_22.models.others.*;
 import pecunia_22.models.others.NBP.*;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
+import pecunia_22.models.setting.Setting;
+import pecunia_22.services.setingService.SettingServiceImpl;
 import utils.JsonUtils;
 
 import java.net.URI;
@@ -23,7 +28,11 @@ import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class ApiServiceImpl implements ApiService {
+
+    private SettingServiceImpl settingService;
+
     @Override
     public ClientResponse clientResponse(String url) {
 
@@ -364,16 +373,6 @@ public class ApiServiceImpl implements ApiService {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(responseBody);
-
-
-            // --------------- TESTY ----------------------------
-//            System.out.println(JsonUtils.gsonPretty(responseBody));
-            System.out.println(JsonUtils.gsonPretty(response.statusCode()));
-            JSONArray goldRate = new JSONArray(responseBody);
-            System.out.println(JsonUtils.gsonPretty(goldRate.getJSONObject(100).get("cena")));
-//            System.out.println(JsonUtils.gsonPretty(rootNode));
-            // --------------- TESTY KONIEC -----------------------
-
             for (JsonNode node : rootNode) {
                 double price = node.get("cena").asDouble() * 31.1034768;
                 String date = node.get("data").asText();
@@ -432,7 +431,7 @@ public class ApiServiceImpl implements ApiService {
             for (int i = 0; jsonArray.length() > i; i++) {
                 RateCurrency rateCurrency = new RateCurrency();
                 rateCurrency.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
-                if (table.toUpperCase().equals("C")) {
+                if (table.equalsIgnoreCase("C")) {
                     rateCurrency.setAsk(jsonArray.getJSONObject(i).getDouble("ask"));
                     rateCurrency.setBid(jsonArray.getJSONObject(i).getDouble("bid"));
                 } else {
@@ -453,14 +452,19 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public GetRateCurrency getRateCurrency(String table) {
+        System.out.println("+++++++++++++++++++++++++++++++++PARAMETER START+++++++++++++++++++++++++");
+        Setting setting = settingService.getSettingByName("rate_code");
+        SettingDto settingDto = new ModelMapper().map(setting, SettingDto.class);
+        System.out.println(JsonUtils.gsonPretty(settingDto));
+        String[] rare_code = settingDto.getSetting().split(", ");
+        for (String s : rare_code) {
+            System.out.println(s);
+        }
+        System.out.println("+++++++++++++++++++++++++++++++++PARAMETER STOP+++++++++++++++++++++++++");
+
         GetRateCurrency getRateCurrency = new GetRateCurrency();
         List<Exchange> exchangeList = new ArrayList<>();
-
-        String[] codes = {"USD", "EUR", "CHF", "GBP"};
-
-        System.out.println(codes.toString());
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
-        ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
         try {
             Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/tables/" + table + "/last/10?format=json");
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
@@ -480,7 +484,7 @@ public class ApiServiceImpl implements ApiService {
 
                     Rate rate = new Rate();
 //                    if (code.equals("EUR") || code.equals("USD")) {
-                    for (String s : codes) {
+                    for (String s : rare_code) {
                         if (code.equals(s)) {
                             rate.setMid(jsonRates.getJSONObject(j).getDouble("mid"));
                             rate.setCod(jsonRates.getJSONObject(j).getString("code"));

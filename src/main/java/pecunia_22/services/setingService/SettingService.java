@@ -13,4 +13,5 @@ public interface SettingService {
     Setting saveSettingGet(Setting setting);
     Setting getSettingById(Long id);
     void deleteSettingById(Long id);
+    Setting getSettingByName(String name);
 }
