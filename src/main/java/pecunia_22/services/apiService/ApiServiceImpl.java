@@ -135,7 +135,7 @@ public class ApiServiceImpl implements ApiService {
             String code;
             for (int i = 0; i < jsonArray1.length(); i++) {
                 code = jsonArray1.getJSONObject(i).get("code").toString();
-                if (Arrays.stream(codes).anyMatch(code::equals)) {
+                if (Arrays.asList(codes).contains(code)) {
                     Rate rate = new Rate();
                     rate.setCod(jsonArray1.getJSONObject(i).getString("code"));
                     rate.setCurrency(jsonArray1.getJSONObject(i).getString("currency"));
@@ -208,8 +208,8 @@ public class ApiServiceImpl implements ApiService {
 //                System.out.println(JsonUtils.gsonPretty(jsonObject));
 
                 MetalRate metalRate = new MetalRate();
-                metalRate.setSymbol(jsonObject.getString("symbol").toString());
-                metalRate.setName(jsonObject.getString("name").toString());
+                metalRate.setSymbol(jsonObject.getString("symbol"));
+                metalRate.setName(jsonObject.getString("name"));
                 metalRate.setPrice(jsonObject.getFloat("price"));
                 metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
                 metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
@@ -222,6 +222,7 @@ public class ApiServiceImpl implements ApiService {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
             }
 
+            assert webResource != null;
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             getMetalRate.setApiResponseInfo(apiResponseInfo);
             getMetalRate.setMetalRates(metalRates);
