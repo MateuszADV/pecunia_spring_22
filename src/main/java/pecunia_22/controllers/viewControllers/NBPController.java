@@ -8,7 +8,9 @@ import pecunia_22.models.others.NBP.*;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Controller
 @AllArgsConstructor
@@ -39,7 +41,21 @@ public class NBPController {
         ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("c", "EUR");
 
         GetRateCurrency getRateCurrency = apiService.getRateCurrency("A");
-        System.out.println(JsonUtils.gsonPretty(getRateCurrency));
+//        System.out.println(JsonUtils.gsonPretty(getRateCurrency));
+
+
+        for (Exchange exchange : getRateCurrency.getExchangeList()) {
+            System.out.println(exchange.getEffectiveDate());
+            System.out.println(exchange.getRates().get(1));
+        }
+
+        Object[][] dane;
+        for (int i = 0; getRateCurrency.getExchangeList().size() > i; i ++) {
+            System.out.println(getRateCurrency.getExchangeList().get(i));
+
+
+        }
+
 
 //        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
         modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
