@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.others.ApiResponseInfo;
 import pecunia_22.models.others.NBP.ExchangeCurrency;
+import pecunia_22.models.others.NBP.GetRateCurrency;
 import pecunia_22.models.others.NBP.RateCurrency;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
@@ -214,6 +215,31 @@ public class ChartRepository {
                                rateCurrency.getMid() };
             objects.add(object);
         }
+
+        return objects;
+    }
+
+    public List<Object[]> my_report_currency_rates() {
+        GetRateCurrency getRateCurrency = apiService.getRateCurrency("A");
+        Object[][] dane;
+        Object[] codes;
+        codes = new Object[getRateCurrency.getExchangeList().get(0).getRates().size()];
+        dane = new Object[getRateCurrency.getExchangeList().size()][getRateCurrency.getExchangeList().get(0).getRates().size() + 1];
+        for (int i = 0; getRateCurrency.getExchangeList().size() > i; i ++) {
+            dane[i][0] = getRateCurrency.getExchangeList().get(i).getEffectiveDate();
+            for (int j = 0; getRateCurrency.getExchangeList().get(i).getRates().size() > j; j++) {
+                dane[i][j + 1] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getMid();
+                if (i < 1) {
+                    codes[j] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getCod();
+                }
+            }
+        }
+
+        List<Object[]> objects = new ArrayList<>();
+        for (Object[] objects1 : dane) {
+            objects.add(objects1);
+        }
+        objects.add(codes);
 
         return objects;
     }

@@ -8,6 +8,7 @@ import pecunia_22.models.others.NBP.*;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -43,21 +44,30 @@ public class NBPController {
         GetRateCurrency getRateCurrency = apiService.getRateCurrency("A");
 //        System.out.println(JsonUtils.gsonPretty(getRateCurrency));
 
-
-        for (Exchange exchange : getRateCurrency.getExchangeList()) {
-            System.out.println(exchange.getEffectiveDate());
-            System.out.println(exchange.getRates().get(1));
-        }
-
+        String[] codes = new String[getRateCurrency.getExchangeList().get(0).getRates().size()];
         Object[][] dane;
+        dane = new Object[getRateCurrency.getExchangeList().size()][getRateCurrency.getExchangeList().get(0).getRates().size() + 1];
         for (int i = 0; getRateCurrency.getExchangeList().size() > i; i ++) {
-            System.out.println(getRateCurrency.getExchangeList().get(i));
-
-
+            dane[i][0] = getRateCurrency.getExchangeList().get(i).getEffectiveDate();
+            for (int j = 0; getRateCurrency.getExchangeList().get(i).getRates().size() > j; j++) {
+                dane[i][j + 1] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getMid();
+                if (i < 1) {
+                    codes[j] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getCod();
+                }
+            }
         }
 
+        List<Object[]> objects = new ArrayList<>();
+        for (Object[] objects1 : dane) {
+            objects.add(objects1);
+        }
+        objects.add(codes);
 
-//        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
+        System.out.println("---------------CODES-------------------------");
+//        System.out.println(JsonUtils.gsonPretty(codes));
+        System.out.println(JsonUtils.gsonPretty(objects));
+        System.out.println("---------------CODES-------------------------");
+
         modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
         return "nbp/rate-currency";
     }
