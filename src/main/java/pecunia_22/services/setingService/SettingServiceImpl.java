@@ -35,12 +35,22 @@ public class SettingServiceImpl implements SettingService {
         if (setting.isPresent()) {
             return setting.get();
         }else {
-            throw new RuntimeException("Continent Not Found For Id :: " + id);
+            throw new RuntimeException("Setting Not Found For Id :: " + id);
         }
     }
 
     @Override
     public void deleteSettingById(Long id) {
         this.settingRepository.deleteById(id);
+    }
+
+    @Override
+    public Setting getSettingByName(String name) {
+        Optional<Setting> setting = Optional.ofNullable(settingRepository.findSettingByName(name));
+        if (setting.isPresent()) {
+            return setting.get();
+        } else {
+            throw new RuntimeException("Setting Not Found For name :: " + name);
+        }
     }
 }

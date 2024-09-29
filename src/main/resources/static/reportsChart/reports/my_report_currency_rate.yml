@@ -1,0 +1,80 @@
+#CHartJS 3.6.0
+report:
+  name: "my_report_continents_test"
+chart:
+  datasets:
+    label: ['Bid', 'Ask']
+    backgroundColor: [ 'rgb(39, 122, 205, 0.5)', 'rgb(0, 0, 0, 0.5)', 'rgb(243, 248, 98, 0.5)', 'rgb(221, 12, 23, 0.5)', 'rgb(229, 184, 70, 0.5)', 'rgb(30, 201, 27, 0.5)', 'rgb(160, 160, 160, 0.5)' ]
+    borderWidth: 1
+    pointRadius: 0
+    borderColor: 'black'
+    hoverBackgroundColor: [ 'rgb(39, 122, 205)', 'rgb(0, 0, 0)', 'rgb(243, 248, 98)', 'rgb(221, 12, 23)', 'rgb(229, 184, 70)', 'rgb(30, 201, 27)', 'rgb(160, 160, 160)' ]
+  options:
+    animations:
+      tension:
+        duration: 1000
+        easing: 'linear'
+        from: 1
+        to: 0
+        loop: true
+    plugins:
+      customCanvasBackgroundColor:
+        color: 'red'
+      title:
+        display: true
+        text: 'Przykładowy wykres'
+        color: 'blue'
+        font:
+          weight: 'bold'
+          size: 20
+      subtitle:
+        display: true
+        text: 'Kurs EUR'
+        color: 'green'
+        font:
+          weight: 'bold'
+          size: 30
+      legend:
+#        Wyświetlanie legeny
+        display: true
+        labels:
+          color: 'black'
+          font:
+            size: 12
+            family: 'Helvetica Neue'
+    scales:
+      y:
+        min: 3
+        max: 10
+        beginAtZero: true
+        title:
+          display: true
+          text: 'Cena'
+          color: 'blue'
+          font:
+            size: 20
+            weight: 'bold'
+            lineHeight: 1.2
+        ticks:
+          color: 'green'
+        grid:
+#          color: 'black'   # Kolor lini siatki 'y'
+          tickColor: 'red'
+#          borderColor: 'red'
+          offset: true
+      x:
+        title:
+          display: true
+          text: 'Data'
+          color: 'green'
+          font:
+            size: 20
+            weight: 'bold'
+            lineHeight: 1.2
+        ticks:
+          color: 'brown'
+        grid:
+#          color: 'black'    # Kolor lini siatki 'x'
+          tickColor: 'red'
+#          borderColor: 'red'
+          offset: true
