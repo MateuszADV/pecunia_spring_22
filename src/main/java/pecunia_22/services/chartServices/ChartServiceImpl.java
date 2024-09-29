@@ -88,7 +88,7 @@ public class ChartServiceImpl implements ChartService {
         System.out.println(objects.size());
         System.out.println(objects.get(0).length);
         System.out.println("Jaki jest object");
-        System.out.println(JsonUtils.gsonPretty(objects));
+//        System.out.println(JsonUtils.gsonPretty(objects));
 
         Object[][] dane;
         if (objects.size() > 0) {

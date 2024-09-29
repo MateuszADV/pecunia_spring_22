@@ -6,18 +6,21 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.MediaType;
+import lombok.AllArgsConstructor;
 import org.glassfish.jersey.client.ClientResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pecunia_22.models.dto.seting.SettingDto;
 import pecunia_22.models.others.*;
-import pecunia_22.models.others.NBP.GetGoldRateNBP;
-import pecunia_22.models.others.NBP.PriceStatistics;
+import pecunia_22.models.others.NBP.*;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
 import pecunia_22.models.others.moneyMetals.MoneyMetal;
+import pecunia_22.models.setting.Setting;
+import pecunia_22.services.setingService.SettingServiceImpl;
 import utils.JsonUtils;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,7 +28,11 @@ import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class ApiServiceImpl implements ApiService {
+
+    private SettingServiceImpl settingService;
+
     @Override
     public ClientResponse clientResponse(String url) {
 
@@ -128,7 +135,7 @@ public class ApiServiceImpl implements ApiService {
             String code;
             for (int i = 0; i < jsonArray1.length(); i++) {
                 code = jsonArray1.getJSONObject(i).get("code").toString();
-                if (Arrays.stream(codes).anyMatch(code::equals)) {
+                if (Arrays.asList(codes).contains(code)) {
                     Rate rate = new Rate();
                     rate.setCod(jsonArray1.getJSONObject(i).getString("code"));
                     rate.setCurrency(jsonArray1.getJSONObject(i).getString("currency"));
@@ -201,8 +208,8 @@ public class ApiServiceImpl implements ApiService {
 //                System.out.println(JsonUtils.gsonPretty(jsonObject));
 
                 MetalRate metalRate = new MetalRate();
-                metalRate.setSymbol(jsonObject.getString("symbol").toString());
-                metalRate.setName(jsonObject.getString("name").toString());
+                metalRate.setSymbol(jsonObject.getString("symbol"));
+                metalRate.setName(jsonObject.getString("name"));
                 metalRate.setPrice(jsonObject.getFloat("price"));
                 metalRate.setUpdateAt((jsonObject.getString("updatedAt").formatted()));
                 metalRate.setUpdatedAtReadable(jsonObject.getString("updatedAtReadable"));
@@ -215,6 +222,7 @@ public class ApiServiceImpl implements ApiService {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
             }
 
+            assert webResource != null;
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             getMetalRate.setApiResponseInfo(apiResponseInfo);
             getMetalRate.setMetalRates(metalRates);
@@ -366,16 +374,6 @@ public class ApiServiceImpl implements ApiService {
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(responseBody);
-
-
-            // --------------- TESTY ----------------------------
-//            System.out.println(JsonUtils.gsonPretty(responseBody));
-            System.out.println(JsonUtils.gsonPretty(response.statusCode()));
-            JSONArray goldRate = new JSONArray(responseBody);
-            System.out.println(JsonUtils.gsonPretty(goldRate.getJSONObject(100).get("cena")));
-//            System.out.println(JsonUtils.gsonPretty(rootNode));
-            // --------------- TESTY KONIEC -----------------------
-
             for (JsonNode node : rootNode) {
                 double price = node.get("cena").asDouble() * 31.1034768;
                 String date = node.get("data").asText();
@@ -416,5 +414,95 @@ public class ApiServiceImpl implements ApiService {
         } else {
             return prices.get(size / 2);
         }
+    }
+
+    @Override
+    public ExchangeCurrency exchangeCurrency(String table, String cod) {
+        List<RateCurrency> rateCurrencies = new ArrayList<>();
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
+        try {
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/10/?format=json");
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
+            String stringJson = webResource.get(String.class);
+            JSONObject jsonObject = new JSONObject(stringJson);
+            JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("rates"));
+
+            for (int i = 0; jsonArray.length() > i; i++) {
+                RateCurrency rateCurrency = new RateCurrency();
+                rateCurrency.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
+                if (table.equalsIgnoreCase("C")) {
+                    rateCurrency.setAsk(jsonArray.getJSONObject(i).getDouble("ask"));
+                    rateCurrency.setBid(jsonArray.getJSONObject(i).getDouble("bid"));
+                } else {
+                    rateCurrency.setMid(jsonArray.getJSONObject(i).getDouble("mid"));
+                }
+                rateCurrencies.add(rateCurrency);
+            }
+            exchangeCurrency.setCurrency(jsonObject.getString("currency"));
+            exchangeCurrency.setCode(jsonObject.getString("code"));
+            exchangeCurrency.setRateCurrencies(rateCurrencies);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+//        System.out.println(JsonUtils.gsonPretty(exchangeCurrency));
+        return exchangeCurrency;
+    }
+
+    @Override
+    public GetRateCurrency getRateCurrency(String table) {
+        System.out.println("+++++++++++++++++++++++++++++++++PARAMETER START+++++++++++++++++++++++++");
+        Setting setting = settingService.getSettingByName("rate_code");
+        SettingDto settingDto = new ModelMapper().map(setting, SettingDto.class);
+        System.out.println(JsonUtils.gsonPretty(settingDto));
+        String[] rare_code = settingDto.getSetting().split(", ");
+        for (String s : rare_code) {
+            System.out.println(s);
+        }
+        System.out.println("+++++++++++++++++++++++++++++++++PARAMETER STOP+++++++++++++++++++++++++");
+
+        GetRateCurrency getRateCurrency = new GetRateCurrency();
+        List<Exchange> exchangeList = new ArrayList<>();
+        ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
+        try {
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/tables/" + table + "/last/10?format=json");
+            apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
+            String stringJson = webResource.get(String.class);
+            JSONArray jsonArray  = new JSONArray(stringJson);
+
+            for (int i = 0; jsonArray.length() > i; i++) {
+                Exchange exchange = new Exchange();
+                exchange.setTable(jsonArray.getJSONObject(i).getString("table"));
+                exchange.setNo(jsonArray.getJSONObject(i).getString("no"));
+                exchange.setEffectiveDate(jsonArray.getJSONObject(i).getString("effectiveDate"));
+
+                JSONArray jsonRates = jsonArray.getJSONObject(i).getJSONArray("rates");
+                List<Rate> rates = new ArrayList<>();
+                for (int j = 0; j < jsonRates.length(); j++) {
+                    String code = jsonRates.getJSONObject(j).getString("code");
+
+                    Rate rate = new Rate();
+//                    if (code.equals("EUR") || code.equals("USD")) {
+                    for (String s : rare_code) {
+                        if (code.equals(s)) {
+                            rate.setMid(jsonRates.getJSONObject(j).getDouble("mid"));
+                            rate.setCod(jsonRates.getJSONObject(j).getString("code"));
+                            rate.setCurrency(jsonRates.getJSONObject(j).getString("currency"));
+                            rates.add(rate);
+                        }
+                    }
+                    exchange.setRates(rates);
+                }
+                exchangeList.add(exchange);
+            }
+            getRateCurrency.setExchangeList(exchangeList);
+            getRateCurrency.setApiResponseInfo(apiResponseInfo);
+//            System.out.println(JsonUtils.gsonPretty(getRateCurrency));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return getRateCurrency;
     }
 }

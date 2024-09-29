@@ -96,7 +96,8 @@ public class NoteController {
     }
 
     @GetMapping("/note/note_list/")
-    public String getNoteList(@RequestParam(value = "currencySeries") String currencySeries,
+    public String getNoteList(
+//            @RequestParam(value = "currencySeries") String currencySeries,
                               @RequestParam(value = "curId") Long  currencyId,
                               HttpServletRequest request,
                               ModelMap modelMap) {
@@ -235,7 +236,8 @@ public class NoteController {
         System.out.println(stop - start);
         System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
 //        return getNoteList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
-        return "redirect:/note/note_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
+//        return "redirect:/note/note_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
+        return "redirect:/note/note_list/?curId=" + currency.getId();
 
     }
 
