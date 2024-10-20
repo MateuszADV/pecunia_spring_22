@@ -26,7 +26,7 @@ public class NoteDtoForm extends CommonDtoForm {
 
     public NoteDtoForm(String itemDate, Date dateBuy, String nameCurrency, Double priceBuy, Double priceSell,
                        Integer quantity, String statusSell, String description, String aversPath, String reversePath,
-                       Double denomination, String series, Integer width, Integer height, Timestamp created_at, Timestamp updated_at,
+                       Double denomination, String series, Integer width, Integer height, String serialNumber, Timestamp created_at, Timestamp updated_at,
                        Boolean visible, String unitCurrency, String unitQuantity, BoughtDtoSelect boughts, QualityDtoSelect qualities, StatusDtoSelect statuses,
                        ActiveDtoSelect actives, ImageTypeDtoSelect imageTypes) {
         super(itemDate, dateBuy, nameCurrency, priceBuy, priceSell, quantity, statusSell, description,
@@ -37,6 +37,7 @@ public class NoteDtoForm extends CommonDtoForm {
 //        this.making = making;
         this.width = width;
         this.height = height;
+        this.serialNumber = serialNumber;
     }
     public NoteDtoForm() {
     }
@@ -57,4 +58,5 @@ public class NoteDtoForm extends CommonDtoForm {
     //    private String making;
     private Integer width;
     private Integer height;
+    private String serialNumber;
 }
