@@ -64,6 +64,9 @@
         </div>
     </div>
     <hr class="my-2">
+    <strong>Serial Number: </strong>
+    <span th:text="${note.serialNumber}"></span>
+    <hr class="my-2">
     <div th:replace="~{note/fragments/_lightBoxNote :: lightBox}"></div>
     <div class="col field" style="padding: 10px 0px 10px 0px">
         <textarea th:text="${note.description}" style="width: 100%; height: 150px; background: darkgray; resize: none" disable></textarea>

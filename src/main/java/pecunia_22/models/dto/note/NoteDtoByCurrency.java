@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 public class NoteDtoByCurrency extends CommonDto {
     public NoteDtoByCurrency(String itemDate, Date dateBuy, String nameCurrency, Double priceBuy, Double priceSell,
                              Integer quantity, String statusSell, String description, String aversPath, String reversePath,
-                             Double denomination, String series, Integer width, Integer height, Timestamp created_at, Timestamp updated_at,
+                             Double denomination, String series, Integer width, Integer height, String serialNumber, Timestamp created_at, Timestamp updated_at,
                              Boolean visible, String unitCurrency, String unitQuantity, BoughtDto boughts, QualityDto qualities, StatusDto statuses,
                              ActiveDto actives, ImageTypeDto imageTypes) {
         super(itemDate, dateBuy, nameCurrency, priceBuy, priceSell, quantity, statusSell, description,
@@ -32,6 +32,7 @@ public class NoteDtoByCurrency extends CommonDto {
 //        this.making = making;
         this.width = width;
         this.height = height;
+        this.serialNumber = serialNumber;
     }
     public NoteDtoByCurrency() {
     }
@@ -42,6 +43,7 @@ public class NoteDtoByCurrency extends CommonDto {
     //    private String making;
     private Integer width;
     private Integer height;
+    private String serialNumber;
 
     //    private ActiveDto actives;
     private MakingDto makings;
