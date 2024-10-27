@@ -45,7 +45,7 @@
                             <td th:text="${note.id}"></td>
                             <td th:text="${#numbers.formatDecimal(note.denomination,1,2)}"></td>
                             <td th:text="${note.nameCurrency}"></td>
-                            <td th:text="${note.statuses.status}"></td>
+                            <td th:text="${note.statuses.status}" th:class="${note.statuses.status.replace(' ', '_')}"></td>
                             <td class="p-0 m-0" style="width: 100px">
                                 <div style="display: flex; justify-content: center">
                                     <div th:replace="~{fragments/_image-small :: image-small(image = ${note.aversPath})}"></div>
