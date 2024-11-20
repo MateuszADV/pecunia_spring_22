@@ -14,7 +14,8 @@
         <div>
             <label class="m-0">Id</label>
             <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="created At" readonly/>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" style="max-width: 220px" placeholder="created At" readonly/>
+            <input class="form-control form-control-sm mb-2" type="text" th:field="*{updated_at}" style="max-width: 220px" placeholder="updated At" readonly/>
         </div>
         <div th:replace="~{currency/_form :: form}"></div>
         <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
