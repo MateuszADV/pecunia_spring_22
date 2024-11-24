@@ -4,7 +4,7 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout}">
 <head>
-    <title>Making Seting</title>
+    <title>Status</title>
 </head>
 <body>
     <div layout:fragment="content" class="container">
@@ -24,7 +24,7 @@
             <Block th:each="status, i : ${statusDtos}">
                 <tr>
                     <td th:text="${i.index + 1}" class="pt-1 pb-1"></td>
-                    <td th:text="${status.status}" class="pt-1 pb-1"></td>
+                    <td th:text="${status.status}" th:class="${status.status.replace(' ', '_')}" class="pt-1 pb-1"></td>
                     <td th:text="${status.statusPl}" class="pt-1 pb-1"></td>
                     <td th:text="${status.description}" class="pt-1 pb-1"></td>
                     <td class="pt-1 pb-1">

@@ -1,5 +1,6 @@
 <header th:fragment="form"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml">
 
     <div>
         <div class="form-row align-items-center">
@@ -164,13 +165,14 @@
             </div>
             <div class="col-auto">
                 <label class="m-0">Status</label>
-                <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}">
+                <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}" >
                     <span th:if="*{statuses.id == null}">
                         <option value="">SELECT STATUS</option>
                     </span>
                     <option th:each="status : ${statuses}"
                             th:value="${status.id}"
-                            th:text="${status.status}">
+                            th:text="${status.status}"
+                            th:class="${status.status.replace(' ', '_')}">
                     </option>
                 </select>
                 <div th:if="${#fields.hasErrors('statuses.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >

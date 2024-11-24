@@ -38,7 +38,6 @@ public class CurrencyController {
     private ActiveServiceImpl activeService;
     private PatternServiceImpl patternService;
 
-    private Optional<Currency> currencyTemp;
     @GetMapping("/currency")
     public String getIndex(ModelMap modelMap) {
 
@@ -132,6 +131,7 @@ public class CurrencyController {
     @GetMapping("currency/edit/{currencyId}")
     public String postEdit(@PathVariable Long currencyId,
                            ModelMap modelMap) {
+        Optional<Currency> currencyTemp;
         currencyTemp = currencyRepository.findById(currencyId);
         CurrencyDtoForm currencyDtoForm = new ModelMapper().map(currencyTemp, CurrencyDtoForm.class);
         System.out.println("*****************************START************************************");
@@ -163,9 +163,11 @@ public class CurrencyController {
     public String postEdit(@ModelAttribute("currencyForm") @Valid CurrencyDtoForm currencyForm,
                            BindingResult result,
                            ModelMap modelMap) {
+        System.out.println("--------------------FORM----------------------------");
+        System.out.println(JsonUtils.gsonPretty(currencyForm));
+        System.out.println("--------------------FORM----------------------------");
 
         if (result.hasErrors()) {
-            System.out.println(JsonUtils.gsonPretty(currencyForm));
 
             List<Active> actives = activeService.getAllActive();
             List<ActiveDtoSelect> activeDtoCurrencies = new ArrayList<>();
@@ -186,8 +188,8 @@ public class CurrencyController {
             return "currency/edit";
         }
 
-        currencyForm.setId(currencyTemp.get().getId());
-        currencyForm.setCreated_at(currencyTemp.get().getCreated_at());
+//        currencyForm.setId(currencyTemp.get().getId());
+//        currencyForm.setCreated_at(currencyTemp.get().getCreated_at());
 
         Currency currency = new ModelMapper().map(currencyForm, Currency.class);
 
