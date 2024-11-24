@@ -3,6 +3,13 @@
     xmlns="http://www.w3.org/1999/xhtml">
 
     <div>
+        <div>
+<!--            <span th:text="${currencies[0].countries.countryEn}"></span>-->
+            <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+        </div>
+    </div>
+    <div>
+        <hr class="my-2">
         <div class="form-row align-items-center">
             <div class="col-auto">
                 <label class="m-0">Currency Series</label>
