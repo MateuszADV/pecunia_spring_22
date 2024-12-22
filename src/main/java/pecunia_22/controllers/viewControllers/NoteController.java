@@ -163,7 +163,7 @@ public class NoteController {
                 modelMap.addAttribute("errorDateBuy", "Podaj porawną datę");
             }
             System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR END&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-
+            modelMap.addAttribute("noteForm", noteForm);
             Currency currency = currencyService.getCurrencyById(noteForm.getCurrencies().getId());
             noteFormVariable(modelMap, currency);
             return "note/new";
