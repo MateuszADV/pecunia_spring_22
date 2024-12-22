@@ -55,8 +55,47 @@ body
 
 
 /*
-*****************STATUS ORDER
+*****************STATUS ORDER**********************************************
  */
+
+.KOLEKCJA
+{
+    background-color: lightgreen;
+    padding: 0 5px 0 5px;
+}
+
+.FOR_SELL
+{
+    background-color: lightcoral;
+    padding: 0 5px 0 5px;
+}
+.SOLD
+{
+    background-color: yellow;
+    padding: 0 5px 0 5px;
+}
+
+.OTHER
+{
+    background-color: gray;
+    padding: 0 5px 0 5px;
+}
+
+.FUTURE
+{
+    background-color: lightskyblue;
+    padding: 0 5px 0 5px;
+}
+
+.NEW
+{
+    background-color: orange;
+    padding: 0 5px 0 5px;
+}
+
+/*
+***************** STATUS **********************************************
+*/
 
 .Open
 {
@@ -80,7 +119,6 @@ body
     background-color: gray;
     padding: 0 5px 0 5px;
 }
-
 
 /**************************MODAL CONFIRM DELETE**************************
 

@@ -239,7 +239,7 @@ public class ChartRepository {
         for (Object[] objects1 : dane) {
             objects.add(objects1);
         }
-        objects.add(codes);
+//        objects.add(codes);
 
         return objects;
     }

@@ -1,7 +1,15 @@
 <header th:fragment="form"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml">
 
     <div>
+        <div>
+<!--            <span th:text="${currencies[0].countries.countryEn}"></span>-->
+            <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+        </div>
+    </div>
+    <div>
+        <hr class="my-2">
         <div class="form-row align-items-center">
             <div class="col-auto">
                 <label class="m-0">Currency Series</label>
@@ -164,13 +172,14 @@
             </div>
             <div class="col-auto">
                 <label class="m-0">Status</label>
-                <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}">
+                <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}" >
                     <span th:if="*{statuses.id == null}">
                         <option value="">SELECT STATUS</option>
                     </span>
                     <option th:each="status : ${statuses}"
                             th:value="${status.id}"
-                            th:text="${status.status}">
+                            th:text="${status.status}"
+                            th:class="${status.status.replace(' ', '_')}">
                     </option>
                 </select>
                 <div th:if="${#fields.hasErrors('statuses.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
@@ -207,6 +216,13 @@
             <div class="col">
                 <label class="m-0">Description</label>
                 <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+            </div>
+        </div>
+        <hr class="my-2">
+        <div class="form-row align-items-center">
+            <div class="col">
+                <label class="m-0" for="aversPath">Serial Number</label>
+                <input type="text" class="form-control form-control-sm mb-2" id="serialNumber" th:field="*{serialNumber}" placeholder="Serial Number">
             </div>
         </div>
         <hr class="my-2">
