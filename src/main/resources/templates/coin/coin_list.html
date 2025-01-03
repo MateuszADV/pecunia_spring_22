@@ -33,6 +33,7 @@
                         <th>Id</th>
                         <th>Denomination</th>
                         <th>Currency</th>
+                        <th>Date</th>
                         <th>Status</th>
                         <th>Image</th>
                         <th style="width: 156px">Akcja</th>
@@ -45,7 +46,8 @@
                             <td th:text="${coin.id}"></td>
                             <td th:text="${#numbers.formatDecimal(coin.denomination,1,2)}"></td>
                             <td th:text="${coin.nameCurrency}"></td>
-                            <td th:text="${coin.statuses.status}"></td>
+                            <td th:text="${coin.getItemDate()}"></td>
+                            <td th:text="${coin.statuses.status}" th:class="${coin.statuses.status.replace(' ', '_')}"></td>
                             <td class="p-0 m-0" style="width: 100px">
                                 <div style="display: flex; justify-content: center">
                                     <div th:replace="~{fragments/_image-small :: image-small(image = ${coin.aversPath})}"></div>
