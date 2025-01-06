@@ -49,6 +49,8 @@ public class WebSecurityConfig  {
 //                        ***********************************
 //                        *************VIEW******************
 //                        ***********************************
+                .requestMatchers("/flags/**")
+                .permitAll()
 
                 .requestMatchers("/", "/registration", "/about")
                 .permitAll()
@@ -94,7 +96,7 @@ public class WebSecurityConfig  {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/flags/**","/reportsChart/**");
+        return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/reportsChart/**");
     }
 
     @Bean
