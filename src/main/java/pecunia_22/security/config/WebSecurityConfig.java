@@ -51,7 +51,7 @@ public class WebSecurityConfig  {
 //                        **********PARAMETERS***************
 //                        ***********************************
 
-                        .requestMatchers("/flags/**")
+                        .requestMatchers("/flags/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/reportsChart/**")
                         .permitAll()
                         .requestMatchers("/resources/**")
                         .permitAll()
@@ -102,10 +102,10 @@ public class WebSecurityConfig  {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers( "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/reportsChart/**");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers(  "");
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
