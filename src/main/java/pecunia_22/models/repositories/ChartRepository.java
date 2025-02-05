@@ -207,7 +207,7 @@ public class ChartRepository {
 
     public List<Object[]> my_report_currency_rate() {
         ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
-        exchangeCurrency = apiService.exchangeCurrency("A", "USD");
+        exchangeCurrency = apiService.exchangeCurrency("A", "EUR");
         List<Object[]> objects = new ArrayList<>();
         for (RateCurrency rateCurrency : exchangeCurrency.getRateCurrencies()) {
             Object[] object = {rateCurrency.getEffectiveDate(),
