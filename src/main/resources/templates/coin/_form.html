@@ -1,17 +1,21 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
+    <div>
+        <div>
+            <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+        </div>
+    </div>
 
     <div class="form-row align-items-center">
         <div class="col-auto">
             <label class="m-0">Currency Series</label>
             <select class="form-control form-control-sm mb-2" th:field="*{currencies.id}">
                     <span th:if="*{currencies.id == null}">
-                        <option value="">SELECT CONTINENT</option>
+                        <option value="">SELECT CURRENCY</option>
                     </span>
                 <option th:each="currency : ${currencies}"
                         th:value="${currency.id}"
                         th:text="${currency.currencySeries}">
-                    Address
                 </option>
             </select>
         </div>

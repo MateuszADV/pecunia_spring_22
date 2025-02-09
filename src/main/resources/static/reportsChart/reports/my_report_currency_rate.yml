@@ -45,7 +45,7 @@ chart:
     scales:
       y:
         min: 3
-        max: 10
+        max: 5
         beginAtZero: true
         title:
           display: true
