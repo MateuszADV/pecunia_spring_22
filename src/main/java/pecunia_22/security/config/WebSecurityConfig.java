@@ -46,6 +46,16 @@ public class WebSecurityConfig  {
                 .permitAll()
                 .requestMatchers("/api/v*/reportTest/**")
                 .permitAll()
+
+//                        ***********************************
+//                        **********PARAMETERS***************
+//                        ***********************************
+
+                        .requestMatchers("/flags/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/reportsChart/**")
+                        .permitAll()
+                        .requestMatchers("/resources/**")
+                        .permitAll()
+
 //                        ***********************************
 //                        *************VIEW******************
 //                        ***********************************
@@ -92,10 +102,10 @@ public class WebSecurityConfig  {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/vendor/**","/fonts/**","/flags/**","/reportsChart/**");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers(  "");
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
