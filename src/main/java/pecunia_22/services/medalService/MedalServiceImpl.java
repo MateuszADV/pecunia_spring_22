@@ -42,4 +42,10 @@ public class MedalServiceImpl implements MedalService {
     public void deleteMedalById(Long id) {
         this.medalRepository.deleteById(id);
     }
+
+    @Override
+    public List<Medal> getMedalByCurrencyId(Long currencyId) {
+        List<Medal> medals = medalRepository.getMedalByCurrencyId(currencyId);
+        return medals;
+    }
 }
