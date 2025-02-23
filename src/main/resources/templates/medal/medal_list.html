@@ -31,7 +31,7 @@
                     <tr>
                         <th>Lp:</th>
                         <th>Id</th>
-                        <th>Denomination</th>
+<!--                        <th>Denomination</th>-->
                         <th>Currency</th>
                         <th>Date</th>
                         <th>Status</th>
@@ -44,7 +44,7 @@
                         <tr>
                             <td th:text="${i.index +1}"></td>
                             <td th:text="${medal.id}"></td>
-                            <td th:text="${#numbers.formatDecimal(medal.denomination,1,2)}"></td>
+<!--                            <td th:text="${#numbers.formatDecimal(medal.denomination,1,2)}"></td>-->
                             <td th:text="${medal.nameCurrency}"></td>
                             <td th:text="${medal.getItemDate()}"></td>
                             <td th:text="${medal.statuses.status}" th:class="${medal.statuses.status.replace(' ', '_')}"></td>

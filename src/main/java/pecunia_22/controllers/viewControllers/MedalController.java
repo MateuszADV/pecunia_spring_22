@@ -1,20 +1,27 @@
 package pecunia_22.controllers.viewControllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import pecunia_22.models.Country;
-import pecunia_22.models.Currency;
-import pecunia_22.models.Medal;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import pecunia_22.models.*;
+import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
+import pecunia_22.models.dto.active.ActiveDtoSelect;
+import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountryDtoForm;
+import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.making.MakingDtoSelect;
+import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.dto.medal.MedalDtoByCurrency;
+import pecunia_22.models.dto.medal.MedalDtoForm;
+import pecunia_22.models.dto.quality.QualityDtoSelect;
+import pecunia_22.models.dto.status.StatusDtoSelect;
+import pecunia_22.models.others.variable.VariableForm;
 import pecunia_22.services.active.ActiveServiceImpl;
 import pecunia_22.services.boughtService.BoughtServiceImpl;
 import pecunia_22.services.countryService.CountryServiceImpl;
@@ -24,8 +31,11 @@ import pecunia_22.services.makingService.MakingServiceImpl;
 import pecunia_22.services.medalService.MedalServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
+import utils.JsonUtils;
 import utils.Search;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,5 +101,108 @@ public class MedalController {
         modelMap.addAttribute("currency", currencyDtoByPattern);
         modelMap.addAttribute("medals", medalDtoByCurrencies);
         return "/medal/medal_list";
+    }
+
+    @GetMapping("/medal/new/")
+    public String getNew(@RequestParam(value = "curId") Long currencyId,
+                         ModelMap modelMap) {
+        Currency currency = currencyService.getCurrencyById(currencyId);
+        CurrencyDto currencyDto = new ModelMapper().map(currency, CurrencyDto.class);
+
+        formVariable(modelMap, currency);
+
+        MedalDtoForm medalDtoForm = new MedalDtoForm();
+        medalDtoForm.setCurrencies(currencyDto);
+
+        medalDtoForm.setDateBuy(Date.valueOf(LocalDate.now()));
+        medalDtoForm.setPriceBuy(0.00);
+        medalDtoForm.setPriceSell(0.00);
+        modelMap.addAttribute("medalForm", medalDtoForm);
+        return "medal/new";
+    }
+
+    @PostMapping("/medal/new")
+    public String postNew(@ModelAttribute("medalForm")@Valid MedalDtoForm medalForm, BindingResult result,
+                          HttpServletRequest request,
+                          ModelMap modelMap) {
+
+        if (result.hasErrors()) {
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            System.out.println(result.toString());
+            System.out.println(result.hasFieldErrors("dateBuy"));
+            System.out.println(result.resolveMessageCodes("test błedu", "dateBuy").toString());
+
+            if (result.hasFieldErrors("dateBuy")) {
+                modelMap.addAttribute("errorDateBuy", "Podaj porawną datę");
+            }
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR END&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            Currency currency = currencyService.getCurrencyById(medalForm.getCurrencies().getId());
+            formVariable(modelMap, currency);
+            return "medal/new";
+        }
+
+        Currency currency = currencyService.getCurrencyById(medalForm.getCurrencies().getId());
+        Medal medal = new ModelMapper().map(medalForm, Medal.class);
+        medalService.saveMedal(medal);
+
+//        return getCoinList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
+        return "redirect:/medal/medal_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
+    }
+
+    @GetMapping("/medal/show/{medalId}")
+    public String getShowMedal(@PathVariable Long medalId, ModelMap modelMap) {
+        System.out.println(medalId);
+        Medal medal = medalService.getMedalById(medalId);
+        MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
+        System.out.println(JsonUtils.gsonPretty(medalDto));
+
+        modelMap.addAttribute("medal", medalDto);
+        modelMap.addAttribute("json", JsonUtils.gsonPretty(medalDto));
+        return "/medal/show";
+    }
+
+    private void formVariable(ModelMap modelMap, Currency currency) {
+        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+        List<CurrencyDto> currencyDtos = new ArrayList<>();
+        for (Currency currency1 : currenciesList) {
+            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+        }
+
+        List<Bought> boughts = boughtServices.getAllBought();
+        List<BoughtDto> boughtDtos = new ArrayList<>();
+        for (Bought bought : boughts) {
+            boughtDtos.add(new ModelMapper().map(bought, BoughtDto.class));
+        }
+        List<Active> actives = activeService.getAllActive();
+        List<ActiveDtoSelect> activeDtoSelects = new ArrayList<>();
+        for (Active active : actives) {
+            activeDtoSelects.add(new ModelMapper().map(active, ActiveDtoSelect.class));
+        }
+
+        List<Making> makings = makingService.getAllMakings();
+        List<MakingDtoSelect> makingDtoSelects = new ArrayList<>();
+        for (Making making : makings) {
+            makingDtoSelects.add(new ModelMapper().map(making, MakingDtoSelect.class));
+        }
+
+        List<Quality> qualities = qualityService.getAllQuality();
+        List<QualityDtoSelect> qualityDtoSelects = new ArrayList<>();
+        for (Quality quality : qualities) {
+            qualityDtoSelects.add(new ModelMapper().map(quality, QualityDtoSelect.class));
+        }
+
+        List<Status> statuses = statusService.getAllStatuses();
+        List<StatusDtoSelect> statusDtoSelects = new ArrayList<>();
+        for (Status status : statuses) {
+            statusDtoSelects.add(new ModelMapper().map(status, StatusDtoSelect.class));
+        }
+
+        List<ImageType> imageTypes = imageTypeService.getAllImageTypes();
+        List<ImageTypeDtoSelect> imageTypeDtoSelects = new ArrayList<>();
+        for (ImageType imageType : imageTypes) {
+            imageTypeDtoSelects.add(new ModelMapper().map(imageType, ImageTypeDtoSelect.class));
+        }
+
+        VariableForm.variableToSelect(modelMap, currencyDtos, boughtDtos, activeDtoSelects, makingDtoSelects, qualityDtoSelects, statusDtoSelects, imageTypeDtoSelects);
     }
 }
