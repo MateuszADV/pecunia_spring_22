@@ -1,6 +1,7 @@
 package pecunia_22.controllers.viewControllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -38,6 +39,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -145,8 +147,77 @@ public class MedalController {
         Medal medal = new ModelMapper().map(medalForm, Medal.class);
         medalService.saveMedal(medal);
 
-//        return getCoinList(currency.getCurrencySeries(), currency.getId(), request, modelMap);
         return "redirect:/medal/medal_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
+    }
+
+    @GetMapping("/medal/edit/{medalId}")
+    public String getEdit(@PathVariable Long medalId,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          ModelMap modelMap) {
+        Optional<Medal> medal = Optional.ofNullable(medalService.getMedalById(medalId));
+        MedalDtoForm medalDtoForm = new ModelMapper().map(medal, MedalDtoForm.class);
+        modelMap.addAttribute("medalForm", medalDtoForm);
+        modelMap.addAttribute("medalInfoLightBox", medalDtoForm);
+        formVariable(modelMap, medal.get().getCurrencies());
+        return "medal/edit";
+    }
+
+    @PostMapping("/medal/edit")
+    public String postEdit(@ModelAttribute ("medalForm")@Valid MedalDtoForm medalForm, BindingResult result,
+                           HttpServletRequest request,
+                           ModelMap modelMap) {
+        if (result.hasErrors()) {
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+            Optional<Medal> medal = Optional.ofNullable(medalService.getMedalById(medalForm.getId()));
+            MedalDtoForm medalInfoLightBox = new ModelMapper().map(medal, MedalDtoForm.class);
+            modelMap.addAttribute("medalInfoLightBox", medalInfoLightBox);
+
+            System.out.println(result.toString());
+            System.out.println(result.hasFieldErrors("dateBuy"));
+            System.out.println(result.resolveMessageCodes("test błedu", "dateBuy").toString());
+
+            if (result.hasFieldErrors("dateBuy")) {
+                System.out.println(result.getFieldError("dateBuy").getDefaultMessage());
+                System.out.println(result.getFieldError("dateBuy").getCode());
+                modelMap.addAttribute("errorDateBuy", "Podaj porawną datę");
+            }
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR END&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+            Currency currency = currencyService.getCurrencyById(medalForm.getCurrencies().getId());
+
+            formVariable(modelMap, currency);
+            return "medal/edit";
+        }
+
+        Currency currency = currencyService.getCurrencyById(medalForm.getCurrencies().getId());
+        System.out.println(JsonUtils.gsonPretty(medalForm));
+        System.out.println("++++++++++++++++++++++++++++++STOP+++++++++++++++++++++++++++++++");
+
+        Medal medal = new ModelMapper().map(medalForm, Medal.class);
+
+
+        System.out.println("+++++++++++++++++ UPDATE START +++++++++++++++++++++++++");
+        Long start = System.currentTimeMillis();
+        medalService.updateMedal(medal);
+        Long stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        System.out.println("++++++++++++++++++UPDATE END +++++++++++++++++++++++++++");
+
+        return "redirect:/medal/medal_list/?currencySeries=" + currency.getCurrencySeries() + "&curId=" + currency.getId();
+    }
+
+    @GetMapping("/medal/delete/{medalId}")
+    public String getDelete(@PathVariable Long medalId, HttpServletRequest request, ModelMap modelMap) {
+        Medal medal = medalService.getMedalById(medalId);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^BEGIN^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        System.out.println(medal.getCurrencies().getCurrencySeries());
+        System.out.println(medal.getCurrencies().getId());
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^END^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+        medalService.deleteMedalById(medalId);
+        return "redirect:/medal/medal_list/?currencySeries=" + medal.getCurrencies().getCurrencySeries() + "&curId=" + medal.getCurrencies().getId();
     }
 
     @GetMapping("/medal/show/{medalId}")

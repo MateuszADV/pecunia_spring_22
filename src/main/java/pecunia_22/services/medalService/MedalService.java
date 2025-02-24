@@ -13,4 +13,6 @@ public interface MedalService {
     void deleteMedalById(Long id);
 
     List<Medal> getMedalByCurrencyId(Long currencyId);
+
+    void updateMedal(Medal medal);
 }

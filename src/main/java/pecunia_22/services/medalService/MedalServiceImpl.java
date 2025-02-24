@@ -48,4 +48,13 @@ public class MedalServiceImpl implements MedalService {
         List<Medal> medals = medalRepository.getMedalByCurrencyId(currencyId);
         return medals;
     }
+
+    @Override
+    public void updateMedal(Medal medal) {
+        medalRepository.updateMedal(medal.getCurrencies().getId(), medal.getDenomination(), medal.getDateBuy(), medal.getNameCurrency(), medal.getSeries(),
+                medal.getBoughts().getId(), medal.getItemDate(), medal.getQuantity(), medal.getUnitQuantity(), medal.getActives().getId(), medal.getPriceBuy(), medal.getPriceSell(),
+                medal.getQualities().getId(), medal.getDiameter(), medal.getThickness(), medal.getWeight(), medal.getStatuses().getId(), medal.getImageTypes().getId(),
+                medal.getStatusSell(), medal.getVisible(), medal.getComposition(), medal.getDescription(), medal.getAversPath(), medal.getReversePath(),
+                medal.getId());
+    }
 }
