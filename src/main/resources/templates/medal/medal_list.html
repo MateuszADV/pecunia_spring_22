@@ -57,7 +57,12 @@
                             <td class="pt-1 pb-1">
                                 <a th:replace="~{fragments/button/_button-show_icon_small :: show_icon_small(show = '/medal/show/' + ${medal.id})}"></a>
                                 <a th:replace="~{fragments/button/_button-edit_icon_small :: edit_icon_small(edit = '/medal/edit/' + ${medal.id})}"></a>
-                                <a th:replace="~{fragments/button/_button-delete_icon_small :: delete_icon_small(delete = '/medal/delete/' + ${medal.id})}"></a>
+<!--                                <a th:replace="~{fragments/button/_button-delete_icon_small :: delete_icon_small(delete = '/medal/delete/' + ${medal.id})}"></a>-->
+                                <a th:href="@{'/medal/delete/' + ${medal.id}}" class="btn btn-sm btn-danger" style="font-size: 10px; float: right" data-toggle="modal" th:attr="data-target='#medal' + ${medal.id}"
+                                   th:insert="~{fragments/button/_button-delete :: delete_icon}"></a>
+                                <div class="modal fade" th:attr="id= 'medal' + ${medal.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div th:replace="~{/medal/_confirmDeleteModal :: confirmDeleteModal}"></div>
+                                </div>
                             </td>
                         </tr>
                     </Block>
