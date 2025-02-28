@@ -422,7 +422,7 @@ public class ApiServiceImpl implements ApiService {
         ApiResponseInfo apiResponseInfo = new ApiResponseInfo();
         ExchangeCurrency exchangeCurrency = new ExchangeCurrency();
         try {
-            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/10/?format=json");
+            Invocation.Builder webResource = webResource("https://api.nbp.pl/api/exchangerates/rates/" + table + "/" +cod + "/last/50/?format=json");
             apiResponseInfo.setResponseStatusInfo(webResource.accept("application/json").get().getStatusInfo());
             System.out.println(JsonUtils.gsonPretty(apiResponseInfo));
             String stringJson = webResource.get(String.class);

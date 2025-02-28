@@ -175,7 +175,7 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
                    "coin.qualities.id = ?13, coin.diameter = ?14,     coin.thickness = ?15,   coin.weight = ?16,      coin.statuses.id = ?17, coin.imageTypes.id = ?18, " +
                    "coin.statusSell = ?19,   coin.visible = ?20,      coin.composition = ?21, coin.description = ?22, coin.aversPath = ?23,   coin.reversePath = ?24 "+
                    "where coin.id = ?25")
-    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+    void updateCoin(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
                     Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
                     Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
                     String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,

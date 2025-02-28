@@ -166,7 +166,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public void updateCoin(Coin coin) {
-        coinRepository.updateNote(coin.getCurrencies().getId(), coin.getDenomination(), coin.getDateBuy(), coin.getNameCurrency(), coin.getSeries(),
+        coinRepository.updateCoin(coin.getCurrencies().getId(), coin.getDenomination(), coin.getDateBuy(), coin.getNameCurrency(), coin.getSeries(),
                 coin.getBoughts().getId(), coin.getItemDate(), coin.getQuantity(), coin.getUnitQuantity(), coin.getActives().getId(), coin.getPriceBuy(), coin.getPriceSell(),
                 coin.getQualities().getId(), coin.getDiameter(), coin.getThickness(), coin.getWeight(), coin.getStatuses().getId(), coin.getImageTypes().getId(),
                 coin.getStatusSell(), coin.getVisible(), coin.getComposition(), coin.getDescription(), coin.getAversPath(), coin.getReversePath(),
