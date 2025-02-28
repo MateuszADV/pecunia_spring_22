@@ -1,0 +1,94 @@
+<div th:fragment="lightBox"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+        <div class="column" style="float: left; padding: 10px 10px 10px 10px">
+            <img th:src="${medal.aversPath}" style="max-width: 100%; max-height: 350px" onclick="openModal();currentSlide(1)" class="hover-shadow cursor">
+        </div>
+        <div class="column" style="float: left; padding: 10px 10px 10px 10px">
+            <img th:src="${medal.reversePath}" style="max-width: 100%; max-height: 350px" onclick="openModal();currentSlide(2)" class="hover-shadow cursor">
+        </div>
+
+    </div>
+
+    <div id="myModal" class="modal-light-box">
+        <span class="close-light-box cursor" onclick="closeModal()">&times;</span>
+        <div class="modal-content-light-box">
+
+            <div class="mySlides" style="text-align: center">
+                <div class="numbertext">1 / 2</div>
+                <img th:src="${medal.aversPath}" style="max-width:100%; max-height: 600px">
+            </div>
+
+            <div class="mySlides" style="text-align: center">
+                <div class="numbertext">2 / 2</div>
+                <img th:src="${medal.reversePath}" style="max-width:100%; max-height: 600px">
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            <div class="caption-container">
+                <p id="caption"></p>
+            </div>
+            <div class="row" style="text-align: center">
+                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                    <img class="demo cursor" th:src="${medal.aversPath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(1)"
+                         th:alt="${medal.denomination} + ' ' + ${medal.nameCurrency}">
+                </div>
+                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                    <img class="demo cursor" th:src="${medal.reversePath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(2)"
+                         th:alt="${medal.denomination} + ' ' + ${medal.nameCurrency}"
+                         th:title="'test Tutułu'">
+                </div>
+                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+                    <b>OPIS</b>
+                    <hr class="my-2">
+                    <div style="text-align: left">
+                        <b>Country: </b><span th:text="${medal.currencies.countries.countryEn}"></span><br>
+                        <b>Series: </b><span th:text="${medal.currencies.currencySeries}"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("demo");
+            var captionText = document.getElementById("caption");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+            captionText.innerHTML = dots[slideIndex-1].alt;
+        }
+    </script>
+</div>

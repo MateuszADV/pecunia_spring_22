@@ -3,6 +3,7 @@ package pecunia_22.models.dto.currency;
 import lombok.*;
 import pecunia_22.models.dto.coin.CoinDtoByCurrency;
 import pecunia_22.models.dto.country.CountryDto;
+import pecunia_22.models.dto.medal.MedalDtoByCurrency;
 import pecunia_22.models.dto.note.NoteDtoByCurrency;
 import pecunia_22.models.dto.security.SecurityDtoByCurrency;
 
@@ -38,4 +39,5 @@ public class CurrencyDtoByPattern {
     private List<NoteDtoByCurrency> notes;
     private List<CoinDtoByCurrency> coins;
     private List<SecurityDtoByCurrency> securities;
+    private List<MedalDtoByCurrency> medals;
 }
