@@ -12,7 +12,7 @@ chart:
   options:
     animations:
       tension:
-        duration: 1000
+        duration: 500
         easing: 'linear'
         from: 1
         to: 0
@@ -46,7 +46,7 @@ chart:
       y:
         min: 5000
         beginAtZero: true
-        max: 12000
+#        max: 13500
         title:
           display: true
           text: 'Cena'
