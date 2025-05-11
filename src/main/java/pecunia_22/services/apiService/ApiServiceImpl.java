@@ -313,8 +313,16 @@ public class ApiServiceImpl implements ApiService {
     private void moneyMetal(Map<String, Object> rate) {
         System.out.printf("|- %-10s | %-10s |%n", "Name", "Price");
         System.out.println("|--------------------------|");
-        rate.forEach((k, v) -> System.out.printf("|- %-10s | %10s |%n", k, v));
+//        rate.forEach((k, v) -> System.out.printf("\u001B[33m" + "|- %-10s | %10s |%n", k, v));
+        rate.forEach((k, v) -> {
+            if (k.equals("gold")) {
+                System.out.printf("\u001B[33m" + "|- %-10s | %-10s |%n", k, v);
+            } else
+                System.out.printf("\u001B[0m" + "|- %-10s | %-10s |%n", k, v);
+        });
+
         System.out.println("|--------------------------|");
+
     }
 
     @Override
