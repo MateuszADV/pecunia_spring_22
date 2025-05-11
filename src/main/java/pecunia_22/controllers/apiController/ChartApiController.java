@@ -14,6 +14,7 @@ import utils.JsonUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,7 @@ public class ChartApiController {
                     System.out.println(e.getMessage());
                     System.out.println("Napis testowy");
                     System.out.println(e.getCause());
-                    return ResponseEntity.ok().body(e.getMessage() + "\n" + e.getCause() + "\nNApis testowy");
+                    return ResponseEntity.ok().body(e.getMessage() + "\n" + e.getCause() + "\nNApis testowy" + "\n" + LocalDateTime.now());
                 }
 
             } catch (InvocationTargetException e) {
@@ -92,6 +93,7 @@ public class ChartApiController {
                     System.out.println(e.getMessage());
                     System.out.println("Napis testowy");
                     System.out.println(e.getCause());
+                    System.out.println(LocalDateTime.now());
                     return ResponseEntity.ok().body(e.getMessage() + "\n" + e.getCause() + "\nNApis testowy");
                 }
             } catch (InvocationTargetException e) {

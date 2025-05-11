@@ -21,4 +21,6 @@ ${AnsiColor.BRIGHT_YELLOW}:: Thymeleaf Version :  ${Ansi.DEFAULT}(${info.thymele
 ${AnsiColor.BRIGHT_WHITE}:: Spring Security Version :  ${Ansi.DEFAULT}(${info.spring.security.version})
 ${AnsiColor.GREEN}:: Hibernate Version :  ${Ansi.DEFAULT}(${info.spring.hibernate.version})
 ${AnsiColor.YELLOW}:: Lombok Version: ${Ansi.DEFAULT}(${info.lombok.version})
+${AnsiColor.BRIGHT_BLUE}:: Json-smart version:  ${Ansi.DEFAULT}(${info.json-smart})
+${AnsiColor.BRIGHT_BLUE}:: Json version:  ${Ansi.DEFAULT}(${info.json})
 ${Ansi.DEFAULT}

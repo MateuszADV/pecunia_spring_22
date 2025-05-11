@@ -7,6 +7,7 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,22 +17,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import pecunia_22.models.Country;
 import pecunia_22.models.dto.UserRegistration;
+import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
+import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
 import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -41,6 +46,7 @@ public class HomeController {
     private RegistrationService registrationService;
     private UserCheckLoged userCheckLoged;
     private ApiServiceImpl apiService;
+    private CountryRepository countryRepository;
 
     @GetMapping("/")
     public String getIndex(ModelMap modelMap) {
@@ -126,6 +132,7 @@ public class HomeController {
         return "home/about";
     }
 
+
     @GetMapping("/test")
     public String getTest(ModelMap modelMap,
                           HttpServletRequest request,
@@ -136,17 +143,18 @@ public class HomeController {
         System.out.println(authentication.getName());
         System.out.println(authentication.getPrincipal().toString());
         System.out.println(authentication.getDetails().toString());
-//        List<Country> countries = countryRepository.findAll();
-////        countries.stream().forEach(System.out::println);
-//        List<CountryDtoForm> countryDtos = new ArrayList<>();
-//        for (Country country : countries) {
-//            countryDtos.add(new ModelMapper().map(country, CountryDtoForm.class));
-//        }
-//        countryDtos.stream()
-//                .filter(country -> country.getId() > 100)
-//                .filter(country -> country.getId() < 150)
-//                .filter(country -> country.getContinent().contains("Azja"))
-//                .forEach(System.out::println);
+        List<Country> countries = countryRepository.findAll();
+//        countries.stream().forEach(System.out::println);
+        List<CountryDtoForm> countryDtos = new ArrayList<>();
+        for (Country country : countries) {
+            countryDtos.add(new ModelMapper().map(country, CountryDtoForm.class));
+        }
+        countryDtos.stream()
+                .filter(country -> country.getId() > 100)
+                .filter(country -> country.getId() < 150)
+                .filter(country -> country.getContinent().contains("Azja"))
+                .map(country -> country.getCountryEn() + " - " + country.getCapital_city())
+                .forEach(System.out::println);
 
 
 //        ********************************************************
@@ -184,6 +192,7 @@ public class HomeController {
         modelMap.addAttribute("timestamp", Instant.now());
 
         System.out.println("---------------------TEST STOP------------------------");
+
         return "home/test";
     }
 
