@@ -7,6 +7,12 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import lombok.AllArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +37,10 @@ import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -214,15 +224,39 @@ public class HomeController {
     @GetMapping("/moneyMetal")
     public String getMonyeMetal(ModelMap modelMap) {
 
-        Long start = System.currentTimeMillis();
-        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
-        Long stop = System.currentTimeMillis();
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-        System.out.println(stop - start);
-        System.out.println("-----------CZAS----------");
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-        modelMap.addAttribute("rates", getMoneyMetals);
+//        Long start = System.currentTimeMillis();
+//        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+//        Long stop = System.currentTimeMillis();
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+//        System.out.println(stop - start);
+//        System.out.println("-----------CZAS----------");
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+//        modelMap.addAttribute("rates", getMoneyMetals);
 
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet("https://www.moneymetals.com/api/spot-prices.json");
+
+            // Dodaj nagłówki jak w prawdziwej przeglądarce
+            request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Accept-Language", "en-US,en;q=0.9");
+            request.setHeader("Referer", "https://www.moneymetals.com/");
+            request.setHeader("Connection", "keep-alive");
+
+            HttpResponse response = client.execute(request);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                String json = EntityUtils.toString(response.getEntity());
+                System.out.println("Dane JSON:\n" + json);
+                JSONObject jsonObject = new JSONObject(json);
+                System.out.println(JsonUtils.gsonPretty(jsonObject.getJSONObject("spot_prices")));
+                System.out.println(JsonUtils.gsonPretty(jsonObject.getJSONObject("spot_prices").length()));
+            } else {
+                System.out.println("Błąd HTTP: " + response.getStatusLine().getStatusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return "home/moneyMetal";
     }
