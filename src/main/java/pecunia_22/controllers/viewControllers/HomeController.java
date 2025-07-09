@@ -30,6 +30,7 @@ import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
+import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
@@ -44,10 +45,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -233,6 +231,9 @@ public class HomeController {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
 //        modelMap.addAttribute("rates", getMoneyMetals);
 
+        GetMoneyMetals getMoneyMetals = new GetMoneyMetals();
+        List<MoneyMetal> moneyMetals = new ArrayList<>();
+
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet request = new HttpGet("https://www.moneymetals.com/api/spot-prices.json");
 
@@ -249,8 +250,27 @@ public class HomeController {
                 String json = EntityUtils.toString(response.getEntity());
                 System.out.println("Dane JSON:\n" + json);
                 JSONObject jsonObject = new JSONObject(json);
-                System.out.println(JsonUtils.gsonPretty(jsonObject.getJSONObject("spot_prices")));
-                System.out.println(JsonUtils.gsonPretty(jsonObject.getJSONObject("spot_prices").length()));
+                System.out.println(jsonObject.getJSONObject("spot_prices"));
+                System.out.println(jsonObject.getJSONObject("spot_prices").length());
+                System.out.println(JsonUtils.gsonPretty(jsonObject));
+
+                Long milliSec =  jsonObject.getLong("time");
+                System.out.println(milliSec);
+
+                Map<String, Object> rate = jsonObject.getJSONObject("spot_prices").toMap();
+                Date res = new Date(milliSec);
+
+                rate.forEach((k, v) -> {
+                    moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())));
+                });
+
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println(moneyMetals);
+                System.out.println(JsonUtils.gsonPretty(moneyMetals));
+
+                getMoneyMetals.setTime(res);
+                getMoneyMetals.setMoneyMetalList(moneyMetals);
+                modelMap.addAttribute("rates", getMoneyMetals);
             } else {
                 System.out.println("Błąd HTTP: " + response.getStatusLine().getStatusCode());
             }
