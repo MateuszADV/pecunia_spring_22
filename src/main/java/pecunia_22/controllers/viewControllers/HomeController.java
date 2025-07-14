@@ -39,6 +39,7 @@ import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -274,6 +275,62 @@ public class HomeController {
             } else {
                 System.out.println("Błąd HTTP: " + response.getStatusLine().getStatusCode());
             }
+
+
+            System.out.println("+++++++++++++++++++++NAGŁÓWKI HTTP SART+++++++++++++++++++++++++++++++++++++");
+//            try {
+//                URL url = new URL("https://www.moneymetals.com/api/spot-prices.json");
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod("GET");
+//
+//                // Wysłanie żądania i połączenie
+//                int responseCode = connection.getResponseCode();
+//                System.out.println("Response Code: " + responseCode);
+//
+//                System.out.println(JsonUtils.gsonPretty(connection.getHeaderFields()));
+//                // Pobranie nagłówków
+//                Map<String, List<String>> headers = connection.getHeaderFields();
+//                System.out.println("Nagłówki HTTP:");
+//                for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+//                    String headerName = entry.getKey();
+//                    List<String> headerValues = entry.getValue();
+//                    System.out.println(headerName + ": " + String.join(", ", headerValues));
+//                }
+//
+//                connection.disconnect();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+            try {
+                URL url = new URL("https://www.moneymetals.com/api/spot-prices.json");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                // Dodajemy User-Agent — udajemy zwykłą przeglądarkę
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                // Można dodać więcej nagłówków, np.
+                // connection.setRequestProperty("Accept", "application/json");
+
+                int responseCode = connection.getResponseCode();
+                System.out.println(JsonUtils.gsonPretty(connection.getHeaderFields()));
+                System.out.println("Response Code: " + responseCode);
+
+                Map<String, List<String>> headers = connection.getHeaderFields();
+                System.out.println("Nagłówki HTTP:");
+                for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                    String headerName = entry.getKey();
+                    List<String> headerValues = entry.getValue();
+                    System.out.println(headerName + ": " + String.join(", ", headerValues));
+                }
+
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("+++++++++++++++++++++NAGŁÓWKI HTTP STOP+++++++++++++++++++++++++++++++++++++");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
