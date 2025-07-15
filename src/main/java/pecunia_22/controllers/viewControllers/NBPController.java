@@ -23,7 +23,7 @@ public class NBPController {
     public String getIndex(ModelMap modelMap) {
 
         List<GetGoldRateNBP> getGoldRateNBPList;
-        getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/11");
+        getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/21");
 
         getGoldRateNBPList.removeFirst();
         modelMap.addAttribute("npbGoldList", getGoldRateNBPList);

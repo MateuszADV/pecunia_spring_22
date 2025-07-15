@@ -112,7 +112,7 @@ public class WebSecurityConfig  {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+//    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);

@@ -124,6 +124,29 @@ body
     background-color: gray;
     padding: 0 5px 0 5px;
 }
+/*************************************** Maney Metal ********************************************/
+.gold
+{
+    background: gold;
+}
+.silver
+{
+    background: silver;
+}
+.copper
+{
+    background: coral;
+}
+.platinum
+{
+    background: fuchsia;
+}
+.btc
+{
+    background: blue;
+}
+
+/**************************Maney Metal END***************************/
 
 /**************************MODAL CONFIRM DELETE**************************
 
