@@ -7,6 +7,12 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import lombok.AllArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +30,7 @@ import pecunia_22.models.others.GetMetalRate;
 import pecunia_22.models.others.GetMetalSymbol;
 import pecunia_22.models.others.GetRateCurrencyTableA;
 import pecunia_22.models.others.moneyMetals.GetMoneyMetals;
+import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
@@ -31,13 +38,15 @@ import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import utils.JsonUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -214,15 +223,117 @@ public class HomeController {
     @GetMapping("/moneyMetal")
     public String getMonyeMetal(ModelMap modelMap) {
 
-        Long start = System.currentTimeMillis();
-        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
-        Long stop = System.currentTimeMillis();
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-        System.out.println(stop - start);
-        System.out.println("-----------CZAS----------");
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
-        modelMap.addAttribute("rates", getMoneyMetals);
+//        Long start = System.currentTimeMillis();
+//        GetMoneyMetals getMoneyMetals = apiService.getMoneyMetal("https://www.moneymetals.com/api/spot-prices.json");
+//        Long stop = System.currentTimeMillis();
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+//        System.out.println(stop - start);
+//        System.out.println("-----------CZAS----------");
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++TIME");
+//        modelMap.addAttribute("rates", getMoneyMetals);
 
+        GetMoneyMetals getMoneyMetals = new GetMoneyMetals();
+        List<MoneyMetal> moneyMetals = new ArrayList<>();
+
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet("https://www.moneymetals.com/api/spot-prices.json");
+
+            // Dodaj nagłówki jak w prawdziwej przeglądarce
+            request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Accept-Language", "en-US,en;q=0.9");
+            request.setHeader("Referer", "https://www.moneymetals.com/");
+            request.setHeader("Connection", "keep-alive");
+
+            HttpResponse response = client.execute(request);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                String json = EntityUtils.toString(response.getEntity());
+                System.out.println("Dane JSON:\n" + json);
+                JSONObject jsonObject = new JSONObject(json);
+                System.out.println(jsonObject.getJSONObject("spot_prices"));
+                System.out.println(jsonObject.getJSONObject("spot_prices").length());
+                System.out.println(JsonUtils.gsonPretty(jsonObject));
+
+                Long milliSec =  jsonObject.getLong("time");
+                System.out.println(milliSec);
+
+                Map<String, Object> rate = jsonObject.getJSONObject("spot_prices").toMap();
+                Date res = new Date(milliSec);
+
+                rate.forEach((k, v) -> {
+                    moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())));
+                });
+
+                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println(moneyMetals);
+                System.out.println(JsonUtils.gsonPretty(moneyMetals));
+
+                getMoneyMetals.setTime(res);
+                getMoneyMetals.setMoneyMetalList(moneyMetals);
+                modelMap.addAttribute("rates", getMoneyMetals);
+            } else {
+                System.out.println("Błąd HTTP: " + response.getStatusLine().getStatusCode());
+            }
+
+
+            System.out.println("+++++++++++++++++++++NAGŁÓWKI HTTP SART+++++++++++++++++++++++++++++++++++++");
+//            try {
+//                URL url = new URL("https://www.moneymetals.com/api/spot-prices.json");
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod("GET");
+//
+//                // Wysłanie żądania i połączenie
+//                int responseCode = connection.getResponseCode();
+//                System.out.println("Response Code: " + responseCode);
+//
+//                System.out.println(JsonUtils.gsonPretty(connection.getHeaderFields()));
+//                // Pobranie nagłówków
+//                Map<String, List<String>> headers = connection.getHeaderFields();
+//                System.out.println("Nagłówki HTTP:");
+//                for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+//                    String headerName = entry.getKey();
+//                    List<String> headerValues = entry.getValue();
+//                    System.out.println(headerName + ": " + String.join(", ", headerValues));
+//                }
+//
+//                connection.disconnect();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+            try {
+                URL url = new URL("https://www.moneymetals.com/api/spot-prices.json");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                // Dodajemy User-Agent — udajemy zwykłą przeglądarkę
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                // Można dodać więcej nagłówków, np.
+                // connection.setRequestProperty("Accept", "application/json");
+
+                int responseCode = connection.getResponseCode();
+                System.out.println(JsonUtils.gsonPretty(connection.getHeaderFields()));
+                System.out.println("Response Code: " + responseCode);
+
+                Map<String, List<String>> headers = connection.getHeaderFields();
+                System.out.println("Nagłówki HTTP:");
+                for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                    String headerName = entry.getKey();
+                    List<String> headerValues = entry.getValue();
+                    System.out.println(headerName + ": " + String.join(", ", headerValues));
+                }
+
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("+++++++++++++++++++++NAGŁÓWKI HTTP STOP+++++++++++++++++++++++++++++++++++++");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return "home/moneyMetal";
     }
