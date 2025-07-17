@@ -17,7 +17,13 @@
 </head>
 <body style="margin-block-end: 40px;">
 <!--<div th:replace="layouts/logo :: logo"></div>-->
-<div th:insert="~{layouts/logo :: logo}"></div>
+<div th:insert="~{layouts/logo :: logo}" style="display: flex;
+                                                align-items: center;
+                                                text-align: center;
+                                                justify-content: center;
+                                                background-color: lightgrey;">
+
+</div>
 <div th:replace="~{layouts/metalRate :: metalRate}"></div>
 <!--header.html  that's here  -->
 <div th:replace="~{layouts/header :: header}"></div>

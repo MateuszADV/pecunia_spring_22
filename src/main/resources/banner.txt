@@ -18,9 +18,12 @@ ${AnsiColor.BRIGHT_GREEN}:: PostgreSql Version :  ${Ansi.DEFAULT}(${info.postgre
 ${AnsiColor.BRIGHT_CYAN}:: Corporation Java :  ${Ansi.DEFAULT}(${info.java-vendor})
 ${AnsiColor.CYAN}:: Tomcat Version :  ${Ansi.DEFAULT}(${info.tomcat.version})
 ${AnsiColor.BRIGHT_YELLOW}:: Thymeleaf Version :  ${Ansi.DEFAULT}(${info.thymeleaf.version})
+${AnsiColor.BRIGHT_YELLOW}:: thymeleaf-layout :  ${Ansi.DEFAULT}(${info.thymeleaf-layout})
 ${AnsiColor.BRIGHT_WHITE}:: Spring Security Version :  ${Ansi.DEFAULT}(${info.spring.security.version})
 ${AnsiColor.GREEN}:: Hibernate Version :  ${Ansi.DEFAULT}(${info.spring.hibernate.version})
 ${AnsiColor.YELLOW}:: Lombok Version: ${Ansi.DEFAULT}(${info.lombok.version})
 ${AnsiColor.BRIGHT_BLUE}:: Json-smart version:  ${Ansi.DEFAULT}(${info.json-smart})
 ${AnsiColor.BRIGHT_BLUE}:: Json version:  ${Ansi.DEFAULT}(${info.json})
+${AnsiColor.BRIGHT_BLUE}:: Git plugin version:  ${Ansi.DEFAULT}(${info.git})
+${AnsiColor.BRIGHT_BLUE}:: Spring Security:  ${Ansi.DEFAULT}(${info.spring-security})
 ${Ansi.DEFAULT}

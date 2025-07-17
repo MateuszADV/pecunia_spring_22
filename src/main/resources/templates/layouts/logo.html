@@ -1,7 +1,36 @@
 <header th:fragment="logo"
         xmlns:th="http://www.thymeleaf.org">
-    <div style="text-align: center; background-color: #4cb148">
-        <span style="font-size: xx-large; font-family: initial">PECUNIA</span>
-        <span th:text="${testB}"></span>
+    <div class="container row">
+        <div class="col-md-2"
+                style="display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                background-color: lightgrey;">
+            <img src="/images/pecunia_Iluminati.png" style="max-width: 50%; border-radius: 50%"/>
+            <br/>
+        </div>
+        <div class="col-md-7" style="display: flex;
+                                    align-items: center;
+                                    text-align: center;
+                                    justify-content: center;
+                                    background-color: lightgrey;">
+            <h1>PECUNIA <small>BANKNOTES OF WORLD</small></h1>
+        </div>
+        <div class="logo-center col-md-2">
+            <img src="/images/pecunia_Iluminati.png" style="max-width: 50%; border-radius: 50%"/>
+        </div>
+<!--        <div class=" col-md-1">-->
+<!--            <div style="font-size:10px">-->
+<!--                <div style="padding:2px">-->
+<!--                   PL-->
+<!--                </div>-->
+
+<!--                <div style="padding:2px">-->
+<!--                   EN-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
     </div>
 </header>
