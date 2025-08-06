@@ -57,7 +57,7 @@ public class CoinForSellController {
     }
 
     @GetMapping("/coin/forSell/list/")
-    private String getNoteForSellList(ModelMap modelMap) {
+    private String getCoinForSellList(ModelMap modelMap) {
         List<Object[]> objects = coinRepository.getCoinsByStatus("FOR SELL");
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
@@ -65,6 +65,6 @@ public class CoinForSellController {
         }
 
         modelMap.addAttribute("forSellCoinsList", getCoinsByStatusList);
-        return "Coin/forSell/list";
+        return "coin/forSell/list";
     }
 }
