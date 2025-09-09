@@ -1,0 +1,131 @@
+
+<div th:fragment="navbar"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.w3.org/1999/xhtml">
+
+    <head></head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <!--      <a class="navbar-brand font-weight-bold" href="/">PECUNIA</a>-->
+            <!--      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">-->
+            <!--        <span class="navbar-toggler-icon"></span>-->
+            <!--      </button>-->
+
+            <!-- LOGO -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img th:src="@{/images/logo.jpg}" alt="Pecunia Logo"
+                     style="height:40px; width:auto;" class="mr-2">
+                <span class="font-weight-bold">PECUNIA</span>
+            </a>
+
+            <!-- Toggle button (mobile) -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+
+                    <!-- COUNTRY DROPDOWN -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="countryDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Country
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="countryDropdown">
+                            <a class="dropdown-item" th:href="@{/continent}">Kontynenty</a>
+                            <a class="dropdown-item" th:each="c : ${countries}" th:text="${c.name}"
+                               th:href="@{/country/{id}(id=${c.id})}"></a>
+
+<!--                            <a class="dropdown-item" th:href="@{/country}">Państwa</a>-->
+<!--                            <a class="dropdown-item" th:href="@{/currency}">Currency</a>-->
+<!--                            <a class="dropdown-item" th:href="@{/test}">TEST</a>-->
+                        </div>
+                    </li>
+
+                    <!-- NOTE DROPDOWN -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="noteDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Note
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="noteDropdown">
+                            <a class="dropdown-item" href="/note/new">New Notes</a>
+                            <a class="dropdown-item" href="/note/historical">Historical Notes</a>
+                        </div>
+                    </li>
+
+                    <!-- COIN DROPDOWN -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="coinDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Coin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="coinDropdown">
+                            <a class="dropdown-item" href="/coin/gold">Gold Coins</a>
+                            <a class="dropdown-item" href="/coin/silver">Silver Coins</a>
+                            <a class="dropdown-item" href="/coin/modern">Modern Coins</a>
+                        </div>
+                    </li>
+
+                    <!-- OTHER LINKS -->
+                    <li class="nav-item"><a class="nav-link" href="/shares">Shares & Bonds</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medal">Medal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/customer">Customer</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                                        <!-- AUTH BUTTONS -->
+<!--                    <li class="nav-item"><a class="btn btn-primary btn-sm ml-2" href="/signup">Sign Up</a></li>-->
+<!--                    <li class="nav-item"><a class="btn btn-outline-primary btn-sm ml-2" href="/signin">Sign In</a></li>-->
+
+                    <li sec:authorize="isAuthenticated()" class= "navbar-brand">
+                        <span th:text = "${#authentication.getAuthorities()[0].getAuthority()}">Roles</span>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <span class="nav-link" sec:authentication="principal.email" data-toggle="modal" data-target="#exampleModal">Email</span>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link btn btn-sm btn-outline-secondary" th:href="@{/logout}">Logout</a>
+                    </li>
+
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link btn btn-primary btn-sm ml-2" th:href="@{/registration}">Sign Up</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link btn btn-outline-primary btn-sm ml-2" th:href="@{/login}">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: darkgray; padding: 8px 8px 8px 8px">
+                    <div sec:authorize="isAuthenticated()" >
+                        <h1 class="modal-title" id="exampleModalLabel" sec:authentication="principal.authorities[0]">Roles</h1>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div sec:authorize="isAuthenticated()">
+                        <span>ROLE - </span><span sec:authentication="principal.authorities[0]">Roles</span><br>
+                        <span>First Name - </span><span sec:authentication="principal.firstName">Firstname</span><br>
+                        <span>Last Name - </span><span sec:authentication="principal.lastName">Lastname</span><br>
+                        <span>Mail - </span><span sec:authentication="principal.email">email</span><br>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background: darkgray; padding: 0">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+</div>

@@ -7,24 +7,30 @@
     <title>Country</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
-        <div class="container" style="text-align: center; margin-top: 15px">
-            <img th:src="@{'/images/continents/' + ${continent.continentCode} + '.png'}" style="width: 100px"/><br>
-            <h1>country</h1>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <Block th:each="country : ${continent.countries}">
-                    <div class="col-sm-2" style="width: 170px">
-                        <div calss="container" style="margin: 15px; width: 160px">
-                            <img th:src="@{'/images/flags/' + ${country.countryEn} + '.png'}" style="width: 80px; max-height: 60px"/><br>
-                            <span th:text="${country.countryPl}" style="font-size: small; display: flex"></span>
-                        </div>
-                    </div>
-                </Block>
+    <div layout:fragment="content">
+        <section class="hero">
+            <div class="container" style="text-align: center; margin-top: 15px">
+                <img th:src="@{'/images/continents/' + ${continent.continentCode} + '.png'}" style="width: 100px"/><br>
+                <h1>country</h1>
             </div>
-        </div>
+        </section>
+
+        <section class="hero">
+            <div class="container">
+                <div class="container">
+                    <div class="row">
+                        <Block th:each="country : ${continent.countries}">
+                            <div class="col-sm-2" style="width: 170px">
+                                <div calss="container" style="margin: 15px; width: 160px">
+                                    <img th:src="@{'/images/flags/' + ${country.countryEn} + '.png'}" style="width: 80px; max-height: 60px"/><br>
+                                    <span th:text="${country.countryPl}" style="font-size: small"></span>
+                                </div>
+                            </div>
+                        </Block>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
 </body>

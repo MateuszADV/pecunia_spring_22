@@ -1,9 +1,9 @@
-body
-{
-    background: url("../images/mochaGrunge.png");
-    /*background-color: #c4e1c1;*/
-    /*background-color: aquamarine;*/
-}
+/*body*/
+/*{*/
+/*    background: url("../images/mochaGrunge.png");*/
+/*    !*background-color: #c4e1c1;*!*/
+/*    !*background-color: aquamarine;*!*/
+/*}*/
 
 .navbar-light .navbar-nav .nav-link
 {
@@ -336,4 +336,41 @@ img.hover-shadow {
 }
 .arrow-down {
     color: orangered;
+}
+
+/********************************** NEW STYLE ***************************************************/
+html, body {
+    height: 100%;
+}
+main {
+    flex: 1; /* wypełnia wolne miejsce */
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+.hero {
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+    /*padding: 4rem 0;*/
+    padding: 1rem 0;
+    text-align: center;
+}
+.hero img {
+    max-width: 50%;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.hero h1 {
+    font-weight: 600;
+}
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
 }
