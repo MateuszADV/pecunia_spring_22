@@ -128,7 +128,7 @@ public class NoteCollectionController {
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status, ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
-        Integer pageSize =10;
+        Integer pageSize =20;
 
         Page<Note> page = noteService.findNotePaginated(pageNo, pageSize, currencyId, status, role);
         List<NoteDto> noteDtoList = new ArrayList<>();
