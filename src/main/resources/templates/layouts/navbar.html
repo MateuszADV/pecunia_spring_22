@@ -89,10 +89,10 @@
                     </li>
 
                     <li sec:authorize="!isAuthenticated()" class="nav-item">
-                        <a class="nav-link btn btn-primary btn-sm ml-2" th:href="@{/registration}">Sign Up</a>
+                        <a class="btn btn-primary btn-sm ml-2" th:href="@{/registration}">Sign Up</a>
                     </li>
                     <li sec:authorize="!isAuthenticated()" class="nav-item">
-                        <a class="nav-link btn btn-outline-primary btn-sm ml-2" th:href="@{/login}">Sign In</a>
+                        <a class="btn btn-outline-primary btn-sm ml-2" th:href="@{/login}">Sign In</a>
                     </li>
                 </ul>
             </div>
