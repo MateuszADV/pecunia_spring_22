@@ -35,8 +35,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="countryDropdown">
                             <a class="dropdown-item" th:href="@{/continent}">Kontynenty</a>
-                            <a class="dropdown-item" th:each="c : ${countries}" th:text="${c.name}"
-                               th:href="@{/country/{id}(id=${c.id})}"></a>
+                            <a class="dropdown-item" th:href="@{/country}">Państwa</a>
+<!--                            <a class="dropdown-item" th:each="c : ${countries}" th:text="${c.name}"-->
+<!--                               th:href="@{/country/{id}(id=${c.id})}"></a>-->
 
 <!--                            <a class="dropdown-item" th:href="@{/country}">Państwa</a>-->
 <!--                            <a class="dropdown-item" th:href="@{/currency}">Currency</a>-->
