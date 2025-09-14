@@ -8,7 +8,10 @@
 </head>
 <body>
 <div layout:fragment="content" class="container">
-    <h1 style="text-align: center">COUNTRY NEW</h1>
+<!--    <h1 style="text-align: center">COUNTRY NEW</h1>-->
+    <div class="card-header bg-light">
+        <h5 class="mb-0">New Country</h5>
+    </div>
 
     <form th:action="@{/country/new}" method="post" th:object="${countryForm}">
         <div th:replace="~{country/_form :: form}"></div>
