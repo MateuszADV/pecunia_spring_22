@@ -4,11 +4,10 @@
 <!--    <input class="input" type="text" th:field="*{created_at}" th:readonly="created_at"/>-->
 <!--    <input class="input" type="text" th:field="*{updated_at}" th:readonly="updated_at"/>-->
 
+    <!-- 1 wiersz -->
     <div class="form-row">
-        <!-- 1 wiersz -->
         <div class="form-row">
-
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label for="continent">Kontynent</label>
                 <select class="form-control" id="continent" name="continent">
                     <option th:each="continent : ${continents}"
@@ -23,85 +22,98 @@
                 <span th:errors="*{continents.id}" ></span>
             </div>
 
-            <div class="form-group col-md-4">
-                <label for="firstName">Imię</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Wpisz imię" required>
+            <div class="form-group col-md-6">
+                <label for="continentEn">Continent</label>
+                <input type="text" class="form-control" id="continentEn" th:field="*{continent}" name="continentEn" placeholder="Coninent" required>
             </div>
-            <div class="form-group col-md-4">
-                <label for="lastName">Nazwisko</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Wpisz nazwisko" required>
-            </div>
-        </div>
 
+        </div>
+    </div>
+
+    <div class="form-row">
         <!-- 2 wiersz -->
-        <div class="form-row">
 
-            <div class="form-group col-md-6">
-                <label for="phone">Telefon</label>
-                <input type="text" class="form-control" id="phone" name="phone" placeholder="+48 ___ ___ ___" required>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="countryEn">Country EN</label>
+                <input type="text" class="form-control" id="countryEn" name="countryEn" th:field="*{countryEn}"placeholder="Country EN" required>
+                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+                    <span th:errors="*{countryEn}" ></span>
+                </div>
             </div>
-            <div class="form-group col-md-6">
-                <label for="zipcode">Kod pocztowy</label>
-                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="__-___" required>
+            <div class="form-group col-md-4">
+                <label for="countryPl">Country PL</label>
+                <input type="text" class="form-control" id="countryPl" name="countryEn" th:field="*{countryPl}"placeholder="Country PL" required>
+                <div th:if="${#fields.hasErrors('countryPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+                    <span th:errors="*{countryPl}" ></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="capitalCity">Capital City</label>
+                <input class="form-control" type="text" id="capitalCity" name="capitalCity" th:field="*{capital_city}" placeholder="Capital City"/>
+                    <div th:if="${#fields.hasErrors('capital_city')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                        <span th:errors="*{capital_city}" ></span>
+                    </div>
             </div>
         </div>
-
-        <!-- 3 wiersz -->
-        <div class="form-row">
-
-            <div class="form-group col-md-4">
-                <label for="address">Adres</label>
-                <input type="text" class="form-control" id="address" name="address" placeholder="np. ul. Warszawska 10">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label for="city">Miasto</label>
-                <input type="text" class="form-control" id="city" name="city" placeholder="np. Warszawa">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="country">Kraj</label>
-                <select class="form-control" id="country" name="country">
-                    <option value="">-- Wybierz kraj --</option>
-                    <option value="PL">Polska</option>
-                    <option value="DE">Niemcy</option>
-                    <option value="UK">Wielka Brytania</option>
-                    <option value="US">Stany Zjednoczone</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- 5 wiersz -->
-
     </div>
     <div class="form-row">
-        <div class="form-group col-md-3">
-            <label for="birthdate">Data urodzenia</label>
-            <input type="date" class="form-control" id="birthdate" name="birthdate">
+        <!-- 3 wiersz -->
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="alfa2">Alfa 2</label><br>
+                <input class="form-control" type="text" id="alfa2" name="alfa2" th:field="*{alfa_2}" placeholder="ALFA 2"/>
+            </div>
+            <div th:if="${#fields.hasErrors('alfa_2')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{alfa_2}" ></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="alfa3">Alfa 3</label><br>
+                <input class="form-control" type="text" id="alfa3" name="alfa2" th:field="*{alfa_3}" placeholder="ALFA 3"/>
+            </div>
+            <div th:if="${#fields.hasErrors('alfa_3')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{alfa_3}" ></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="numericCode">Numeric Code</label>
+                <input class="form-control" type="text" id="numericCode" name="numericCode" th:field="*{numeric_code}" placeholder="Numeric Code"/>
+            </div>
+            <div th:if="${#fields.hasErrors('numeric_code')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{numeric_code}" ></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="isoCode">ISO Code</label>
+                <input class="form-control" type="text" id="isoCode" name="isoCode" th:field="*{iso_code}" placeholder="iso code"/>
+            </div>
         </div>
+        <!-- 5 wiersz -->
+
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-6 d-flex align-items-center">
             <div class="form-check mt-12">
-                <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
-                <label class="form-check-label" for="newsletter">
-                    Zapisz do newslettera
+                <input class="form-check-input" type="checkbox" id="exist" name="newsletter" th:field="*{exists}" placeholder="exist">
+                <label class="form-check-label" for="exist">
+                    Czy państwo istnieje
                 </label>
             </div>
         </div>
     </div>
 
-    <!-- Pole 6 -->
     <div class="form-group">
         <label for="field6">Uwagi</label>
-        <textarea class="form-control" id="field6" rows="3" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+        <textarea class="form-control" id="field6" rows="3" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
     </div>
 
-    <!-- Przyciski -->
-    <div class="d-flex justify-content-end">
-        <button type="reset" class="btn btn-outline-secondary mr-2">Wyczyść</button>
-        <button type="submit" class="btn btn-primary">Zapisz</button>
-    </div>
+<!--    &lt;!&ndash; Przyciski &ndash;&gt;-->
+<!--    <div class="d-flex justify-content-end">-->
+<!--        <button type="reset" class="btn btn-outline-secondary mr-2">Wyczyść</button>-->
+<!--        <button type="submit" class="btn btn-primary">Zapisz</button>-->
+<!--    </div>-->
 
 
 
