@@ -9,18 +9,22 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="continent">Kontynent</label>
-                <select class="form-control" id="continent" name="continent">
+                <select class="form-control" id="continent" name="continent" th:field="*{continents.id}">
+                <span th:if="*{continents.id == null}">
+                    <option value="">SELECT CONTINENT</option>
+                </span>
                     <option th:each="continent : ${continents}"
                             th:value="${continent.id}"
                             th:text="${continent.continentPl}">
                         Continent
                     </option>
                 </select>
+                <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{continents.id}" ></span>
+                </div>
             </div>
 
-            <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{continents.id}" ></span>
-            </div>
+
 
             <div class="form-group col-md-6">
                 <label for="con">Continent</label>
@@ -36,15 +40,24 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="countryEn">Country EN</label>
-                <input type="text" class="form-control" id="countryEn" name="countryEn" th:field="*{countryEn}"placeholder="Country EN" required>
-                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
-                    <span th:errors="*{countryEn}" ></span>
+                <input type="text" class="form-control"
+                       th:classappend="${#fields.hasErrors('countryEn')} ? ' is-invalid' : ''"
+                       placeholder="Enter country name in English"
+                       id="countryEn" name="countryEn" th:field="*{countryEn}">
+                <!-- komunikat walidacji -->
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('countryEn')}"
+                     th:errors="*{countryEn}">
+                    Niepoprawna wartość
                 </div>
+<!--                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{countryEn}" >TETS</span>-->
+<!--                </div>-->
+
             </div>
             <div class="form-group col-md-4">
                 <label for="countryPl">Country PL</label>
-                <input type="text" class="form-control" id="countryPl" name="countryEn" th:field="*{countryPl}"placeholder="Country PL" required>
-                <div th:if="${#fields.hasErrors('countryPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+                <input type="text" class="form-control" id="countryPl" name="countryEn" th:field="*{countryPl}"placeholder="Country PL" >
+                <div th:if="${#fields.hasErrors('countryPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
                     <span th:errors="*{countryPl}" ></span>
                 </div>
             </div>
@@ -72,10 +85,11 @@
             <div class="form-group col-md-3">
                 <label for="alfa3">Alfa 3</label><br>
                 <input class="form-control" type="text" id="alfa3" name="alfa2" th:field="*{alfa_3}" placeholder="ALFA 3"/>
+                <div th:if="${#fields.hasErrors('alfa_3')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{alfa_3}" ></span>
+                </div>
             </div>
-            <div th:if="${#fields.hasErrors('alfa_3')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{alfa_3}" ></span>
-            </div>
+
 
             <div class="form-group col-md-3">
                 <label for="numericCode">Numeric Code</label>
