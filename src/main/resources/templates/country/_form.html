@@ -13,7 +13,7 @@
                     <option th:each="continent : ${continents}"
                             th:value="${continent.id}"
                             th:text="${continent.continentPl}">
-                        Address
+                        Continent
                     </option>
                 </select>
             </div>
@@ -23,8 +23,8 @@
             </div>
 
             <div class="form-group col-md-6">
-                <label for="continentEn">Continent</label>
-                <input type="text" class="form-control" id="continentEn" th:field="*{continent}" name="continentEn" placeholder="Coninent" required>
+                <label for="con">Continent</label>
+                <input type="text" class="form-control" id="con" name="con" th:field="*{continent}"placeholder="Continent">
             </div>
 
         </div>
