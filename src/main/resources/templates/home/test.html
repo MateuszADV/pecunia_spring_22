@@ -7,60 +7,63 @@
     <title>About</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
+    <div layout:fragment="content" >
+        <section class="hero py-5">
+            <div class="container">
+                <div class="jumbotron">
+                    <h1 style="text-align: center;">----------- TESTY ----------</h1>
 
-        <div class="jumbotron">
-            <h1 style="text-align: center;">----------- TESTY ----------</h1>
+                </div>
 
-        </div>
+                <div class="jumbotron">
+                    <h5 th:text="${ip}"></h5>
+                    <h1>FORMAT DATA</h1>
+                    <h1 th:text="${#dates.format(standardDate, 'yyyy-MM-dd HH:mm')}"></h1>
+                    <p th:text="${#temporals.formatISO(localDateTime)}"></p>
+                    <p th:text="${#temporals.formatISO(localDate)}"></p>
+                    <p th:text="${#temporals.formatISO(timestamp)}"></p>
 
-        <div class="jumbotron">
-            <h5 th:text="${ip}"></h5>
-            <h1>FORMAT DATA</h1>
-            <h1 th:text="${#dates.format(standardDate, 'yyyy-MM-dd HH:mm')}"></h1>
-            <p th:text="${#temporals.formatISO(localDateTime)}"></p>
-            <p th:text="${#temporals.formatISO(localDate)}"></p>
-            <p th:text="${#temporals.formatISO(timestamp)}"></p>
+                    <div sec:authorize="isAuthenticated()">
+                        1 - <span sec:authentication="principal.authorities[0]">Roles</span><br>
+                        2 - <span sec:authentication="principal.firstName">Firstname</span><br>
+                        3 - <span sec:authentication="principal.lastName">Lastname</span><br>
+                        4 - <span sec:authentication="principal.email">email</span><br>
+                        5 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
+                        This content is only shown to authenticated users.
+                    </div>
+                    <!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+                    <p>==================================</p>
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        This content is only shown to administrators.
+                        <p th:text="${#authentication.getAuthorities()[0].getAuthority()}"></p>
+                    </div>
+                    <div sec:authorize="hasAuthority('USER')">
+                        This content is only shown to users.
+                        <p th:text="${#authentication.getAuthorities()[0].getAuthority()}"></p>
+                    </div>
 
-            <div sec:authorize="isAuthenticated()">
-                1 - <span sec:authentication="principal.authorities[0]">Roles</span><br>
-                2 - <span sec:authentication="principal.firstName">Firstname</span><br>
-                3 - <span sec:authentication="principal.lastName">Lastname</span><br>
-                4 - <span sec:authentication="principal.email">email</span><br>
-                5 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
-                This content is only shown to authenticated users.
+
+                    <div th:if = "${#authentication.getAuthorities()[0].getAuthority()} == 'USER'" >
+                        <h1>---USER---</h1><br>
+                        1 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
+                        2 - <span th:text ="${#authentication.getDetails()}"></span><br>
+                        3 - <span th:text ="${#authentication.getPrincipal()}"></span><br>
+                        4 - <span th:text ="${#authentication.authorities.size()}"></span><br>
+                        5 - <span th:text ="${#authentication.toString()}"></span>
+                    </div>
+
+                    <div th:if = "${#authentication.getAuthorities()[0].getAuthority()} == 'ADMIN'" >
+                        <h1>---ADMIN---</h1><br>
+                        1 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
+                        2 - <span th:text ="${#authentication.getDetails()}"></span><br>
+                        3 - <span th:text ="${#authentication.getPrincipal()}"></span><br>
+                        4 - <span th:text ="${#authentication.authorities.size()}"></span><br>
+                        5 - <span th:text ="${#authentication.toString()}"></span>
+                    </div>
+
+                </div>
             </div>
-            <!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
-            <p>==================================</p>
-            <div sec:authorize="hasAuthority('ADMIN')">
-                This content is only shown to administrators.
-                <p th:text="${#authentication.getAuthorities()[0].getAuthority()}"></p>
-            </div>
-            <div sec:authorize="hasAuthority('USER')">
-                This content is only shown to users.
-                <p th:text="${#authentication.getAuthorities()[0].getAuthority()}"></p>
-            </div>
-
-
-            <div th:if = "${#authentication.getAuthorities()[0].getAuthority()} == 'USER'" >
-                <h1>---USER---</h1><br>
-                1 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
-                2 - <span th:text ="${#authentication.getDetails()}"></span><br>
-                3 - <span th:text ="${#authentication.getPrincipal()}"></span><br>
-                4 - <span th:text ="${#authentication.authorities.size()}"></span><br>
-                5 - <span th:text ="${#authentication.toString()}"></span>
-            </div>
-
-            <div th:if = "${#authentication.getAuthorities()[0].getAuthority()} == 'ADMIN'" >
-                <h1>---ADMIN---</h1><br>
-                1 - <span th:text ="${#authentication.getAuthorities()}"></span><br>
-                2 - <span th:text ="${#authentication.getDetails()}"></span><br>
-                3 - <span th:text ="${#authentication.getPrincipal()}"></span><br>
-                4 - <span th:text ="${#authentication.authorities.size()}"></span><br>
-                5 - <span th:text ="${#authentication.toString()}"></span>
-            </div>
-
-        </div>
+        </section>
     </div>
 </body>
 </html>

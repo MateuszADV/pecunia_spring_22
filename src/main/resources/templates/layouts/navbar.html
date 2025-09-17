@@ -36,6 +36,8 @@
                         <div class="dropdown-menu" aria-labelledby="countryDropdown">
                             <a class="dropdown-item" th:href="@{/continent}">Kontynenty</a>
                             <a class="dropdown-item" th:href="@{/country}">Państwa</a>
+                            <a class="dropdown-item" th:href="@{/currency}">Currency</a>
+                            <a class="dropdown-item" th:href="@{/test}">TEST</a>
 <!--                            <a class="dropdown-item" th:each="c : ${countries}" th:text="${c.name}"-->
 <!--                               th:href="@{/country/{id}(id=${c.id})}"></a>-->
 
@@ -52,8 +54,9 @@
                             Note
                         </a>
                         <div class="dropdown-menu" aria-labelledby="noteDropdown">
-                            <a class="dropdown-item" href="/note/new">New Notes</a>
-                            <a class="dropdown-item" href="/note/historical">Historical Notes</a>
+                            <a class="dropdown-item" th:href="@{/note}">Add Note</a>
+<!--                            <a class="dropdown-item" href="/note/new">New Notes</a>-->
+<!--                            <a class="dropdown-item" href="/note/historical">Historical Notes</a>-->
                         </div>
                     </li>
 

@@ -182,7 +182,7 @@ public class HomeController {
         System.out.println("---------------------TEST START------------------------");
         System.out.println(request.toString());
         System.out.println(response.getLocale().toString());
-        modelMap.addAttribute("ip", request.getRemoteAddr());
+
 
 
         System.out.println("=========================================");
@@ -191,6 +191,7 @@ public class HomeController {
         System.out.println(currentLocale.getLanguage() + " : " + currentLocale.getDisplayLanguage());
 //        System.out.println(request.getHeader("X-FORWARDED-FOR"));
         System.out.println(request.getRemoteAddr());
+        modelMap.addAttribute("ip", request.getRemoteAddr());
         System.out.println("==========================================");
 
         System.out.println(LocalDateTime.now());
