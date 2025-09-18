@@ -14,7 +14,8 @@
     <name>pecunia_22</name>
     <description>pecunia_22_OPIS</description>
     <properties>
-        <java.version>22</java.version>
+        <java.version>21</java.version>
+<!--        <java.version>22</java.version>-->
     </properties>
     <dependencies>
 <!--        <dependency>-->

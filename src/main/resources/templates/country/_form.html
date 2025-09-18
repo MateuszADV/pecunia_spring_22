@@ -10,19 +10,40 @@
             <div class="form-group col-md-6">
                 <label for="continent">Kontynent</label>
                 <select class="form-control" id="continent" name="continent" th:field="*{continents.id}">
-                <span th:if="*{continents.id == null}">
-                    <option value="">SELECT CONTINENT</option>
-                </span>
+<!--                <span th:if="*{continents.id == null}">-->
+                    <option value="">-- SELECT CONTINENT --</option>
+<!--                </span>-->
                     <option th:each="continent : ${continents}"
                             th:value="${continent.id}"
                             th:text="${continent.continentPl}">
                         Continent
                     </option>
                 </select>
-                <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{continents.id}" ></span>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('continents.id')}"
+                     th:errors="*{continents.id}">
                 </div>
+<!--                <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{continents.id}" ></span>-->
+<!--                </div>-->
             </div>
+<!--            <div class="form-group col-md-6">-->
+<!--                <label for="continent">Kontynent</label>-->
+<!--                <select class="form-control" id="continent" th:field="*{continentId}">-->
+<!--                    <option value="" disabled selected>&#45;&#45; wybierz kontynent &#45;&#45;</option>-->
+<!--                    <option th:each="c : ${continents}"-->
+<!--                            th:value="${c.id}"-->
+<!--                            th:text="${c.continentPl}">-->
+<!--                    </option>-->
+<!--                </select>-->
+
+<!--                &lt;!&ndash; Komunikat błędu &ndash;&gt;-->
+<!--                <div class="invalid-feedback d-block"-->
+<!--                     th:if="${#fields.hasErrors('continentId')}"-->
+<!--                     th:errors="*{continentId}">-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="form-group col-md-6">
                 <label for="con">Continent</label>
