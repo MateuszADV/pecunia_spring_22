@@ -24,7 +24,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown" style="font-size: small">
                 <ul class="navbar-nav ml-auto">
 
                     <!-- COUNTRY DROPDOWN -->
@@ -77,6 +77,17 @@
                     <li class="nav-item"><a class="nav-link" href="/shares">Shares & Bonds</a></li>
                     <li class="nav-item"><a class="nav-link" href="/medal">Medal</a></li>
                     <li class="nav-item"><a class="nav-link" href="/customer">Customer</a></li>
+
+                    <!-- SETTING DROPDOWN -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="settingDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Setting
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="settingDropdown">
+                            <a class="dropdown-item" th:href="@{/chart}">Chart</a>
+                        </div>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                                         <!-- AUTH BUTTONS -->
 <!--                    <li class="nav-item"><a class="btn btn-primary btn-sm ml-2" href="/signup">Sign Up</a></li>-->
