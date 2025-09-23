@@ -3,96 +3,250 @@
 <!--    <input class="input" type="text" th:field="*{id}" th:readonly="id" th:type="hidden"/>-->
 <!--    <input class="input" type="text" th:field="*{created_at}" th:readonly="created_at"/>-->
 <!--    <input class="input" type="text" th:field="*{updated_at}" th:readonly="updated_at"/>-->
-    <table>
-        <tr>
-            <td>
-                <label>Continent</label><br>
-                <select th:field="*{continents.id}">
-                    <span th:if="*{continents.id == null}">
-                        <option value="">SELECT CONTINENT</option>
-                    </span>
+
+    <!-- 1 wiersz -->
+    <div class="form-row">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="continent">Kontynent</label>
+                <select class="form-control" id="continent" name="continent" th:field="*{continents.id}">
+<!--                <span th:if="*{continents.id == null}">-->
+                    <option value="">-- SELECT CONTINENT --</option>
+<!--                </span>-->
                     <option th:each="continent : ${continents}"
                             th:value="${continent.id}"
                             th:text="${continent.continentPl}">
-                        Address
+                        Continent
                     </option>
                 </select>
-                <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{continents.id}" ></span>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('continents.id')}"
+                     th:errors="*{continents.id}">
                 </div>
-            </td>
-            <td>
-                <label>Continent</label><br>
-                <input class="input" type="text" th:field="*{continent}" placeholder="Continent"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Country En</label><br>
-                <input class="input" type="text" th:field="*{countryEn}" placeholder="Continent En"/>
-                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{countryEn}" ></span>
-                </div>
-            </td>
-            <td>
-                <label>Country Pl</label><br>
-                <input class="input" type="text" th:field="*{countryPl}" placeholder="Continent Pl"/>
-                <div th:if="${#fields.hasErrors('countryPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{countryPl}" ></span>
-                </div>
-            </td>
-            <td>
-                <label>Capital City</label><br>
-                <input class="input" type="text" th:field="*{capital_city}" placeholder="Capital City"/>
-                <div th:if="${#fields.hasErrors('capital_city')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{capital_city}" ></span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Alfa 2</label><br>
-                <input class="input" type="text" th:field="*{alfa_2}" placeholder="ALFA 2"/>
-                <div th:if="${#fields.hasErrors('alfa_2')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{alfa_2}" ></span>
-                </div>
-            </td>
-            <td>
-                <label>Alfa 3</label><br>
-                <input class="input" type="text" th:field="*{alfa_3}" placeholder="ALFA 3"/>
-                <div th:if="${#fields.hasErrors('alfa_3')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{alfa_3}" ></span>
-                </div>
-            </td>
-        <tr>
+<!--                <div th:if="${#fields.hasErrors('continents.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{continents.id}" ></span>-->
+<!--                </div>-->
+            </div>
+<!--            <div class="form-group col-md-6">-->
+<!--                <label for="continent">Kontynent</label>-->
+<!--                <select class="form-control" id="continent" th:field="*{continentId}">-->
+<!--                    <option value="" disabled selected>&#45;&#45; wybierz kontynent &#45;&#45;</option>-->
+<!--                    <option th:each="c : ${continents}"-->
+<!--                            th:value="${c.id}"-->
+<!--                            th:text="${c.continentPl}">-->
+<!--                    </option>-->
+<!--                </select>-->
 
-        </tr>
-        <tr>
-            <td>
-                <label>Numeric Code</label><br>
-                <input class="input" type="text" th:field="*{numeric_code}" placeholder="First Name"/>
-                <div th:if="${#fields.hasErrors('numeric_code')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{numeric_code}" ></span>
+<!--                &lt;!&ndash; Komunikat błędu &ndash;&gt;-->
+<!--                <div class="invalid-feedback d-block"-->
+<!--                     th:if="${#fields.hasErrors('continentId')}"-->
+<!--                     th:errors="*{continentId}">-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="form-group col-md-6">
+                <label for="con">Continent</label>
+                <input type="text" class="form-control" id="con" name="con" th:field="*{continent}"placeholder="Continent">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <!-- 2 wiersz -->
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label for="countryEn">Country EN</label>
+                <input type="text" class="form-control"
+                       th:classappend="${#fields.hasErrors('countryEn')} ? ' is-invalid' : ''"
+                       placeholder="Enter country name in English"
+                       id="countryEn" name="countryEn" th:field="*{countryEn}">
+                <!-- komunikat walidacji -->
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('countryEn')}"
+                     th:errors="*{countryEn}">
+                    Niepoprawna wartość
                 </div>
-            </td>
-            <td>
-                <label>ISO Code</label><br>
-                <input class="input" type="text" th:field="*{iso_code}" placeholder="iso code"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Exist</label><br>
-                <input class="input" type="checkbox" th:field="*{exists}" placeholder="exist"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Description</label><br>
-                <div>
-                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>
+<!--                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{countryEn}" >TETS</span>-->
+<!--                </div>-->
+
+            </div>
+            <div class="form-group col-md-5">
+                <label for="countryPl">Country PL</label>
+                <input type="text" class="form-control"
+                       th:classappend="${#fields.hasErrors('countryPl')} ? ' is-invalid' : ''"
+                       placeholder="Enter country name in Polish"
+                       id="countryPl" name="countryPl" th:field="*{countryPl}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('countryPl')}"
+                     th:errors="*{countryPl}">
+                    Niepoprawna wartość
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+
+            <div class="form-group col-md-5">
+                <label for="capitalCity">Capital City</label>
+                <input class="form-control" type="text"
+                       th:classappend="${#fields.hasErrors('capital_city')} ? ' is-invalid' : ''"
+                       placeholder=" Enter Capital City"
+                       id="capitalCity" name="capitalCity" th:field="*{capital_city}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('capital_city')}"
+                     th:errors="*{capital_city}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <!-- 3 wiersz -->
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="alfa2">Alfa 2</label><br>
+                <input class="form-control" type="text"
+                       th:classappend="${#fields.hasErrors('alfa_2')} ? ' is-invalid' : ''"
+                       placeholder="np. AB"
+                       id="alfa2" name="alfa2" th:field="*{alfa_2}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('alfa_2')}"
+                     th:errors="*{alfa_2}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="alfa3">Alfa 3</label><br>
+                <input class="form-control" type="text"
+                       th:classappend="${#fields.hasErrors('alfa_3')} ? ' is-invalid' : ''"
+                       placeholder="np. ABC"
+                       id="alfa3" name="alfa3" th:field="*{alfa_3}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('alfa_3')}"
+                     th:errors="*{alfa_3}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-3">
+                <label for="numericCode">Numeric Code</label>
+                <input class="form-control" type="text"
+                       th:classappend="${#fields.hasErrors('numeric_code')} ? ' is-invalid' : ''"
+                       placeholder="Numeric Code 123"
+                       id="numericCode" name="numericCode" th:field="*{numeric_code}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('numeric_code')}"
+                     th:errors="*{numeric_code}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="isoCode">ISO Code</label>
+                <input class="form-control" type="text"
+                       placeholder="iso code"
+                       id="isoCode" name="isoCode" th:field="*{iso_code}">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6 d-flex align-items-center">
+            <div class="form-check mt-12">
+                <input class="form-check-input" type="checkbox" id="exist" name="newsletter" th:field="*{exists}" placeholder="exist">
+                <label class="form-check-label" for="exist">
+                    Czy państwo istnieje
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="field6">Uwagi</label>
+        <textarea class="form-control" id="field6" rows="3" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
+
+<!--    &lt;!&ndash; Przyciski &ndash;&gt;-->
+<!--    <div class="d-flex justify-content-end">-->
+<!--        <button type="reset" class="btn btn-outline-secondary mr-2">Wyczyść</button>-->
+<!--        <button type="submit" class="btn btn-primary">Zapisz</button>-->
+<!--    </div>-->
+
+
+
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--               -->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Continent</label><br>-->
+<!--                <input class="input" type="text" th:field="*{continent}" placeholder="Continent"/>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Country En</label><br>-->
+<!--                <input class="input" type="text" th:field="*{countryEn}" placeholder="Continent En"/>-->
+<!--                <div th:if="${#fields.hasErrors('countryEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{countryEn}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Country Pl</label><br>-->
+<!--                <input class="input" type="text" th:field="*{countryPl}" placeholder="Continent Pl"/>-->
+<!--                <div th:if="${#fields.hasErrors('countryPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{countryPl}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Capital City</label><br>-->
+<!--                <input class="input" type="text" th:field="*{capital_city}" placeholder="Capital City"/>-->
+<!--                <div th:if="${#fields.hasErrors('capital_city')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{capital_city}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Alfa 2</label><br>-->
+<!--                <input class="input" type="text" th:field="*{alfa_2}" placeholder="ALFA 2"/>-->
+<!--                <div th:if="${#fields.hasErrors('alfa_2')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{alfa_2}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Alfa 3</label><br>-->
+<!--                <input class="input" type="text" th:field="*{alfa_3}" placeholder="ALFA 3"/>-->
+<!--                <div th:if="${#fields.hasErrors('alfa_3')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{alfa_3}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        <tr>-->
+
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Numeric Code</label><br>-->
+<!--                <input class="input" type="text" th:field="*{numeric_code}" placeholder="First Name"/>-->
+<!--                <div th:if="${#fields.hasErrors('numeric_code')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{numeric_code}" ></span>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>ISO Code</label><br>-->
+<!--                <input class="input" type="text" th:field="*{iso_code}" placeholder="iso code"/>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Exist</label><br>-->
+<!--                <input class="input" type="checkbox" th:field="*{exists}" placeholder="exist"/>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Description</label><br>-->
+<!--                <div>-->
+<!--                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
 </header>

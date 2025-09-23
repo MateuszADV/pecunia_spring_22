@@ -10,61 +10,71 @@
 </head>
 <body>
     <div layout:fragment="content" class="container">
-        <h1 style="text-align: center">CHART TEST</h1>
-        <div id="parametr" th:value="${countryParam}" ></div>
-        <div id="typeChart" th:value="${typeChart}" ></div>
+        <section class="hero">
+            <h1 style="text-align: center">CHART TEST</h1>
+        </section>
+        <section class="hero py-5">
+            <div class="container">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <div id="parametr" th:value="${countryParam}" ></div>
+                        <div id="typeChart" th:value="${typeChart}" ></div>
 
-        <form th:action="@{/chart}" method="post" th:name="typeChart">
-            <div style="float: left">
-                <select th:name="typeChart" th:value="${typeChart}">
-                    <option th:value="bar" th:text="Bar" th:selected ="${typeChart} == 'bar'"></option>
-                    <option th:value="line" th:text="Line" th:selected ="${typeChart} == 'line'"></option>
-                    <option th:value="polarArea" th:text="'Polar Area'" th:selected ="${typeChart} == 'polarArea'"></option>
-                    <option th:value="doughnut" th:text="'Doughnut'" th:selected ="${typeChart} == 'doughnut'"></option>
-                    <option th:value="pie" th:text="'Pie'" th:selected ="${typeChart} == 'pie'"></option>
-                    <option th:value="scatter" th:text="'Scatter'" th:selected ="${typeChart} == 'scatter'"></option>
-                    <option th:value="radar" th:text="'Radar'" th:selected ="${typeChart} == 'radar'"></option>
-                    <option th:value="bubble" th:text="'Bubble'" th:selected ="${typeChart} == 'bubble'"></option>
-                </select>
-                <select th:name="report">
-                    <option th:each="report : ${reports}"
-                            th:value="${report.name}"
-                            th:text="${(report.name.replace('_', ' ')).replace('my report ', '')}"
-                            th:selected="${report.name} == ${reportName}">
-                    </option>
-                </select>
-                <select th:name="countryParam">
-                    <option th:each="country : ${countries}"
-                            th:value="${country.countryEn}"
-                            th:text="${country.countryEn}"
-                            th:selected="${country.countryEn} == ${countryParam}">
-                    </option>
-                </select>
+                        <form th:action="@{/chart}" method="post" th:name="typeChart">
+                            <div style="float: left">
+                                <select th:name="typeChart" th:value="${typeChart}">
+                                    <option th:value="bar" th:text="Bar" th:selected ="${typeChart} == 'bar'"></option>
+                                    <option th:value="line" th:text="Line" th:selected ="${typeChart} == 'line'"></option>
+                                    <option th:value="polarArea" th:text="'Polar Area'" th:selected ="${typeChart} == 'polarArea'"></option>
+                                    <option th:value="doughnut" th:text="'Doughnut'" th:selected ="${typeChart} == 'doughnut'"></option>
+                                    <option th:value="pie" th:text="'Pie'" th:selected ="${typeChart} == 'pie'"></option>
+                                    <option th:value="scatter" th:text="'Scatter'" th:selected ="${typeChart} == 'scatter'"></option>
+                                    <option th:value="radar" th:text="'Radar'" th:selected ="${typeChart} == 'radar'"></option>
+                                    <option th:value="bubble" th:text="'Bubble'" th:selected ="${typeChart} == 'bubble'"></option>
+                                </select>
+                                <select th:name="report">
+                                    <option th:each="report : ${reports}"
+                                            th:value="${report.name}"
+                                            th:text="${(report.name.replace('_', ' ')).replace('my report ', '')}"
+                                            th:selected="${report.name} == ${reportName}">
+                                    </option>
+                                </select>
+                                <select th:name="countryParam">
+                                    <option th:each="country : ${countries}"
+                                            th:value="${country.countryEn}"
+                                            th:text="${country.countryEn}"
+                                            th:selected="${country.countryEn} == ${countryParam}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 10px">
+                                <p> <input type="submit" value="Select" class="btn btn-sm btn-primary"></p>
+                            </div>
+                        </form>
+                        <script id="chart" th:value="${reportName}" src="js/chart.js" async type="text/javascript">
+
+                            // var ctx = document.getElementById('myChart').getContext('2d');
+                            // var chartData = [[${chartData}]];
+                            // var labels = chartData.chart.labels;
+                            // var datasets  = chartData.chart.datasets;
+                            // var options = chartData.chart.options;
+                            //     console.log(chartData)
+                            // new Chart(ctx, {
+                            //     type: 'bar',
+                            //     data: {
+                            //         labels: labels,
+                            //         datasets: [datasets]
+                            //     },
+                            //     options: options
+                            // });
+                        </script>
+
+                        <canvas id="myChart" style="max-width: 100%; max-height: 600px; background: lightgray"></canvas>
+                        <p th:text="${test}"></p>
+                    </div>
+                </div>
             </div>
-            <div style="float: left; margin-left: 10px">
-                <p> <input type="submit" value="Select" class="btn btn-sm btn-primary"></p>
-            </div>
-        </form>
-        <script id="chart" th:value="${reportName}" src="js/chart.js" async type="text/javascript">
-
-            // var ctx = document.getElementById('myChart').getContext('2d');
-            // var chartData = [[${chartData}]];
-            // var labels = chartData.chart.labels;
-            // var datasets  = chartData.chart.datasets;
-            // var options = chartData.chart.options;
-            //     console.log(chartData)
-            // new Chart(ctx, {
-            //     type: 'bar',
-            //     data: {
-            //         labels: labels,
-            //         datasets: [datasets]
-            //     },
-            //     options: options
-            // });
-        </script>
-
-        <canvas id="myChart" style="max-width: 100%; max-height: 600px; background: lightgray"></canvas>
-        <p th:text="${test}"></p>
+        </section>
 <!--        <script id="reportName" th:value="${reportName}" src="js/test.js"></script>-->
     </div>
 </body>

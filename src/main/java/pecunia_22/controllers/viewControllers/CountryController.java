@@ -89,6 +89,8 @@ public class CountryController {
     public String postNew(@ModelAttribute("countryForm")
                           @Valid CountryDtoForm countryForm, BindingResult result, ModelMap modelMap) {
         System.out.println("--------------------***************START*****************-----------------------------");
+        System.out.println(countryForm);
+        System.out.println(result.toString());
         if (result.hasErrors()) {
             getAllContinents(modelMap);
             return "country/new";
