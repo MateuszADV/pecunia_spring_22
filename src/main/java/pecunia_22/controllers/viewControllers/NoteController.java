@@ -125,7 +125,7 @@ public class NoteController {
 
         modelMap.addAttribute("note", noteDto);
         modelMap.addAttribute("json", JsonUtils.gsonPretty(noteDto));
-        return "/note/show";
+        return "note/show";
     }
 
     @GetMapping("/note/new/")
