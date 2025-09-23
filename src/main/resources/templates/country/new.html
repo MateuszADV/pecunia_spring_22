@@ -7,13 +7,30 @@
     <title>Country New</title>
 </head>
 <body>
-<div layout:fragment="content" class="container">
-    <h1 style="text-align: center">COUNTRY NEW</h1>
-
-    <form th:action="@{/country/new}" method="post" th:object="${countryForm}">
-        <div th:replace="~{country/_form :: form}"></div>
-        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
-    </form>
+<div layout:fragment="content">
+<!--    <h1 style="text-align: center">COUNTRY NEW</h1>-->
+    <section class="hero py-5">
+        <div class="container">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Dodaj Państwo</h5>
+                </div>
+                <div class="container">
+                    <div class="card-body">
+                        <form th:action="@{/country/new}" method="post" th:object="${countryForm}">
+                            <div th:replace="~{country/_form :: form}"></div>
+        <!--                    <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>-->
+                            <!-- Przyciski -->
+                            <div class="d-flex justify-content-end">
+                                <button type="reset" class="btn btn-outline-secondary mr-2">Wyczyść</button>
+                                <button type="submit" class="btn btn-primary">Zapisz</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </div>
 </body>

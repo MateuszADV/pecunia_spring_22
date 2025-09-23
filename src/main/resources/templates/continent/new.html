@@ -7,29 +7,71 @@
     <title>Country New</title>
 </head>
 <body>
-<div layout:fragment="content" class="container">
-    <h1 style="text-align: center">CONTINENT NEW</h1>
+    <div layout:fragment="content">
+        <section class="hero">
+            <div class="container">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                <h1 style="text-align: center">CONTINENT NEW</h1>
+                        <div class="card-body">
+                            <form th:action="@{/continent/new}" method="post" th:object="${continentForm}">
+                                <div class="form-row">
+                                    <!-- Continent En -->
+                                    <div class="form-group col-md-6">
+                                        <label for="continentEn">Continent En</label>
+                                        <input class="input form-control" type="text" th:field="*{continentEn}" id="continentEn"  placeholder="Continent En" />
+                                        <!--              <input type="text" class="form-control" id="firstName" name="firstName"-->
+                                        <!--                     placeholder="Wpisz imię" required>-->
+                                    </div>
 
-    <form th:action="@{/continent/new}" method="post" th:object="${continentForm}">
-        <table>
-            <tr>
-                <td>Continent En</td>
-                <td><input class="input" type="text" th:field="*{continentEn}" placeholder="Continent En"/></td>
-            </tr>
-            <tr>
-                <td>Continent Pl</td>
-                <td><input class="input" type="text" th:field="*{continentPl}" placeholder="Continent Pl"/></td>
-            </tr>
-            <tr>
-                <td>Continent Code</td>
-                <td><input class="input" type="text" th:field="*{continentCode}" placeholder="Continenyt code"/></td>
-            </tr>
+                                    <!-- Nazwisko -->
+                                    <div class="form-group col-md-6">
+                                        <label for="continentPl">continentPl</label>
+                                        <input class="input form-control" type="text" id="continentPl" th:field="*{continentPl}" placeholder="Continent Pl" />
+                                        <!--              <input type="text" class="form-control" id="lastName" name="lastName"-->
+                                        <!--                     placeholder="Wpisz nazwisko" required>-->
+                                    </div>
+                                </div>
 
-        </table>
+                                <div class="form-row">
+                                    <!-- Telefon -->
+                                    <div class="form-group col-md-6">
+                                        <label for="continentCode">Continent Code</label>
+                                        <input class="input form-control" type="text" id="continentCode" th:field="*{continentCode}" placeholder="Continent Code" />
+                                        <!--              <input type="text" class="form-control" id="phone" name="phone"-->
+                                        <!--                     placeholder="+48 ___ ___ ___" required>-->
+                                    </div>
+                                </div>
+                                <!-- Uwagi -->
+                                <div class="form-group">
+                                    <label for="notes">Uwagi</label>
+                                    <textarea class="input form-control" type="text" id="notes" rows="3"  placeholder="Tutaj możesz dodać dodatkowe informacje" ></textarea>
+                                    <!--            <textarea class="form-control" id="notes" name="notes" rows="3"-->
+                                    <!--                      placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>-->
+                                </div>
+            <!--                    <table>-->
+            <!--                        <tr>-->
+            <!--                            <td>Continent En</td>-->
+            <!--                            <td><input class="input" type="text" th:field="*{continentEn}" placeholder="Continent En"/></td>-->
+            <!--                        </tr>-->
+            <!--                        <tr>-->
+            <!--                            <td>Continent Pl</td>-->
+            <!--                            <td><input class="input" type="text" th:field="*{continentPl}" placeholder="Continent Pl"/></td>-->
+            <!--                        </tr>-->
+            <!--                        <tr>-->
+            <!--                            <td>Continent Code</td>-->
+            <!--                            <td><input class="input" type="text" th:field="*{continentCode}" placeholder="Continenyt code"/></td>-->
+            <!--                        </tr>-->
 
-        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
-    </form>
+            <!--                    </table>-->
 
-</div>
+                                <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </body>
 </html>

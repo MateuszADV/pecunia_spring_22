@@ -1,28 +1,28 @@
-body
-{
-    /*background: url("../images/mochaGrunge.png");*/
-    background-color: #c4e1c1;
-    /*background-color: aquamarine;*/
-}
+/*body*/
+/*{*/
+/*    background: url("../images/mochaGrunge.png");*/
+/*    !*background-color: #c4e1c1;*!*/
+/*    !*background-color: aquamarine;*!*/
+/*}*/
 
-.navbar-light .navbar-nav .nav-link
-{
-    color: azure;
-}
+/*.navbar-light .navbar-nav .nav-link*/
+/*{*/
+/*    color: azure;*/
+/*}*/
 
-.navbar-light:hover .navbar-nav:hover .nav-link:hover
-{
-    color: lightgray;
-}
+/*.navbar-light:hover .navbar-nav:hover .nav-link:hover*/
+/*{*/
+/*    color: lightgray;*/
+/*}*/
 
-.navbar-light .navbar-brand
-{
-    color: aliceblue;
-}
-.dropdown-menu
-{
-    background-color: darkgray;
-}
+/*.navbar-light .navbar-brand*/
+/*{*/
+/*    color: aliceblue;*/
+/*}*/
+/*.dropdown-menu*/
+/*{*/
+/*    background-color: darkgray;*/
+/*}*/
 
 .currencyBox
 {
@@ -40,7 +40,8 @@ body
 
 .NOTE
 {
-    background: #2fff50d9;
+    /*background: #2fff50d9;*/
+    background: #27ae3cd9;
 }
 
 .COIN
@@ -337,3 +338,4 @@ img.hover-shadow {
 .arrow-down {
     color: orangered;
 }
+

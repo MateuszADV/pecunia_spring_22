@@ -7,78 +7,78 @@
     <title>Pecunia Spring</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
+    <div layout:fragment="content">
+<!--        <div th:if="${rateCurrencyTableA.exchange} != null" style="background: aquamarine; text-align: center">-->
         <div th:if="${rateCurrencyTableA.exchange} != null" style="background: aquamarine; text-align: center">
             <block th:each=" rate : ${rateCurrencyTableA.exchange.rates}">
                 <span>[[${rate.cod}]]: [[${rate.mid}]] </span>
             </block>
         </div>
-        <div class="row row-cols-1 row-cols-sm-2">
-            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-<!--                <img src="https://dub01pap001files.storage.live.com/y4md3w1qi0YL5yavfhXUFN-NaDSWmpYX8dP-eBdmw0DFcLLvqqroXSozwRBMwyYMXuCz7ysZe0g7xKyCbEbrK-sssY0jYUUSCCHE4k_CwNtyEZbVFW_t9i-86AxZlqTuioEn6irCkrF9GMXA46Mnl_3M8ThY5KdpUQD2x-YtkM6AEXosOITvadBqgRchDOsdJsKfQz9WbG8L3WMya1uqbGpgw?encodeFailures=1&width=1626&height=837" style="max-width: 100%; max-height: 350px"/>-->
-                <img src="https://www.mediafire.com/convkey/2c06/s3ou244w2vkt7ncag.jpg" style="max-width: 100%; max-height: 350px"/>
+
+
+        <section class="hero">
+            <div class="container">
+                <h1 class="mb-4">Banknotes & Coins of the World</h1>
+<!--                <p class="lead mb-5">Odkryj unikalne banknoty, monety oraz papiery wartościowe z całego świata</p>-->
+                <img th:src="@{https://www.mediafire.com/convkey/2c06/s3ou244w2vkt7ncag.jpg}" alt="Banknote example">
             </div>
-            <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-                <img src="https://www.mediafire.com/convkey/df70/hvm3v4xwhcls2uzag.jpg" style="max-width: 100%; max-height: 350px"/>
-            </div>
-        </div>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-            <div class="col field" style="float: left; margin: 5px 0px 5px 0px" >
-                <div class="container" style=" background: #4cb148">
-                    <h3>Note</h3>
-                    <div class="row row-cols-1 row-cols-sm-2" style="text-align: center">
-                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-<!--                            <img src="https://pehkkw.ch.files.1drv.com/y4mNVXrG_-x12nbIvGKJ2ms8SpGIi3w8QBwgx08L4UQFM7PdqrMwBo_0pUKIX6MA83PmhkU37U1eH4FofvuRnzBPseFf5TBbY82mZ0jnnfh4sK4N6m6B3Q24WTHS-c3W35WA5RFR1mUNr2xlXvocd220LpsypSF6JUdGi0IQAx5koLMpnxVvQ0RqB4t8WiDuEPvlMibKOTmRZXCVxXhaVkxfw/Poland_19_Zlotych_201a_2019.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>-->
-                            <img src="https://www.mediafire.com/convkey/3315/rpy09vvxqhl97bdag.jpg" style="max-width: 100%; max-height: 100px"/>
-                        </div>
-                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-<!--                            <img src="https://pehkkw.ch.files.1drv.com/y4mTdJBUd72VW2oPVKt6N_UNoV0g0lyGf7Qo9jz8-B9cf8zbYvhse1DYfEAT2Q8HLqdp7zyqPzXuo4LowxfxHRPekKShPTYfweOPADCm-LsyKwR_WUosk3PPZP9nKQK1PtECJWcyybofzDR5su-19-BDPryHNQTFV7y3PV0dD7Ya5ur1uTUsksIbYlOs3VJMFQhLzn0vYma8zCJ5-xVgKX9Qg/Poland_19_Zlotych_201b_2019.jpg?psid=1" style="max-width: 100%; max-height: 100px"/>-->
-                            <img src="https://www.mediafire.com/convkey/73f2/v24i3xp3wgvsc94ag.jpg" style="max-width: 100%; max-height: 100px"/>
+        </section>
+
+        <section class="hero">
+<!--            <div class="row row-cols-1 row-cols-sm-2">-->
+<!--                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">-->
+<!--    &lt;!&ndash;                <img src="https://dub01pap001files.storage.live.com/y4md3w1qi0YL5yavfhXUFN-NaDSWmpYX8dP-eBdmw0DFcLLvqqroXSozwRBMwyYMXuCz7ysZe0g7xKyCbEbrK-sssY0jYUUSCCHE4k_CwNtyEZbVFW_t9i-86AxZlqTuioEn6irCkrF9GMXA46Mnl_3M8ThY5KdpUQD2x-YtkM6AEXosOITvadBqgRchDOsdJsKfQz9WbG8L3WMya1uqbGpgw?encodeFailures=1&width=1626&height=837" style="max-width: 100%; max-height: 350px"/>&ndash;&gt;-->
+<!--                    <img src="https://www.mediafire.com/convkey/2c06/s3ou244w2vkt7ncag.jpg" style="max-width: 100%; max-height: 350px"/>-->
+<!--                </div>-->
+<!--                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">-->
+<!--                    <img src="https://www.mediafire.com/convkey/df70/hvm3v4xwhcls2uzag.jpg" style="max-width: 100%; max-height: 350px"/>-->
+<!--                </div>-->
+<!--            </div>-->
+        </section>
+        <!-- CARDS SECTION -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+
+                    <!-- NOTE -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img th:src="@{https://www.mediafire.com/convkey/07c4/53erl3cpqv1vxhoag.jpg}" class="card-img-top" alt="Note">
+                            <div class="card-body">
+                                <h5 class="card-title">Note</h5>
+                                <p class="card-text">Opis banknotów świata. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <a href="/note" class="btn btn-primary">Zobacz więcej</a>
+                            </div>
                         </div>
                     </div>
-                   <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
-                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
-                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
-                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
-                </div>
-            </div>
-            <div class="col field" style="float: left; margin: 5px 0px 5px 0px">
-                <div class="container" style="background: #4cb148">
-                    <h3>Coin</h3>
-                    <div class="row row-cols-1 row-cols-sm-2" style="text-align: center">
-                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-                            <img src="https://www.mediafire.com/convkey/9ad7/02synx7vt7ggyq5ag.jpg" style="max-width: 100%; max-height: 100px"/>
-                        </div>
-                        <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-                            <img src="https://www.mediafire.com/convkey/0479/zlffi70xqmbs42vag.jpg" style="max-width: 100%; max-height: 100px"/>
+
+                    <!-- COIN -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img th:src="@{https://www.mediafire.com/convkey/55d8/mhn2psyv1cdmzxjag.jpg}" class="card-img-top" style="width: 50%" alt="Coin">
+                            <div class="card-body">
+                                <h5 class="card-title">Coin</h5>
+                                <p class="card-text">Monety historyczne i współczesne. Cras maximus ornare condimentum.</p>
+                                <a href="/coin" class="btn btn-primary">Zobacz więcej</a>
+                            </div>
                         </div>
                     </div>
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
-                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
-                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
-                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
+
+                    <!-- OTHER -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img th:src="@{https://www.mediafire.com/convkey/da4e/9eorwek017ev96sag.jpg}" class="card-img-top" alt="Other">
+                            <div class="card-body">
+                                <h5 class="card-title">Other</h5>
+                                <p class="card-text">Inne cenne papiery, obligacje i medale kolekcjonerskie.</p>
+                                <a href="/other" class="btn btn-primary">Zobacz więcej</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div class="col field" style="float: left; margin: 5px 0px 5px 0px">
-                <div class="container" style="background: #4cb148">
-                    <h3>Other</h3>
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                       Vestibulum turpis enim, tempus venenatis sodales a, auctor ut lorem.
-                       Cras maximus ornare condimentum. Aenean vehicula, leo eu feugiat vehicula,
-                       tellus odio aliquam neque, dictum iaculis quam lacus at justo. Cras sem ipsum,
-                       tempor vel nulla quis, tristique aliquet lacus. Duis dignissim. </span>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Button trigger modal -->
-<!--        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-<!--            Launch demo modal-->
-<!--        </button>-->
-
+        </section>
     </div>
 </body>
 </html>
