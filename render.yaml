@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: pecunia
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: JAVA_OPTS
+        value: "-Xms256m -Xmx512m"
+      - key: JDBC_DATABASE_URL
+        sync: false
+      - key: JDBC_DATABASE_USERNAME
+        sync: false
+      - key: JDBC_DATABASE_PASSWORD
+        sync: false
