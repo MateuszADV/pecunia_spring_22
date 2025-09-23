@@ -113,7 +113,7 @@ public class NoteController {
         }
         modelMap.addAttribute("currency", currencyDtoByPattern);
         modelMap.addAttribute("notes", noteDtoByCurrencies);
-        return "/note/note_list";
+        return "note/note_list";
     }
 
     @GetMapping("/note/show/{noteId}")
