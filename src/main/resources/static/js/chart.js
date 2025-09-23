@@ -10,13 +10,18 @@ console.log(param);
 console.log(typeChart);
 
 const root = location.protocol + '//' + location.host;
+
+console.log("--------ROOT-----------------")
 console.log(root);
+console.log("--------ROOT-----------------")
 
 if (param) {
-    les = chartUrl = "http://localhost:8080/api/v1/report/?report=" + reportName + "&param=" + param
+    // les = chartUrl = "http://localhost:8080/api/v1/report/?report=" + reportName + "&param=" + param
+    les = chartUrl = root + "/api/v1/report/?report=" + reportName + "&param=" + param
     console.log("param nie jest pusty - " + param)
 } else {
-    les = chartUrl = "http://localhost:8080/api/v1/report/?report=" + reportName;
+    // les = chartUrl = "http://localhost:8080/api/v1/report/?report=" + reportName;
+    les = chartUrl = root + "/api/v1/report/?report=" + reportName;
     console.log("parametr jest pusty")
 }
 
