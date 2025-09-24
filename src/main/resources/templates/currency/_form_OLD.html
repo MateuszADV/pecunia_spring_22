@@ -1,0 +1,112 @@
+<header th:fragment="form"
+    xmlns:th="http://www.thymeleaf.org">
+    <label >[[${currencyForm.countries.countryEn}]]</label>
+    <input class="input" type="text" th:field="*{countries.id}" th:readonly="id"/>
+
+<!--    <input class="input" type="text" th:field="*{created_at}" th:readonly="created_at" th:type="hidden"/>-->
+<!--    <input class="input" type="text" th:field="*{updated_at}" th:readonly="updated_at" th:type="hidden"/>-->
+
+    <h1>DODAWANIE WALUTY</h1>
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            <td>
+                <div class="field">
+                    <label>COD</label><br>
+                    <input type="text" th:field="*{cod}" class="input form-control form-control-sm" placeholder="COD"/>
+                    <div th:if="${#fields.hasErrors('cod')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                        <span th:errors="*{cod}" ></span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <label>Pattern</label><br>
+                    <select th:field="*{patterns.id}" class="form-control form-control-sm">
+                        <span th:if="*{patterns.id == null}">
+                            <option value="">SELECT</option>
+                        </span>
+                        <option th:each="pattern : ${patterns}"
+                                th:value="${pattern.id}"
+                                th:text="${pattern.pattern}">
+                            Address
+                        </option>
+                    </select>
+                </div>
+                <div th:if="${#fields.hasErrors('patterns.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{patterns.id}" ></span>
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <label>Name Currency</label><br>
+                    <input type="text" th:field="*{currency}" class="form-control form-control-sm" placeholder="Currency"/>
+                    <div th:if="${#fields.hasErrors('currency')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                        <span th:errors="*{currency}" ></span>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <div class="field">
+                    <label>Change</label><br>
+                    <input type="text" th:field="*{change}" class="form-control form-control-sm" placeholder="Change"/>
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <label>Active</label><br>
+                    <select th:field="*{actives.id}" class="form-control form-control-sm">
+                        <span th:if="*{actives.id == null}">
+                            <option value="">SELECT</option>
+                        </span>
+                        <option th:each="active : ${actives}"
+                                th:value="${active.id}"
+                                th:text="${active.name}">
+                            Address
+                        </option>
+                    </select>
+                </div>
+                <div th:if="${#fields.hasErrors('actives.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{actives.id}" ></span>
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <label>Date Exchane</label><br>
+                    <input type="text" th:field="*{dataExchange}" class="form-control form-control-sm" placeholder="Date Exchane"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div class="field ">
+                    <label>Currency Series</label><br>
+                    <input type="text" th:field="*{currencySeries}" class="form-control form-control-sm" placeholder="Currency Series"/>
+                    <div th:if="${#fields.hasErrors('currencySeries')}"  class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                        <span th:errors="*{currencySeries}" ></span>
+                    </div>
+                </div>
+            </td>
+        <tr>
+            <td>
+                <div class="field">
+                    <label>Currency From</label><br>
+                    <input type="text" th:field="*{currencyFrom}" class="form-control form-control-sm" placeholder="Currency From"/>
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <label>Converter</label><br>
+                    <input type="text" th:field="*{converter}" class="form-control form-control-sm" placeholder="converter np: 1 = 100"/>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+    <div class="field">
+    <label>Description</label><br>
+        <textarea th:field="*{description}" class="form-control form-control-sm" placeholder="Description"></textarea>
+    </div>
+</header>
