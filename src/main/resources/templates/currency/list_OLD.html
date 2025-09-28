@@ -48,21 +48,12 @@
                             [[${currency.currencySeries}]]  ([[${currency.id}]])
                         </td>
                         <td class="pt-1 pb-1">
-                            <a th:href="@{'/currency/show/' + ${currency.id}}"
-                               class="btn btn-sm btn-outline-info mr-1" style="font-size: x-small" data-toggle="modal" th:attr="data-target='#currency-' + ${currency.id}" >
-                                <i class="fas fa-eye"></i>SHOW
-                            </a>
+                            <a th:href="@{'/currency/show/' + ${currency.id}}" class="btn btn-sm btn-info" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#currency-' + ${currency.id}" >SHOW</a>
                             <div class="modal fade" th:attr="id= 'currency-' + ${currency.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div th:replace="~{currency/_showModal :: showModal}"></div>
                             </div>
-                            <a th:href="@{'/currency/edit/' + ${currency.id}}"
-                               class="btn btn-sm btn-outline-primary mr-1" style="font-size: x-small">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a th:href="@{'/currency/delete/' + ${currency.id} + '/' + ${country.id}}"
-                               class="btn btn-sm btn-outline-danger" style="font-size: x-small">
-                            <i class="fas fa-trash"></i>DELETE
-                            </a>
+                            <a th:href="@{'/currency/edit/' + ${currency.id}}" class="btn btn-sm btn-primary" style="font-size: 10px">EDIT</a>
+                            <a th:href="@{'/currency/delete/' + ${currency.id} + '/' + ${country.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">DELETE</a>
                         </td>
                     </tr>
                 </Block>
