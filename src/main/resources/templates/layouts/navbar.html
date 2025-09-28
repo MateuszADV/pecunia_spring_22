@@ -88,6 +88,18 @@
                             <a class="dropdown-item" th:href="@{/chart}">Chart</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="ratesDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Rates
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ratesDropdown">
+                            <a class="dropdown-item" th:href="@{/nbp}">NBP</a>
+                            <a class="dropdown-item" th:href="@{/nbp-rate-currency}">NBP Rate</a>
+                            <a class="dropdown-item" th:href="@{/metal}">Metal</a>
+                            <a class="dropdown-item" th:href="@{/moneyMetal}">Money Metal</a>
+                        </div>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                                         <!-- AUTH BUTTONS -->
 <!--                    <li class="nav-item"><a class="btn btn-primary btn-sm ml-2" href="/signup">Sign Up</a></li>-->
