@@ -1,8 +1,10 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
     <section class="hero">
-        <label >[[${currencyForm.countries.countryEn}]]</label>
-        <input class="input" type="text" th:field="*{countries.id}" th:readonly="id"/>
+        <div class="form-group col-md-3">
+            <label for="country">[[${currencyForm.countries.countryEn}]]</label>
+            <input class="input" id="country" type="text" th:field="*{countries.id}" th:readonly="id"/>
+        </div>
         <h1>DODAWANIE WALUTY</h1>
     </section>
     <div class="form-row">
