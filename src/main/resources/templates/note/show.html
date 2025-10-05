@@ -7,17 +7,22 @@
     <title>NOTE SHOW</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
-        <div class="jumbotron">
-            <h1 class="display-4" style="text-align: center">NOTE SHOW</h1>
-            <hr class="my-2">
-            <div class="container" style="display: inline-block">
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${note.currencies.currencySeries} + '&curId=' + ${note.currencies.id})}"></a>
+    <div layout:fragment="content">
+        <section class="hero py-5">
+            <div class="container">
+                <h1 class="display-4" style="text-align: center">Note SHOW</h1>
+                <hr class="my-2">
+                <div class="jumbotron">
+                    <hr class="my-2">
+                    <div class="container" style="display: inline-block">
+                        <a th:replace="~{fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${note.currencies.currencySeries} + '&curId=' + ${note.currencies.id})}"></a>
+                    </div>
+                    <div th:replace="~{note/fragments/_note-show :: note-show}"></div>
+                    <hr class="my-2">
+                    <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/note/edit/' + ${note.id})}"></a>
+                </div>
             </div>
-            <div th:replace="~{note/fragments/_note-show :: note-show}"></div>
-            <hr class="my-2">
-            <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/note/edit/' + ${note.id})}"></a>
-        </div>
+        </section>
     </div>
 </body>
 </html>

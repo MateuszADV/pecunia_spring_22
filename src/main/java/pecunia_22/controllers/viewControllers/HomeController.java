@@ -66,24 +66,24 @@ public class HomeController {
             modelMap.addAttribute("rateCurrencyTableA", getRateCurrencyTableA);
             System.out.println(JsonUtils.gsonPretty(getRateCurrencyTableA));
             System.out.println("KURS WALUT");
+//            String url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
+//            String url2 ="https://api.gold-api.com/symbols";
+//            String url3 = "https://www.moneymetals.com/api/spot-prices.json";
+//
+//            Client client = ClientBuilder.newClient();
+//            Invocation.Builder webResource = client.target(url).request();
+//
+//            System.out.println("-----------START-------------------");
+//            System.out.println(webResource.get(String.class));
+//            String stringJson = webResource.get(String.class);
+//
+//            System.out.println("-----------------------------------------");
+//            System.out.println(apiService.webResource(url).get());
+//            System.out.println(apiService.webResource(url).get(String.class));
+//            System.out.println(apiService.webResource(url).get().getStatus());
         }catch (Exception e) {
             modelMap.addAttribute("rateCurrencyTableA", getRateCurrencyTableA);
         }
-        String url = "https://api.nbp.pl/api/exchangerates/tables/A/?format=json";
-        String url2 ="https://api.gold-api.com/symbols";
-        String url3 = "https://www.moneymetals.com/api/spot-prices.json";
-
-        Client client = ClientBuilder.newClient();
-        Invocation.Builder webResource = client.target(url).request();
-
-        System.out.println("-----------START-------------------");
-        System.out.println(webResource.get(String.class));
-        String stringJson = webResource.get(String.class);
-
-        System.out.println("-----------------------------------------");
-        System.out.println(apiService.webResource(url).get());
-        System.out.println(apiService.webResource(url).get(String.class));
-        System.out.println(apiService.webResource(url).get().getStatus());
         System.out.println("żłóńćąęś");
         System.out.println("-----------------------------------------");
 
