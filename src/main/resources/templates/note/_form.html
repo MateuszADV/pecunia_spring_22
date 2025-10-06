@@ -8,7 +8,7 @@
         </div>
 <!--        <h1>DODAWANIE NOWEGO BANKNOTU</h1>-->
     </section>
-
+    <hr class="my-2">
         <!-- 1 wiersz -->
         <div class="form-row">
             <div class="form-group col-md-4">
@@ -25,8 +25,7 @@
                 </select>
             </div>
         </div>
-
-
+    <hr class="my-2">
         <!-- 2 wiersz -->
         <div class="form-row">
             <div class="form-group col-md-3">
@@ -38,18 +37,42 @@
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label class="m-0">Bought</label>
-                <select class="form-control form-control-sm mb-2" th:field="*{boughts.id}">
-                    <span th:if="*{boughts.id == null}">
-                        <option value="">SELECT BOUGHT</option>
-                    </span>
+                <label class="m-0" for="bought">Bought</label>
+                <select class="form-control form-control-sm mb-2" id="bought" name="bought" th:field="*{boughts.id}">
+                    <option value="">-- SELECT BOUGHT --</option>
                     <option th:each="bought : ${boughts}"
                             th:value="${bought.id}"
                             th:text="${bought.name}">
+                        Bought
                     </option>
                 </select>
-                <div th:if="${#fields.hasErrors('boughts.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{boughts.id}" ></span>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('boughts.id')}"
+                     th:errors="*{boughts.id}">
+                </div>
+                <hr class="my-2">
+            </div>
+        </div>
+    <hr class="my-2">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                    <label class="m-0" for="denomination">Denomination</label>
+                    <input type="text" class="form-control form-control-sm mb-2" id="denomination" th:field="*{denomination}" placeholder="Denomiation">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="nameCurrency">Name Currency</label>
+                <input type="text" class="form-control form-control-sm mb-2" id="nameCurrency" th:field="*{nameCurrency}" placeholder="Name Currency">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="series">Series</label>
+                <input type="text" class="form-control form-control-sm mb-2" id="series" th:field="*{series}" placeholder="Series">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="itemDate">Item Date</label>
+                <input type="text" class="form-control form-control-sm mb-2" id="itemDate" th:field="*{itemDate}" placeholder="Item Date">
+                <div th:if="${#fields.hasErrors('itemDate')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                    <span th:errors="*{itemDate}" ></span>
                 </div>
             </div>
         </div>
