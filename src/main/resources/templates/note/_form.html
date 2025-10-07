@@ -51,7 +51,6 @@
                      th:if="${#fields.hasErrors('boughts.id')}"
                      th:errors="*{boughts.id}">
                 </div>
-                <hr class="my-2">
             </div>
         </div>
     <hr class="my-2">
@@ -70,12 +69,163 @@
             </div>
             <div class="form-group col-md-3">
                 <label class="m-0" for="itemDate">Item Date</label>
-                <input type="text" class="form-control form-control-sm mb-2" id="itemDate" th:field="*{itemDate}" placeholder="Item Date">
-                <div th:if="${#fields.hasErrors('itemDate')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{itemDate}" ></span>
+                <input type="text" class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('itemDate')} ? ' is-invalid' : ''"
+                       placeholder = "Item Date"
+                       id="itemDate" name="itemDate" th:field="*{itemDate}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('itemDate')}"
+                     th:errors="*{itemDate}">
+                    Niepoprawna wartość
                 </div>
             </div>
         </div>
-
+    <hr class="my-2">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label class="m-0" for="quantity">Quantity</label>
+                <input type="number" class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('quantity')} ? ' is-invalid' : ''"
+                       placeholder="quantity"
+                       id="quantity" th:field="*{quantity}" min="0">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('quantity')}"
+                     th:errors="*{quantity}">
+                    Niepoprawna wartość
+                </div>
+<!--                <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{quantity}" style="display: inline-block; font-size: xx-small" ></span>-->
+<!--                </div>-->
+            </div>
+            <div class="form-group col-md-1">
+                <label class="m-0" for="unitQuantity">Unit</label>
+                <select class="form-control form-control-sm mb-2" id="unitQuantity" th:field="*{unitQuantity}">
+                    <option th:value="'szt'" th:text="szt"></option>
+                    <option th:value="'set'" th:text="set"></option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="active">Active</label>
+                <select class="form-control form-control-sm mb-2" id="active" th:field="*{actives.id}">
+                    <option value="">-- SELECT ACTIVE --</option>
+                    <option th:each="active : ${actives}"
+                            th:value="${active.id}"
+                            th:text="${active.name}">
+                        Active
+                    </option>
+                </select>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('actives.id')}"
+                     th:errors="*{actives.id}">
+                </div>
+            </div>
+        </div>
+    <hr class="my-2">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label class="m-0" for="priceBuy">Price Buy</label>
+                <input class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('priceBuy')} ? ' is-invalid' : ''"
+                       placeholder="0.00"
+                       id="priceBuy" type="number" step="0.01"  th:field="*{priceBuy}" >
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('priceBuy')}"
+                     th:errors="*{priceBuy}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="m-0" for="priceSell">Price Sell</label>
+                <input class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('priceSell')} ? ' is-invalid' : ''"
+                       placeholder="0.00"
+                       id="priceSell" type="number" step="0.01"  th:field="*{priceSell}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('priceSell')}"
+                     th:errors="*{priceSell}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="making">Making</label>
+                <select class="form-control form-control-sm mb-2" id="making" th:field="*{makings.id}">
+                    <option value="">-- SELECT MAKING --</option>
+                    <option th:each="making : ${makings}"
+                            th:value="${making.id}"
+                            th:text="${making.making}">
+                    </option>
+                </select>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('makings.id')}"
+                     th:errors="*{makings.id}">
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="quality">Quality</label>
+                <select class="form-control form-control-sm mb-2" id="quality" th:field="*{qualities.id}">
+                    <option value="">-- SELECT QUALITY --</option>
+                    <option th:each="quality : ${qualities}"
+                            th:value="${quality.id}"
+                            th:text="${quality.quality}">
+                    </option>
+                </select>
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('qualities.id')}"
+                     th:errors="*{qualities.id}">
+                </div>
+            </div>
+        </div>
+    <hr class="my-2">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label class="m-0" for="white">Width</label>
+                <input class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('width')} ? ' is-invalid' : ''"
+                       id="white" type="number" min="0"  th:field="*{width}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('width')}"
+                     th:errors="*{width}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="m-0" for="height">height</label>
+                <input class="form-control form-control-sm mb-2"
+                       th:classappend="${#fields.hasErrors('width')} ? ' is-invalid' : ''"
+                       id="height" type="number" min="0"  th:field="*{height}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('height')}"
+                     th:errors="*{height}">
+                    Niepoprawna wartość
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="status">Status</label>
+                <select class="form-control form-control-sm mb-2" id="status" th:field="*{statuses.id}" >
+                    <option value="">-- SELECT STATUS --</option>
+                    <option th:each="status : ${statuses}"
+                            th:value="${status.id}"
+                            th:text="${status.status}"
+                            th:class="${status.status.replace(' ', '_')}">
+                    </option>
+                </select>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('statuses.id')}"
+                     th:errors="*{statuses.id}">
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="m-0" for="imageType">Image Type</label>
+                <select class="form-control form-control-sm mb-2" id="imageType" th:field="*{imageTypes.id}">
+                    <option value="">-- SELECT IMAGE TYPE --</option>
+                    <option th:each="imageType : ${imageTypes}"
+                            th:value="${imageType.id}"
+                            th:text="${imageType.type}">
+                    </option>
+                </select>
+                <!-- Komunikat błędu -->
+                <div class="invalid-feedback d-block"
+                     th:if="${#fields.hasErrors('imageTypes.id')}"
+                     th:errors="*{imageTypes.id}">
+                </div>
+            </div>
+        </div>
 
 </header>
