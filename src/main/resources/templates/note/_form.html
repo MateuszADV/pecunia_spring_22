@@ -1,13 +1,12 @@
 <header th:fragment="form"
-    xmlns:th="http://www.thymeleaf.org"
+    xmlns:th="http://thymeleaf.org"
     xmlns="http://www.w3.org/1999/xhtml">
-    <section class="hero">
+<!--    <section class="hero">-->
         <div class="container">
             <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
 
         </div>
 <!--        <h1>DODAWANIE NOWEGO BANKNOTU</h1>-->
-    </section>
     <hr class="my-2">
         <!-- 1 wiersz -->
         <div class="form-row">
@@ -227,5 +226,42 @@
                 </div>
             </div>
         </div>
+    <hr class="my-2">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label class="m-0" for="statusSell">Status Sell</label>
+                <input class="form-control form-control-sm mb-2"
+                       id="statusSell" type="text" th:field="*{statusSell}">
+            </div>
+            <div class="form-group col-md-2 align-items-center">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox"
+                           id="visible" name="newsletter" th:field="*{visible}">
+                    <label class="form-check-label" for="visible">
+                        Visinble
+                    </label>
+                </div>
+            </div>
+        </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="3" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="serialNumber">Serial NUmber</label>
+        <input type="text" class="form-control form-control-sm mb-2" id="serialNumber" th:field="*{serialNumber}" placeholder="Serial Number">
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="aversPath">Avers Path</label>
+        <input type="text" class="form-control form-control-sm mb-2" id="aversPath" th:field="*{aversPath}" placeholder="Avers Path">
+    </div>
+    <div class="form-group">
+        <label for="reversePath">Reverse Path</label>
+        <input type="text" class="form-control form-control-sm mb-2" id="reversePath" th:field="*{reversePath}" placeholder="Reverse Path">
+    </div>
+<!--    </section>-->
 
 </header>
