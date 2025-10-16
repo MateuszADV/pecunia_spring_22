@@ -4,34 +4,59 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout}">
 <head>
-    <title>Note New</title>
+    <title>Note Edit</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
+    <div layout:fragment="content">
+        <section class="hero py-5">
+            <div class="container">
+                <div class="shadow-sm mb-4" style="background-color: #fff; border-radius: 12px;">
+                    <h1 class="display-4" style="text-align: center">NOTE EDIT</h1>
+                    <hr class="my-2">
+                    <div class="container">
+                        <div class="card-body">
+                            <form th:action="@{/note/edit}" method="post" th:object="${noteForm}">
+                                <div class="form-group col-md-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <label for="idNote" class="mr-2 mb-0">Id:</label>
+                                        <input class="form-control form-control-sm" type="text" id="idNote"
+                                               th:field="*{id}" style="max-width: 80px;" readonly>
+                                    </div>
 
-        <div class="jumbotron">
-            <h1 class="display-4" style="text-align: center">NOTE EDIT</h1>
-            <hr class="my-2">
-            <form th:action="@{/note/edit}" method="post" th:object="${noteForm}">
-                <div>
-                    <label class="m-0">Id</label>
-                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>
-                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" style="max-width: 220px" placeholder="created At" readonly/>
-                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{updated_at}" style="max-width: 220px" placeholder="updated At" readonly/>
+                                    <input class="form-control form-control-sm mb-2" type="text"
+                                           th:field="*{created_at}" style="max-width: 220px;" placeholder="Created At" readonly>
+                                    <input class="form-control form-control-sm" type="text"
+                                           th:field="*{updated_at}" style="max-width: 220px;" placeholder="Updated At" readonly>
+                                </div>
+<!--                                <div class="form-group col-md-3">-->
+<!--                                    <label class="m-0" for="idNote">Id</label>-->
+<!--                                    <input class="form-control form-control-sm mb-2" type="text" id="idNote" th:field="*{id}" placeholder="Id" style="max-width: 80px" readonly/>-->
+<!--                                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" style="max-width: 220px" placeholder="created At" readonly/>-->
+<!--                                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{updated_at}" style="max-width: 220px" placeholder="updated At" readonly/>-->
+<!--                                </div>-->
+                                <div th:replace="~{note/_form :: form}"></div>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="row row-cols-1" style="margin-left: 20px; margin-right: 20px; max-height: 100%">
+                        <div th:replace="~{note/fragments/_lightBoxNote :: lightBox(note = ${noteInfoLightBox})}"></div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-start align-items-center container py-2">
+                        <div class="mr-2">
+                            <a th:replace="~{fragments/button/_button-show :: show(show = '/note/show/' + ${noteForm.id})}"></a>
+                        </div>
+                        <a th:replace="~{fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${noteForm.currencies.currencySeries} + '&curId=' + ${noteForm.currencies.id})}"></a>
+                    </div>
                 </div>
-                <div th:replace="~{note/_form :: form}"></div>
-                <p> <input type="submit" value="Zapisz Zmiany" class="btn btn-sm btn-primary"></p>
-            </form>
-            <hr class="my-2">
-            <div class="row row-cols-1" style="margin-left: 20px; margin-right: 20px; max-height: 100%">
-                <div th:replace="~{note/fragments/_lightBoxNote :: lightBox(note = ${noteInfoLightBox})}"></div>
             </div>
-            <hr class="my-2">
-            <div style="display: block ruby">
-                <a th:replace="~{fragments/button/_button-show :: show(show = '/note/show/' + ${noteForm.id})}"></a>
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/note_list/?currencySeries=' + ${noteForm.currencies.currencySeries} + '&curId=' + ${noteForm.currencies.id})}"></a>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 </html>
