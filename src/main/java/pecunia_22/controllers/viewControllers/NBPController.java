@@ -22,53 +22,62 @@ public class NBPController {
     @GetMapping("/nbp")
     public String getIndex(ModelMap modelMap) {
 
-        List<GetGoldRateNBP> getGoldRateNBPList;
-        getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/21");
+        try {
+            List<GetGoldRateNBP> getGoldRateNBPList;
+            getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/21");
 
-        getGoldRateNBPList.removeFirst();
-        modelMap.addAttribute("npbGoldList", getGoldRateNBPList);
+            getGoldRateNBPList.removeFirst();
+            modelMap.addAttribute("npbGoldList", getGoldRateNBPList);
 
 //        ************* STATYSTYKA **********************
 
-        List<PriceStatistics> priceStatisticsList;
-        priceStatisticsList = apiService.PriceStatistics("https://api.nbp.pl/api/cenyzlota/last/", 255);
+            List<PriceStatistics> priceStatisticsList;
+            priceStatisticsList = apiService.PriceStatistics("https://api.nbp.pl/api/cenyzlota/last/", 255);
 
-        modelMap.addAttribute("priceStatistics", priceStatisticsList);
+            modelMap.addAttribute("priceStatistics", priceStatisticsList);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return "nbp/index";
     }
 
     @GetMapping("nbp-rate-currency")
     public String getRateCurrency(ModelMap modelMap) {
-        ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("c", "EUR");
 
-        GetRateCurrency getRateCurrency = apiService.getRateCurrency("A");
+        try {
+            ExchangeCurrency exchangeCurrency = apiService.exchangeCurrency("c", "EUR");
+
+            GetRateCurrency getRateCurrency = apiService.getRateCurrency("A");
 //        System.out.println(JsonUtils.gsonPretty(getRateCurrency));
 
-        String[] codes = new String[getRateCurrency.getExchangeList().get(0).getRates().size()];
-        Object[][] dane;
-        dane = new Object[getRateCurrency.getExchangeList().size()][getRateCurrency.getExchangeList().get(0).getRates().size() + 1];
-        for (int i = 0; getRateCurrency.getExchangeList().size() > i; i ++) {
-            dane[i][0] = getRateCurrency.getExchangeList().get(i).getEffectiveDate();
-            for (int j = 0; getRateCurrency.getExchangeList().get(i).getRates().size() > j; j++) {
-                dane[i][j + 1] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getMid();
-                if (i < 1) {
-                    codes[j] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getCod();
+            String[] codes = new String[getRateCurrency.getExchangeList().get(0).getRates().size()];
+            Object[][] dane;
+            dane = new Object[getRateCurrency.getExchangeList().size()][getRateCurrency.getExchangeList().get(0).getRates().size() + 1];
+            for (int i = 0; getRateCurrency.getExchangeList().size() > i; i++) {
+                dane[i][0] = getRateCurrency.getExchangeList().get(i).getEffectiveDate();
+                for (int j = 0; getRateCurrency.getExchangeList().get(i).getRates().size() > j; j++) {
+                    dane[i][j + 1] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getMid();
+                    if (i < 1) {
+                        codes[j] = getRateCurrency.getExchangeList().get(i).getRates().get(j).getCod();
+                    }
                 }
             }
-        }
 
-        List<Object[]> objects = new ArrayList<>();
-        for (Object[] objects1 : dane) {
-            objects.add(objects1);
-        }
-        objects.add(codes);
+            List<Object[]> objects = new ArrayList<>();
+            for (Object[] objects1 : dane) {
+                objects.add(objects1);
+            }
+            objects.add(codes);
 
-        System.out.println("---------------CODES-------------------------");
+            System.out.println("---------------CODES-------------------------");
 //        System.out.println(JsonUtils.gsonPretty(codes));
-        System.out.println(JsonUtils.gsonPretty(objects));
-        System.out.println("---------------CODES-------------------------");
+            System.out.println(JsonUtils.gsonPretty(objects));
+            System.out.println("---------------CODES-------------------------");
+            modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        modelMap.addAttribute("exchangeCurrency", exchangeCurrency);
         return "nbp/rate-currency";
     }
 

@@ -10,10 +10,12 @@
 }
 .note-box
 {
-    width: 240px;
+    /*width: 240px;*/
     min-height: 80px;
+    min-width: 230px;
     margin: 10px;
     text-align: center;
-    background: darkgrey;
+    /*background: darkgrey;*/
+    background: rgba(180, 178, 178, 0.48);
     color: black;
 }

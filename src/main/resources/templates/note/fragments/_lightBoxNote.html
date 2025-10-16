@@ -15,12 +15,12 @@
 
             <div class="mySlides" style="text-align: center">
                 <div class="numbertext">1 / 2</div>
-                <img th:src="${note.aversPath}" style="max-width:100%; max-height: 800px">
+                <img th:src="${note.aversPath}" style="max-width:100%; max-height: 700px">
             </div>
 
             <div class="mySlides" style="text-align: center">
                 <div class="numbertext">2 / 2</div>
-                <img th:src="${note.reversePath}" style="max-width:100%; max-height: 800px">
+                <img th:src="${note.reversePath}" style="max-width:100%; max-height: 700px">
             </div>
 
             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
@@ -29,67 +29,97 @@
             <div class="caption-container">
                 <p id="caption"></p>
             </div>
-            <div class="row" style="text-align: center">
-                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-                    <img class="demo cursor" th:src="${note.aversPath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(1)"
+            <div class="row text-center align-items-start" style="padding-top: 10px">
+                <div class="col-6 col-md-4 mb-3">
+                    <img class="demo cursor img-fluid rounded shadow-sm"
+                         th:src="${note.aversPath}"
+                         onclick="currentSlide(1)"
                          th:alt="${note.denomination} + ' ' + ${note.nameCurrency}">
                 </div>
-                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
-                    <img class="demo cursor" th:src="${note.reversePath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(2)"
+
+                <div class="col-6 col-md-4 mb-3">
+                    <img class="demo cursor img-fluid rounded shadow-sm"
+                         th:src="${note.reversePath}"
+                         onclick="currentSlide(2)"
                          th:alt="${note.denomination} + ' ' + ${note.nameCurrency}"
-                         th:title="'test Tutułu'">
+                         th:title="'test Tytułu'">
                 </div>
-                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">
+
+                <div class="col-12 col-md-4 text-left">
                     <b>OPIS</b>
                     <hr class="my-2">
-                    <div style="text-align: left">
+                    <div>
                         <b>Country: </b><span th:text="${note.currencies.countries.countryEn}"></span><br>
                         <b>Series: </b><span th:text="${note.currencies.currencySeries}"></span>
-                        <div th:if="${note.width}  != null ">
-                            <b>Size: </b> <span>[[${#numbers.formatDecimal(note.width,1,0)}]] x [[${#numbers.formatDecimal(note.height,1,0)}]] </span><br>
+                        <div th:if="${note.width} != null">
+                            <b>Size: </b>
+                            <span>[[${#numbers.formatDecimal(note.width,1,0)}]] × [[${#numbers.formatDecimal(note.height,1,0)}]]</span><br>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!--            <div class="row" style="text-align: center">-->
+<!--                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">-->
+<!--                    <img class="demo cursor" th:src="${note.aversPath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(1)"-->
+<!--                         th:alt="${note.denomination} + ' ' + ${note.nameCurrency}">-->
+<!--                </div>-->
+<!--                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">-->
+<!--                    <img class="demo cursor" th:src="${note.reversePath}" style="max-width:100%; max-height: 150px;" onclick="currentSlide(2)"-->
+<!--                         th:alt="${note.denomination} + ' ' + ${note.nameCurrency}"-->
+<!--                         th:title="'test Tutułu'">-->
+<!--                </div>-->
+<!--                <div class="col field" style="float: left; padding: 10px 10px 10px 10px">-->
+<!--                    <b>OPIS</b>-->
+<!--                    <hr class="my-2">-->
+<!--                    <div style="text-align: left">-->
+<!--                        <b>Country: </b><span th:text="${note.currencies.countries.countryEn}"></span><br>-->
+<!--                        <b>Series: </b><span th:text="${note.currencies.currencySeries}"></span>-->
+<!--                        <div th:if="${note.width}  != null ">-->
+<!--                            <b>Size: </b> <span>[[${#numbers.formatDecimal(note.width,1,0)}]] x [[${#numbers.formatDecimal(note.height,1,0)}]] </span><br>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 
-    <script>
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
-        }
+<!--    <script>-->
+<!--        function openModal() {-->
+<!--            document.getElementById("myModal").style.display = "block";-->
+<!--        }-->
 
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
-        }
+<!--        function closeModal() {-->
+<!--            document.getElementById("myModal").style.display = "none";-->
+<!--        }-->
 
-        var slideIndex = 1;
-        showSlides(slideIndex);
+<!--        var slideIndex = 1;-->
+<!--        showSlides(slideIndex);-->
 
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
+<!--        function plusSlides(n) {-->
+<!--            showSlides(slideIndex += n);-->
+<!--        }-->
 
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
+<!--        function currentSlide(n) {-->
+<!--            showSlides(slideIndex = n);-->
+<!--        }-->
 
-        function showSlides(n) {
-            var i;
-            var slides = document.getElementsByClassName("mySlides");
-            var dots = document.getElementsByClassName("demo");
-            var captionText = document.getElementById("caption");
-            if (n > slides.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex-1].style.display = "block";
-            dots[slideIndex-1].className += " active";
-            captionText.innerHTML = dots[slideIndex-1].alt;
-        }
-    </script>
+<!--        function showSlides(n) {-->
+<!--            var i;-->
+<!--            var slides = document.getElementsByClassName("mySlides");-->
+<!--            var dots = document.getElementsByClassName("demo");-->
+<!--            var captionText = document.getElementById("caption");-->
+<!--            if (n > slides.length) {slideIndex = 1}-->
+<!--            if (n < 1) {slideIndex = slides.length}-->
+<!--            for (i = 0; i < slides.length; i++) {-->
+<!--                slides[i].style.display = "none";-->
+<!--            }-->
+<!--            for (i = 0; i < dots.length; i++) {-->
+<!--                dots[i].className = dots[i].className.replace(" active", "");-->
+<!--            }-->
+<!--            slides[slideIndex-1].style.display = "block";-->
+<!--            dots[slideIndex-1].className += " active";-->
+<!--            captionText.innerHTML = dots[slideIndex-1].alt;-->
+<!--        }-->
+<!--    </script>-->
 </div>

@@ -8,15 +8,16 @@
 </head>
 <body>
     <div layout:fragment="content" class="container">
-
-        <div class="jumbotron">
-            <h1 class="display-4" style="text-align: center">NOTE SHOW</h1>
-            <div th:replace="~{note/fragments/_note-show :: note-show}"></div>
-            <hr class="my-2">
-            <div>
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/note/collection/notes/?selectCurrencyId=' + ${note.currencies.id})}"></a>
+        <section class="py-5">
+            <div class="jumbotron">
+                <h1 class="display-4" style="text-align: center">NOTE SHOW</h1>
+                <div th:replace="~{note/fragments/_note-show :: note-show}"></div>
+                <hr class="my-2">
+                <div>
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/note/collection/notes/?selectCurrencyId=' + ${note.currencies.id})}"></a>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 </html>

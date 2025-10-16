@@ -7,11 +7,10 @@
     <title>Note Currency</title>
 </head>
 <body>
-    <div layout:fragment="content">
+    <div layout:fragment="content" class="container">
 
-        <section class="py-5">
-            <div class="container">
-                <h1 class="display-4" style="text-align: center">Note Currency</h1>
+        <div class="jumbotron" style="padding-top: 10px">
+            <h1 class="display-2" style="text-align: center">Note Currency</h1>
             <hr class="my-2">
 
             <div th:if="${currencies.size > 0}">
@@ -60,7 +59,7 @@
             </div>
 
         </div>
-        </section>
+
     </div>
 </body>
 </html>

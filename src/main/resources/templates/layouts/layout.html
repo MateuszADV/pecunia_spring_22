@@ -49,7 +49,10 @@
 <div layout:fragment="content"></div>
 <!--footer_OLD.html  that's here  -->
 
+
+
 <div th:replace="~{layouts/footer :: footer}"></div>
+
 <!--<div class="stopka" th:replace="~{layouts/footer_OLD :: footer}"></div>-->
 
 <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"-->
@@ -69,6 +72,7 @@
 <!-- Inputmask -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 
+<script th:src="@{/js/lightbox.js}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Telefon: +48 123 456 789
