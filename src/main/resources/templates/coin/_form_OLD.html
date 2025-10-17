@@ -1,59 +1,52 @@
 <header th:fragment="form"
-        xmlns:th="http://thymeleaf.org"
-        xmlns="http://www.w3.org/1999/xhtml">
-<!--    xmlns:th="http://www.thymeleaf.org">-->
-        <div class="container">
+    xmlns:th="http://www.thymeleaf.org">
+    <div>
+        <div>
             <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
         </div>
+    </div>
 
-    <hr class="my-2">
-    <!-- 1 wiersz -->
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label class="m-0" for="curSer">Currency Series</label>
-            <select class="form-control form-control-sm mb-2" id="curSer" th:field="*{currencies.id}">
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label class="m-0">Currency Series</label>
+            <select class="form-control form-control-sm mb-2" th:field="*{currencies.id}">
                     <span th:if="*{currencies.id == null}">
                         <option value="">SELECT CURRENCY</option>
                     </span>
                 <option th:each="currency : ${currencies}"
                         th:value="${currency.id}"
                         th:text="${currency.currencySeries}">
-                    Currency Series
                 </option>
             </select>
         </div>
     </div>
     <hr class="my-2">
-    <!-- 2 wiersz -->
-    <div class="form-row">
-        <div class="form-group col-md-3">
+    <div class="form-row align-items-center">
+        <div class="col-auto">
             <label class="m-0">Date Buy</label>
             <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateBuy}">
             <div th:if="${#fields.hasErrors('dateBuy')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <!--                <span th:errors="*{dateBuy}" ></span>-->
+<!--                <span th:errors="*{dateBuy}" ></span>-->
                 <span th:text="${errorDateBuy}"></span>
             </div>
         </div>
-        <div class="form-group col-md-4">
-            <label class="m-0" for="bought">Bought</label>
-            <select class="form-control form-control-sm mb-2" id="bought" name="bought" th:field="*{boughts.id}">
-                <option value="">-- SELECT BOUGHT --</option>
+        <div class="col-auto">
+            <label class="m-0">Bought</label>
+            <select class="form-control form-control-sm mb-2" th:field="*{boughts.id}">
+                    <span th:if="*{boughts.id == null}">
+                        <option value="">SELECT BOUGHT</option>
+                    </span>
                 <option th:each="bought : ${boughts}"
                         th:value="${bought.id}"
                         th:text="${bought.name}">
-                    Bought
                 </option>
             </select>
-            <!-- Komunikat błędu -->
-            <div class="invalid-feedback d-block"
-                 th:if="${#fields.hasErrors('boughts.id')}"
-                 th:errors="*{boughts.id}">
+            <div th:if="${#fields.hasErrors('boughts.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:errors="*{boughts.id}" ></span>
             </div>
         </div>
+
     </div>
-
-
-
     <hr class="my-2">
     <div class="form-row align-items-center">
         <div class="col-auto">
