@@ -1,39 +1,305 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">-->
+<!--<head >-->
+<!--    <meta charset="utf-8">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    &lt;!&ndash; The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags &ndash;&gt;-->
+<!--    <meta name="description" content="">-->
+<!--    <meta name="author" content="">-->
+
+<!--    <title>ERROR</title>-->
+
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"-->
+<!--          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">-->
+
+<!--    <link rel="stylesheet" th:href="@{/css/my_style.css}" type="text/css" />-->
+<!--</head>-->
+
+<!--<body>-->
+
+<!--<div class="container">-->
+
+<!--    <h1 style="text-align: center">ERROR</h1>-->
+<!--    <h2 th:text="${error}"></h2>-->
+
+<!--</div>-->
+<!--<div layout:fragment="content"></div>-->
+<!--&lt;!&ndash;footer_OLD.html  that's here  &ndash;&gt;-->
+<!--<div class="stopka" th:replace="~{layouts/footer_OLD :: footer}"></div>-->
+<!--&lt;!&ndash; /container &ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"-->
+<!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"-->
+<!--        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"-->
+<!--        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="pl" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Błąd systemu | Pecunia</title>-->
+<!--    <link rel="icon" type="image/png" href="/images/pecunia-logo.png"/>-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #00bcd4;-->
+<!--            &#45;&#45;secondary: #007bff;-->
+<!--            &#45;&#45;danger: #ff5252;-->
+<!--            &#45;&#45;text: #cfd8dc;-->
+<!--            &#45;&#45;bg: #0a0f1e;-->
+<!--            &#45;&#45;glass: rgba(255, 255, 255, 0.08);-->
+<!--        }-->
+
+<!--        body {-->
+<!--            margin: 0;-->
+<!--            font-family: 'Segoe UI', Roboto, sans-serif;-->
+<!--            background: linear-gradient(135deg, var(&#45;&#45;bg) 0%, #000 100%);-->
+<!--            color: var(&#45;&#45;text);-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            text-align: center;-->
+<!--            min-height: 100vh;-->
+<!--            overflow: hidden;-->
+<!--            padding: 1rem;-->
+<!--        }-->
+
+<!--        .error-card {-->
+<!--            background: var(&#45;&#45;glass);-->
+<!--            backdrop-filter: blur(20px);-->
+<!--            border-radius: 20px;-->
+<!--            padding: 3rem 2rem;-->
+<!--            box-shadow: 0 0 40px rgba(0, 188, 212, 0.2);-->
+<!--            animation: floatIn 1s ease-in-out;-->
+<!--            max-width: 550px;-->
+<!--            width: 100%;-->
+<!--        }-->
+
+<!--        .logo img {-->
+<!--            width: 70px;-->
+<!--            height: 70px;-->
+<!--            margin-bottom: 1rem;-->
+<!--            filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.6));-->
+<!--        }-->
+
+<!--        h1 {-->
+<!--            font-size: 2.5rem;-->
+<!--            margin: 0.5rem 0;-->
+<!--            color: var(&#45;&#45;danger);-->
+<!--            text-shadow: 0 0 10px rgba(255, 82, 82, 0.7);-->
+<!--        }-->
+
+<!--        h2 {-->
+<!--            font-weight: normal;-->
+<!--            margin-bottom: 1.5rem;-->
+<!--            color: var(&#45;&#45;text);-->
+<!--        }-->
+
+<!--        p {-->
+<!--            color: #9ea7b3;-->
+<!--            font-size: 1.1rem;-->
+<!--            margin-bottom: 2rem;-->
+<!--        }-->
+
+<!--        a.button {-->
+<!--            display: inline-block;-->
+<!--            padding: 0.8rem 1.6rem;-->
+<!--            border-radius: 40px;-->
+<!--            background: linear-gradient(90deg, var(&#45;&#45;primary), var(&#45;&#45;secondary));-->
+<!--            color: #fff;-->
+<!--            text-decoration: none;-->
+<!--            font-weight: 500;-->
+<!--            transition: all 0.3s ease;-->
+<!--            box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);-->
+<!--        }-->
+
+<!--        a.button:hover {-->
+<!--            background: linear-gradient(90deg, var(&#45;&#45;secondary), var(&#45;&#45;primary));-->
+<!--            transform: translateY(-2px);-->
+<!--            box-shadow: 0 0 25px rgba(0, 188, 212, 0.5);-->
+<!--        }-->
+
+<!--        .code {-->
+<!--            font-family: monospace;-->
+<!--            font-size: 0.9rem;-->
+<!--            color: #ffab91;-->
+<!--            margin-top: 1.5rem;-->
+<!--        }-->
+
+<!--        footer {-->
+<!--            margin-top: 2rem;-->
+<!--            font-size: 0.85rem;-->
+<!--            color: #607d8b;-->
+<!--        }-->
+
+<!--        @keyframes floatIn {-->
+<!--            from { opacity: 0; transform: translateY(30px); }-->
+<!--            to { opacity: 1; transform: translateY(0); }-->
+<!--        }-->
+
+<!--        @media (max-width: 600px) {-->
+<!--            h1 { font-size: 2rem; }-->
+<!--            .error-card { padding: 2rem 1.2rem; }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="error-card">-->
+<!--    <div class="logo">-->
+<!--        <img th:src="@{/images/logo.jpg}" alt="Pecunia Logo">-->
+<!--    </div>-->
+<!--    <h1>💥 Ups! Coś poszło nie tak...</h1>-->
+<!--    <h2 th:text="'Kod błędu: ' + ${status}"></h2>-->
+<!--    <p>-->
+<!--        Wystąpił nieoczekiwany błąd w systemie.<br>-->
+<!--        Spróbuj odświeżyć stronę lub wróć do strony głównej.-->
+<!--    </p>-->
+<!--    <a href="/" class="button">🏠 Wróć na stronę główną</a>-->
+<!--    <div class="code">Error reference ID: <span th:text="${T(java.util.UUID).randomUUID()}"></span></div>-->
+<!--</div>-->
+
+<!--<footer>-->
+<!--    Pecunia © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> | System bezpieczeństwa aktywny 🔒-->
+<!--</footer>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head >
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Błąd systemu | Pecunia</title>
+    <link rel="icon" type="image/png" href="/images/pecunia-logo.png"/>
+    <style>
+        :root {
+            --primary: #00bcd4;
+            --secondary: #007bff;
+            --danger: #ff5252;
+            --text: #cfd8dc;
+            --bg: #0a0f1e;
+            --glass: rgba(255, 255, 255, 0.08);
+        }
 
-    <title>ERROR</title>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #000 100%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+            overflow: hidden;
+            padding: 1rem;
+        }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        .error-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 0 40px rgba(0, 188, 212, 0.2);
+            animation: floatIn 1s ease-in-out;
+            max-width: 550px;
+            width: 100%;
+        }
 
-    <link rel="stylesheet" th:href="@{/css/my_style.css}" type="text/css" />
+        .logo img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.6));
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+            color: var(--danger);
+            text-shadow: 0 0 10px rgba(255, 82, 82, 0.7);
+        }
+
+        h2 {
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        p {
+            color: #9ea7b3;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 0.8rem 1.6rem;
+            border-radius: 40px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+        }
+
+        a.button:hover {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 188, 212, 0.5);
+        }
+
+        .code {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #ffab91;
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #607d8b;
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .error-card { padding: 2rem 1.2rem; }
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="container">
-
-    <h1 style="text-align: center">ERROR</h1>
-    <h2 th:text="${error}"></h2>
-
+<div class="error-card">
+    <div class="logo">
+        <img th:src="@{/images/logo.jpg}"  alt="Pecunia Logo">
+    </div>
+    <h1>💥 Ups! Coś poszło nie tak...</h1>
+    <h2 th:text="'Kod błędu: ' + ${status}"></h2>
+    <p>
+        Wystąpił nieoczekiwany błąd w systemie.<br>
+        Spróbuj odświeżyć stronę lub wróć do strony głównej.
+    </p>
+    <a href="/" class="button">🏠 Wróć na stronę główną</a>
+    <div class="code">Error reference ID: <span th:text="${T(java.util.UUID).randomUUID()}"></span></div>
 </div>
-<div layout:fragment="content"></div>
-<!--footer_OLD.html  that's here  -->
-<div class="stopka" th:replace="~{layouts/footer_OLD :: footer}"></div>
-<!-- /container -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
-        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+
+<footer>
+    Pecunia © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> | System bezpieczeństwa aktywny 🔒
+</footer>
 </body>
 </html>

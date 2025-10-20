@@ -60,7 +60,7 @@ public class WebSecurityConfig  {
 //                        *************VIEW******************
 //                        ***********************************
 
-                .requestMatchers("/", "/registration", "/about")
+                .requestMatchers("/", "/registration", "/about", "/test", "/access-denied")
                 .permitAll()
                 .requestMatchers("/country", "/country/show/**")
                 .permitAll()
@@ -85,7 +85,12 @@ public class WebSecurityConfig  {
                 .anyRequest().hasAnyAuthority("ADMIN"));
         http
                 .formLogin(withDefaults())
-                .httpBasic(withDefaults());
+                .httpBasic(withDefaults())
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/access-denied");
+                        })
+                );
 //                .formLogin(formLogin -> formLogin
 //                        .loginPage("/login"));
 ////                .formLogin().permitAll()
