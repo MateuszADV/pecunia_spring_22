@@ -26,32 +26,32 @@
                     <div class="container">
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <thead class="thead-dark">
-                            <tr>
-                                <!--                <th>CON</th>-->
-                                <th class="pt-1 pb-1">Lp:</th>
-                                <th class="pt-1 pb-1">Id</th>
-                                <th class="pt-1 pb-1">Seria</th>
-                                <th class="pt-1 pb-1">Total</th>
-                                <!--                        <th style="width: 156px">Akcja</th>-->
-                            </tr>
+                                <tr>
+                                    <!--                <th>CON</th>-->
+                                    <th class="pt-1 pb-1">Lp:</th>
+                                    <th class="pt-1 pb-1">Id</th>
+                                    <th class="pt-1 pb-1">Seria</th>
+                                    <th class="pt-1 pb-1">Total</th>
+                                    <!--                        <th style="width: 156px">Akcja</th>-->
+                                </tr>
                             </thead>
                             <tbody>
-                            <Block th:each="currency, i : ${currencies}">
-                                <tr>
-                                    <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
-                                    <td th:text="${i.index +1}" class="pt-1 pb-1"></td>
-                                    <td th:text="${currency.id}" class="pt-1 pb-1"></td>
-                                    <td class="pt-1 pb-1">
-                                        <a th:href="@{'/note/note_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}" style="color: black">
-                                            [[${currency.currencySeries}]]  ([[${currency.id}]])
-                                        </a>
-                                    </td>
-                                    <td th:text="${currency.notes.size}"></td>
-                                    <!--                            <td class="pt-1 pb-1">-->
-                                    <!--                                <a th:href="@{'/note/note_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}">SHOW</a>-->
-                                    <!--                            </td>-->
-                                </tr>
-                            </Block>
+                                <Block th:each="currency, i : ${currencies}">
+                                    <tr>
+                                        <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
+                                        <td th:text="${i.index +1}" class="pt-1 pb-1"></td>
+                                        <td th:text="${currency.id}" class="pt-1 pb-1"></td>
+                                        <td class="pt-1 pb-1">
+                                            <a th:href="@{'/note/note_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}" style="color: black">
+                                                [[${currency.currencySeries}]]  ([[${currency.id}]])
+                                            </a>
+                                        </td>
+                                        <td th:text="${currency.notes.size}"></td>
+                                        <!--                            <td class="pt-1 pb-1">-->
+                                        <!--                                <a th:href="@{'/note/note_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}">SHOW</a>-->
+                                        <!--                            </td>-->
+                                    </tr>
+                                </Block>
                             </tbody>
                         </table>
                     </div>

@@ -97,7 +97,7 @@ public class CoinController {
 
         modelMap.addAttribute("currency", currencyDtoByPattern);
         modelMap.addAttribute("coins", coinDtoByCurrencies);
-        return "/coin/coin_list";
+        return "coin/coin_list";
     }
 
     @GetMapping("/coin/new/")
@@ -231,7 +231,7 @@ public class CoinController {
 
         modelMap.addAttribute("coin", coinDto);
         modelMap.addAttribute("json", JsonUtils.gsonPretty(coinDto));
-        return "/coin/show";
+        return "coin/show";
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
