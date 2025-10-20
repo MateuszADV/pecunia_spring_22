@@ -63,10 +63,12 @@
     <hr class="my-2">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
             <div class="col field " style="float: left">
-                <textarea th:text="${coin.description}" style="width: 100%; height: 125px; color: black; resize: none; background: darkgray;" disabled></textarea>
+                <label for="description">Description</label>
+                <textarea th:text="${coin.description}" id="description" style="width: 100%; height: 125px; color: black; resize: none; background: darkgray;" disabled></textarea>
             </div>
             <div class="col field " style="float: left">
-                <textarea th:text="${coin.composition}" style="width: 100%; height: 125px; color: black; resize: none; background: darkgray;" disabled></textarea>
+                <label for="composition">Composition</label>
+                <textarea th:text="${coin.composition}" id="composition" style="width: 100%; height: 125px; color: black; resize: none; background: darkgray;" disabled></textarea>
             </div>
         </div>
     <hr class="my-2">
