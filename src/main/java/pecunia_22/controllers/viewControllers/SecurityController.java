@@ -91,7 +91,7 @@ public class SecurityController {
         }
         modelMap.addAttribute("currency", currencyDto);
         modelMap.addAttribute("securities", securityDtos);
-        return "/security/security_list";
+        return "security/security_list";
     }
 
     @GetMapping("/security/new/")
@@ -191,7 +191,7 @@ public class SecurityController {
         System.out.println(JsonUtils.gsonPretty(securityDto));
 
         modelMap.addAttribute("security", securityDto);
-        return "/security/show";
+        return "security/show";
     }
 
     @GetMapping("/security/edit/{securityId}")
