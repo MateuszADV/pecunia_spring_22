@@ -9,7 +9,6 @@
 </head>
 <body>
     <div layout:fragment="content" class="container">
-
         <div class="jumbotron">
             <h2 class="display-4" style="text-align: center" >SECURITIES COLECTION</H2>
             <hr class="my-2">
@@ -21,21 +20,23 @@
                 <a th:replace="~{fragments/button/_button-back :: back(back = '/security/collection/currency/?selectCountryId=' + ${securities[0].currencies.countries.id})}"></a>
             </div>
             <hr class="my-2">
-            <div class="form-row align-items-center">
-                <div class="form-row align-items-center">
+            <div class="container my-4">
+                <div class="form-row justify-content-center">
                     <th:block th:each="security : ${securities}">
-                        <div class="col-auto note-box">
-                            <div >
-                                <a th:href="@{'/security/collection/show/' + ${security.id}}" data-toggle="modal" th:attr="data-target='#Security-' + ${security.id}"
-                                   style="display: flex; justify-content: center">
-                                    <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.aversPath})}"></div>
-                                    <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.reversePath})}"></div>
-                                </a>
-                                <div class="modal fade" th:attr="id= 'Security-' + ${security.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div th:replace="~{security/collection/_showModal :: showModal}"></div>
+                        <div class="col-auto note-box" style="border-radius: 20px;">
+                            <div>
+                                <div>
+                                    <a th:href="@{'/security/collection/show/' + ${security.id}}" data-toggle="modal" th:attr="data-target='#Security-' + ${security.id}"
+                                       style="display: flex; justify-content: center">
+                                        <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.aversPath})}"></div>
+                                        <div th:replace="~{fragments/_image-midle :: image-midle(image = ${security.reversePath})}"></div>
+                                    </a>
+                                    <div class="modal fade" th:attr="id= 'Security-' + ${security.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{security/collection/_showModal :: showModal}"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div style="text-align: left; font-size: small">
+                            <div class="container" style="text-align: left; font-size: small">
                                 <span th:text="${security.denomination >= 1 ? #numbers.formatDecimal(security.denomination,1,0,'COMMA') :  #numbers.formatDecimal(security.denomination,1,2,'COMMA')} + ' ' + ${security.nameCurrency}"></span><br>
                                 <span th:text="${'Year: ' + security.itemDate}"></span><br>
                                 <span th:text="${'Quality: ' + security.qualities.quality}"></span><br>

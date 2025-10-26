@@ -126,7 +126,15 @@ public class NoteCollectionController {
     @GetMapping("/note/collection/notes/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
-                                @RequestParam("status") String status, ModelMap modelMap) {
+                                @RequestParam("status") String status,
+                                ModelMap modelMap) {
+
+        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
+        System.out.println(status);
+        System.out.println();
+        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
+
+
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =20;
 

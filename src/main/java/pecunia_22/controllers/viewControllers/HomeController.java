@@ -130,10 +130,10 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/error")
-    public String getError(){
-        return "error";
-    }
+//    @GetMapping("/error")
+//    public String getError(){
+//        return "error";
+//    }
 
     @GetMapping("/about")
     public String getAbout(ModelMap modelMap){

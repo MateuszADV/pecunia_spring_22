@@ -24,7 +24,7 @@ public class SecurityDto extends CommonDto {
 
     public SecurityDto(String itemDate, Date dateBuy, String nameCurrency, Double priceBuy, Double priceSell,
                        Integer quantity, String statusSell, String description, String aversPath, String reversePath,
-                       Double denomination, String series, Integer width, Integer height, Timestamp created_at, Timestamp updated_at,
+                       Double denomination, String series, Integer width, Integer height, String serialNumber, Timestamp created_at, Timestamp updated_at,
                        Boolean visible, String unitCurrency, String unitQuantity, BoughtDto boughts, QualityDto qualities, StatusDto statuses, ActiveDto actives, ImageTypeDto imageTypes) {
         super(itemDate, dateBuy, nameCurrency, priceBuy, priceSell, quantity, statusSell, description,
                 unitQuantity, visible, unitCurrency, aversPath, reversePath, created_at, updated_at, boughts, qualities, statuses, actives, imageTypes);
@@ -32,6 +32,7 @@ public class SecurityDto extends CommonDto {
         this.series = series;
         this.width = width;
         this.height = height;
+        this.serialNumber = serialNumber;
     }
     public SecurityDto() {
     }
@@ -43,4 +44,5 @@ public class SecurityDto extends CommonDto {
     private String series;
     private Integer width;
     private Integer height;
+    private String serialNumber;
 }

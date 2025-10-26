@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dostęp zabroniony | Pecunia</title>
+    <link rel="icon" type="image/png" href="/images/pecunia-logo.png"/>
+    <style>
+        :root {
+            --primary: #00bcd4;
+            --secondary: #007bff;
+            --danger: #ff5252;
+            --text-light: #cfd8dc;
+            --bg-dark: #0b132b;
+            --glass: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at top right, var(--bg-dark), #000);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.2);
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.5));
+        }
+
+        .logo span {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 15px rgba(255, 82, 82, 0.7);
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 0.9rem 1.7rem;
+            border-radius: 50px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+        }
+
+        a.button:hover {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 188, 212, 0.6);
+        }
+
+        .code {
+            font-family: monospace;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #ffab91;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #607d8b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 📱 Responsywność */
+        @media (max-width: 600px) {
+            .glass-card {
+                padding: 2rem 1.2rem;
+            }
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="glass-card">
+    <div class="logo">
+        <img th:src="@{/images/logo.jpg}"  alt="Pecunia Logo">
+        <span>Pecunia</span>
+    </div>
+    <h1>🚫 Brak uprawnień</h1>
+    <p>Nie masz dostępu do tej części aplikacji.<br>Jeśli uważasz, że to pomyłka — skontaktuj się z administratorem.</p>
+    <a href="/" class="button">🏠 Wróć na stronę główną</a>
+    <div class="code">Error: HTTP 403 — Access Denied</div>
+</div>
+
+<footer>
+    Pecunia © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> | System bezpieczeństwa aktywny 🔒
+</footer>
+</body>
+</html>

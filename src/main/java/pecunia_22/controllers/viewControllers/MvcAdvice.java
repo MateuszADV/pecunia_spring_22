@@ -28,8 +28,8 @@ public class MvcAdvice {
 //        System.out.println(JsonUtils.gsonPretty(getApiMetal));
     }
 
-    @ModelAttribute
-    public void currencyRAte() {
+//    @ModelAttribute
+//    public void currencyRAte() {
 //        ClientResponse clientResponse = apiService.clientResponse("https://api.nbp.pl/api/exchangerates/tables/A/?format=json");
 //        String stringJson = clientResponse.getEntity(String.class);
 //        JSONArray jsonArray = new JSONArray(stringJson);
@@ -38,7 +38,7 @@ public class MvcAdvice {
 //        System.out.println(JsonUtils.gsonPretty(jsonArray.getJSONObject(0).get("no")));
 //        System.out.println(JsonUtils.gsonPretty(jsonArray.getJSONObject(0).get("effectiveDate")));
 //        System.out.println(JsonUtils.gsonPretty(jsonArray.getJSONObject(0).getJSONArray("rates").getJSONObject(0)));
-    }
+//    }
 
     @ModelAttribute
     public void metalRate(ModelMap modelMap) {

@@ -127,7 +127,7 @@ public class SecurityServiceImpl implements SecurityService {
         securityRepository.updateSecurity(security.getCurrencies().getId(), security.getDenomination(), security.getDateBuy(), security.getNameCurrency(), security.getSeries(),
                 security.getBoughts().getId(), security.getItemDate(), security.getQuantity(), security.getUnitQuantity(), security.getActives().getId(), security.getPriceBuy(), security.getPriceSell(),
                 security.getMakings().getId(), security.getQualities().getId(), security.getWidth(), security.getHeight(), security.getStatuses().getId(), security.getImageTypes().getId(),
-                security.getStatusSell(), security.getVisible(), security.getDescription(), security.getAversPath(), security.getReversePath(),
+                security.getStatusSell(), security.getVisible(), security.getDescription(), security.getAversPath(), security.getReversePath(), security.getSerialNumber(),
                 security.getId());
     }
 }

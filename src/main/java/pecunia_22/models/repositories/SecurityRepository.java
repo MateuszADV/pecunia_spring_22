@@ -121,13 +121,13 @@ public interface SecurityRepository extends JpaRepository<Security, Long> {
     @Transactional
     @Modifying
     @Query(value = "update Security secu set secu.currencies.id = ?1, secu.denomination = ?2, secu.dateBuy = ?3, secu.nameCurrency = ?4, secu.series = ?5, " +
-            "secu.boughts.id = ?6, secu.itemDate = ?7, secu.quantity = ?8, secu.unitQuantity = ?9, secu.actives.id = ?10, secu.priceBuy = ?11, secu.priceSell = ?12, " +
-            "secu.makings.id = ?13, secu.qualities.id = ?14, secu.width = ?15, secu.height = ?16, secu.statuses.id = ?17, secu.imageTypes.id = ?18, " +
-            "secu.statusSell = ?19, secu.visible = ?20, secu.description = ?21, secu.aversPath = ?22, secu.reversePath = ?23 "+
-            "where secu.id = ?24")
+                    "secu.boughts.id = ?6, secu.itemDate = ?7, secu.quantity = ?8, secu.unitQuantity = ?9, secu.actives.id = ?10, secu.priceBuy = ?11, secu.priceSell = ?12, " +
+                    "secu.makings.id = ?13, secu.qualities.id = ?14, secu.width = ?15, secu.height = ?16, secu.statuses.id = ?17, secu.imageTypes.id = ?18, " +
+                    "secu.statusSell = ?19, secu.visible = ?20, secu.description = ?21, secu.aversPath = ?22, secu.reversePath = ?23, secu.serialNumber = ?24 "+
+                    "where secu.id = ?25")
     void updateSecurity(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
                     Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
                     Long making, Long quality, Integer width, Integer height, Long status, Long imageType,
-                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath,
+                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath, String serialNumber,
                     Long securityId);
 }
