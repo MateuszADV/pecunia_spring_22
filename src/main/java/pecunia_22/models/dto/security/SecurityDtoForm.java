@@ -26,7 +26,7 @@ public class SecurityDtoForm extends CommonDtoForm {
 
     public SecurityDtoForm(String itemDate, Date dateBuy, String nameCurrency, Double priceBuy, Double priceSell,
                            Integer quantity, String statusSell, String description, String aversPath, String reversePath,
-                           Double denomination, String series, Integer width, Integer height, Timestamp created_at, Timestamp updated_at,
+                           Double denomination, String series, Integer width, Integer height, String serialNumber, Timestamp created_at, Timestamp updated_at,
                            Boolean visible, String unitCurrency, String unitQuantity, BoughtDtoSelect boughts, QualityDtoSelect qualities, StatusDtoSelect statuses,
                            ActiveDtoSelect actives, ImageTypeDtoSelect imageTypes) {
         super(itemDate, dateBuy, nameCurrency, priceBuy, priceSell, quantity, statusSell, description,
@@ -36,6 +36,7 @@ public class SecurityDtoForm extends CommonDtoForm {
         this.series = series;
         this.width = width;
         this.height = height;
+        this.serialNumber = serialNumber;
     }
     public SecurityDtoForm() {
     }
@@ -50,4 +51,5 @@ public class SecurityDtoForm extends CommonDtoForm {
     private String series;
     private Integer width;
     private Integer height;
+    private String serialNumber;
 }

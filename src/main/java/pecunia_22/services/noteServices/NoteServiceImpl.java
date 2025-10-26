@@ -89,6 +89,10 @@ public class NoteServiceImpl implements NoteService {
         List<Object[]> objects = new ArrayList<>();
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
+        System.out.println("=========================================================");
+        System.out.println(status);
+        System.out.println("=========================================================");
+
         if (role == "ADMIN") {
             objects = noteRepository.currencyByStatus(status, countryId);
             for (Object[] object : objects) {

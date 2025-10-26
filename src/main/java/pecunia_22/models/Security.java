@@ -19,7 +19,7 @@ public class Security extends Common{
 
     public Security(String itemDate, Date dateBuy, String nameCurrency, Double priceBuy, Double priceSell,
                     Integer quantity, String statusSell, String description, String aversPath, String reversePath,
-                    Double denomination, String series, Integer width, Integer height, Timestamp created_at, Timestamp updated_at,
+                    Double denomination, String series, Integer width, Integer height, String serialNumber, Timestamp created_at, Timestamp updated_at,
                     Boolean visible, String unitCurrency, String unitQuantity, Bought boughts, Quality qualities, Status statuses, Active actives, ImageType imageTypes) {
         super( itemDate, dateBuy, nameCurrency, priceBuy, priceSell, quantity, statusSell, description,
                 unitQuantity, visible, unitCurrency, aversPath, reversePath, created_at, updated_at, boughts, qualities, statuses, actives, imageTypes);
@@ -27,6 +27,7 @@ public class Security extends Common{
         this.series = series;
         this.width = width;
         this.height = height;
+        this.serialNumber = serialNumber;
     }
     public Security() {
     }
@@ -50,6 +51,8 @@ public class Security extends Common{
     private Integer width;
     @Column(name = "height")
     private Integer height;
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     @ManyToOne
     @JoinColumn(name = "currency_id")

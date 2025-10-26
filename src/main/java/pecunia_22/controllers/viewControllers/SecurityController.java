@@ -15,6 +15,7 @@ import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.making.MakingDtoSelect;
+import pecunia_22.models.dto.note.NoteDtoForm;
 import pecunia_22.models.dto.quality.QualityDtoSelect;
 import pecunia_22.models.dto.security.SecurityDto;
 import pecunia_22.models.dto.security.SecurityDtoForm;
@@ -91,7 +92,7 @@ public class SecurityController {
         }
         modelMap.addAttribute("currency", currencyDto);
         modelMap.addAttribute("securities", securityDtos);
-        return "/security/security_list";
+        return "security/security_list";
     }
 
     @GetMapping("/security/new/")
@@ -191,7 +192,7 @@ public class SecurityController {
         System.out.println(JsonUtils.gsonPretty(securityDto));
 
         modelMap.addAttribute("security", securityDto);
-        return "/security/show";
+        return "security/show";
     }
 
     @GetMapping("/security/edit/{securityId}")
@@ -201,6 +202,7 @@ public class SecurityController {
         SecurityDtoForm securityDtoForm = new ModelMapper().map(security, SecurityDtoForm.class);
         System.out.println(JsonUtils.gsonPretty(securityDtoForm));
         modelMap.addAttribute("securityForm", securityDtoForm);
+        modelMap.addAttribute("securityInfoLightBox",securityDtoForm);
         formVariable(modelMap, security.get().getCurrencies());
         return "security/edit";
     }
@@ -210,6 +212,10 @@ public class SecurityController {
                            HttpServletRequest request,
                            ModelMap modelMap) {
         if (result.hasErrors()) {
+
+            Optional<Security> security = Optional.ofNullable(securityService.getSecurityById(securityForm.getId()));
+            SecurityDtoForm securityInfoLightBox = new ModelMapper().map(security, SecurityDtoForm.class);
+            modelMap.addAttribute("securityInfoLightBox", securityInfoLightBox);
             System.out.println(result.toString());
             System.out.println(result.hasFieldErrors("dateBuy"));
             System.out.println(result.resolveMessageCodes("test błedu", "dateBuy").toString());

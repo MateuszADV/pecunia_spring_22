@@ -84,8 +84,19 @@
                         </div>
                     </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="bondDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Shares & Bonds
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="bondDropdown">
+                            <a class="dropdown-item" th:href="@{/security}">Add Security</a>
+                            <a class="dropdown-item" th:href="@{/security/collection}">Colection</a>
+                        </div>
+                    </li>
+
                     <!-- OTHER LINKS -->
-                    <li class="nav-item"><a class="nav-link" href="/shares">Shares & Bonds</a></li>
+<!--                    <li class="nav-item"><a class="nav-link" href="/shares">Shares & Bonds</a></li>-->
                     <li class="nav-item"><a class="nav-link" href="/medal">Medal</a></li>
                     <li class="nav-item"><a class="nav-link" href="/customer">Customer</a></li>
 

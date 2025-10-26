@@ -7,27 +7,33 @@
     <title>Country</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
-        <div class="jumbotron">
-            <h2 class="display-4" style="text-align: center">CURRENCY COLECTION</H2>
-            <hr class="my-2">
-            <div th:replace="~{fragments/_flag :: flag(country = ${currencyByStatusList[0].countryEn})}"></div>
-            <hr class="my-2">
-            <div style="display: flex;">
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/security/collection')}"></a>
+    <div layout:fragment="content">
+        <section>
+            <div class="card container" style="margin-bottom: 30px">
+                <h2 class="display-4" style="text-align: center">CURRENCY COLECTION</H2>
+                <hr class="my-2">
+                <div th:replace="~{fragments/_flag :: flag(country = ${currencyByStatusList[0].countryEn})}"></div>
+                <hr class="my-2">
+                <div>
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/security/collection')}"></a>
+                </div>
+                <hr class="my-2">
+                <div class="container my-4">
+                    <div class="form-row justify-content-center">
+                        <th:block th:each="currency : ${currencyByStatusList}">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex justify-content-center mb-4">
+                                <a th:href="@{'/security/collection/securities/?selectCurrencyId=' + ${currency.currencyId} + '&status=KOLEKCJA'}">
+                                    <div class="currency-box-bis text-center p-3">
+                                        <span th:text="${currency.currencySeries}"></span><br>
+                                        <span>[[${'(' + currency.total + ')'}]]</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
             </div>
-            <hr class="my-2">
-            <div class="form-row align-items-center">
-                <th:block th:each="currency : ${currencyByStatusList}">
-                    <a th:href="@{'/security/collection/securities/?selectCurrencyId=' + ${currency.currencyId} + '&status=KOLEKCJA'}">
-                        <div class="col-auto currency-box ">
-                            <span th:text="${currency.currencySeries}"></span><br>
-                            <span>[[${'(' + currency.total + ')'}]]</span>
-                        </div>
-                    </a>
-                </th:block>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 </html>
