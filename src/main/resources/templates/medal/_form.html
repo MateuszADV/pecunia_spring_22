@@ -1,222 +1,479 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-    <div>
-        <div>
-            <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
-        </div>
+
+    <div class="container">
+        <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
     </div>
 
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <label class="m-0">Currency Series</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{currencies.id}">
+    <hr class="my-2">
+    <!-- 1 wiersz -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label class="m-0" for="curSer">Currency Series</label>
+            <select class="form-control form-control-sm mb-2" id="curSer" th:field="*{currencies.id}">
                     <span th:if="*{currencies.id == null}">
                         <option value="">SELECT CURRENCY</option>
                     </span>
                 <option th:each="currency : ${currencies}"
                         th:value="${currency.id}"
                         th:text="${currency.currencySeries}">
+                    Currency Series
                 </option>
             </select>
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
+    <!-- 2 wiersz -->
+    <div class="form-row">
+        <div class="form-group col-md-3">
             <label class="m-0">Date Buy</label>
             <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateBuy}">
             <div th:if="${#fields.hasErrors('dateBuy')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-<!--                <span th:errors="*{dateBuy}" ></span>-->
+                <!--                <span th:errors="*{dateBuy}" ></span>-->
                 <span th:text="${errorDateBuy}"></span>
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Bought</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{boughts.id}">
-                    <span th:if="*{boughts.id == null}">
-                        <option value="">SELECT BOUGHT</option>
-                    </span>
+        <div class="form-group col-md-4">
+            <label class="m-0" for="bought">Bought</label>
+            <select class="form-control form-control-sm mb-2" id="bought" name="bought" th:field="*{boughts.id}">
+                <option value="">-- SELECT BOUGHT --</option>
                 <option th:each="bought : ${boughts}"
                         th:value="${bought.id}"
                         th:text="${bought.name}">
+                    Bought
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('boughts.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{boughts.id}" ></span>
+            <!-- Komunikat błędu -->
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('boughts.id')}"
+                 th:errors="*{boughts.id}">
             </div>
         </div>
-
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
+    <div class="form-row">
+        <div class="form-group col-md-3">
             <label class="m-0" for="denomination">Denomination</label>
             <input type="text" class="form-control form-control-sm mb-2" id="denomination" th:field="*{denomination}" placeholder="Denomiation">
         </div>
-        <div class="col-auto">
+        <div class="form-group col-md-3">
             <label class="m-0" for="nameCurrency">Name Currency</label>
             <input type="text" class="form-control form-control-sm mb-2" id="nameCurrency" th:field="*{nameCurrency}" placeholder="Name Currency">
         </div>
-        <div class="col-auto">
+        <div class="form-group col-md-3">
             <label class="m-0" for="series">Series</label>
             <input type="text" class="form-control form-control-sm mb-2" id="series" th:field="*{series}" placeholder="Series">
         </div>
-        <div class="col-auto">
+        <div class="form-group col-md-3">
             <label class="m-0" for="itemDate">Item Date</label>
-            <input type="text" class="form-control form-control-sm mb-2" id="itemDate" th:field="*{itemDate}" placeholder="Item Date">
-            <div th:if="${#fields.hasErrors('itemDate')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{itemDate}" ></span>
-            </div>
-        </div>
-        <div class="col-auto">
-            <div style="float: left; max-width: 110px">
-                <label class="m-0" for="itemDate">Quantity</label>
-                <input type="number" class="form-control form-control-sm mb-2" id="quality" th:field="*{quantity}" min="0" placeholder="quantity">
-                <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{quantity}" style="display: inline-block; font-size: xx-small" ></span>
-                </div>
-            </div>
-            <div style="float:left; max-width: 100px">
-                <label class="m-0" for="itemDate">Unit</label>
-                <select class="form-control form-control-sm mb-2" th:field="*{unitQuantity}">
-                    <option th:value="'szt'" th:text="szt"></option>
-                    <option th:value="'set'" th:text="set"></option>
-                </select>
-            </div>
-
-        </div>
-        <div class="col-auto">
-            <label class="m-0">Active</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{actives.id}">
-                    <span th:if="*{actives.id == null}">
-                        <option value="">SELECT ACTIVE</option>
-                    </span>
-                <option th:each="active : ${actives}"
-                        th:value="${active.id}"
-                        th:text="${active.name}">
-                </option>
-            </select>
-            <div th:if="${#fields.hasErrors('actives.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{actives.id}" ></span>
+            <input type="text" class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('itemDate')} ? ' is-invalid' : ''"
+                   placeholder = "Item Date"
+                   id="itemDate" name="itemDate" th:field="*{itemDate}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('itemDate')}"
+                 th:errors="*{itemDate}">
+                Niepoprawna wartość
             </div>
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <label class="m-0">Price Buy</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{priceBuy}" placeholder="0.00">
-            <div th:if="${#fields.hasErrors('priceBuy')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{priceBuy}" ></span>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="m-0" for="quantity">Quantity</label>
+            <input type="number" class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('quantity')} ? ' is-invalid' : ''"
+                   placeholder="quantity"
+                   id="quantity" th:field="*{quantity}" min="0">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('quantity')}"
+                 th:errors="*{quantity}">
+                Niepoprawna wartość
+            </div>
+            <!--                <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+            <!--                    <span th:errors="*{quantity}" style="display: inline-block; font-size: xx-small" ></span>-->
+            <!--                </div>-->
+        </div>
+        <div class="form-group col-md-1">
+            <label class="m-0" for="unitQuantity">Unit</label>
+            <select class="form-control form-control-sm mb-2" id="unitQuantity" th:field="*{unitQuantity}">
+                <option th:value="'szt'" th:text="szt"></option>
+                <option th:value="'set'" th:text="set"></option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="m-0" for="active">Active</label>
+            <select class="form-control form-control-sm mb-2" id="active" th:field="*{actives.id}">
+                <option value="">-- SELECT ACTIVE --</option>
+                <option th:each="active : ${actives}"
+                        th:value="${active.id}"
+                        th:text="${active.name}">
+                    Active
+                </option>
+            </select>
+            <!-- Komunikat błędu -->
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('actives.id')}"
+                 th:errors="*{actives.id}">
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Price Sell</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{priceSell}" placeholder="0.00">
-            <div th:if="${#fields.hasErrors('priceSell')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{priceSell}" ></span>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="m-0" for="priceBuy">Price Buy</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('priceBuy')} ? ' is-invalid' : ''"
+                   placeholder="0.00"
+                   id="priceBuy" type="number" step="0.01"  th:field="*{priceBuy}" >
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('priceBuy')}"
+                 th:errors="*{priceBuy}">
+                Niepoprawna wartość
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Quality</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{qualities.id}">
-                    <span th:if="*{qualities.id == null}">
-                        <option value="">SELECT QUALITY</option>
-                    </span>
+        <div class="form-group col-md-2">
+            <label class="m-0" for="priceSell">Price Sell</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('priceSell')} ? ' is-invalid' : ''"
+                   placeholder="0.00"
+                   id="priceSell" type="number" step="0.01"  th:field="*{priceSell}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('priceSell')}"
+                 th:errors="*{priceSell}">
+                Niepoprawna wartość
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="m-0" for="quality">Quality</label>
+            <select class="form-control form-control-sm mb-2" id="quality" th:field="*{qualities.id}">
+                <option value="">-- SELECT QUALITY --</option>
                 <option th:each="quality : ${qualities}"
                         th:value="${quality.id}"
                         th:text="${quality.quality}">
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('qualities.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{qualities.id}" ></span>
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('qualities.id')}"
+                 th:errors="*{qualities.id}">
             </div>
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <label class="m-0">Diameter(mm)</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{diameter}">
-            <div th:if="${#fields.hasErrors('diameter')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{diameter}" ></span>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="m-0" for="diameter">Diameter(mm)</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('diameter')} ? ' is-invalid' : ''"
+                   id="diameter" type="number" min="0"  th:field="*{diameter}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('diameter')}"
+                 th:errors="*{diameter}">
+                Niepoprawna wartość
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Thickness(mm)</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{thickness}">
-            <div th:if="${#fields.hasErrors('thickness')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{thickness}" ></span>
+        <div class="form-group col-md-2">
+            <label class="m-0" for="thickness">Thickness(mm)</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('thickness')} ? ' is-invalid' : ''"
+                   id="thickness" type="number" min="0"  th:field="*{thickness}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('thickness')}"
+                 th:errors="*{thickness}">
+                Niepoprawna wartość
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Weight(gr)</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{weight}">
-            <div th:if="${#fields.hasErrors('weight')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{weight}" ></span>
+        <div class="form-group col-md-2">
+            <label class="m-0" for="weight">Weight(mm)</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('weight')} ? ' is-invalid' : ''"
+                   id="weight" type="number" min="0"  th:field="*{weight}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('weight')}"
+                 th:errors="*{weight}">
+                Niepoprawna wartość
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Status</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}">
-                    <span th:if="*{statuses.id == null}">
-                        <option value="">SELECT STATUS</option>
-                    </span>
+        <div class="form-group col-md-3">
+            <label class="m-0" for="status">Status</label>
+            <select class="form-control form-control-sm mb-2" id="status" th:field="*{statuses.id}" >
+                <option value="">-- SELECT STATUS --</option>
                 <option th:each="status : ${statuses}"
                         th:value="${status.id}"
-                        th:text="${status.status}">
+                        th:text="${status.status}"
+                        th:class="${status.status.replace(' ', '_')}">
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('statuses.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{statuses.id}" ></span>
+            <!-- Komunikat błędu -->
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('statuses.id')}"
+                 th:errors="*{statuses.id}">
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Image Typ</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{imageTypes.id}">
-                    <span th:if="*{imageTypes.id == null}">
-                        <option value="">SELECT IMAGE TYPE</option>
-                    </span>
+        <div class="form-group col-md-3">
+            <label class="m-0" for="imageType">Image Type</label>
+            <select class="form-control form-control-sm mb-2" id="imageType" th:field="*{imageTypes.id}">
+                <option value="">-- SELECT IMAGE TYPE --</option>
                 <option th:each="imageType : ${imageTypes}"
                         th:value="${imageType.id}"
                         th:text="${imageType.type}">
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('imageTypes.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{imageTypes.id}" ></span>
+            <!-- Komunikat błędu -->
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('imageTypes.id')}"
+                 th:errors="*{imageTypes.id}">
             </div>
-        </div>
-        <div class="col-auto">
-            <label class="m-0">Status Sell</label>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{statusSell}">
-        </div>
-        <div class="col-auto" style="text-align: center;background: darkcyan;">
-            <label class="m-0">Visible</label><br>
-            <input lass="form-control form-control-sm mb-2" type="checkbox" th:field="*{visible}" placeholder="visible"/>
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label class="m-0">Composition</label>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{composition}" placeholder="Composition"></textarea>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label class="m-0" for="statusSell">Status Sell</label>
+            <input class="form-control form-control-sm mb-2"
+                   id="statusSell" type="text" th:field="*{statusSell}">
         </div>
-        <div class="col">
-            <label class="m-0">Description</label>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
-        </div>
-    </div>
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label class="m-0" for="aversPath">Avers Patch</label>
-            <input type="text" class="form-control form-control-sm mb-2" id="aversPath" th:field="*{aversPath}" placeholder="Avers Path">
-        </div>
-    </div>
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label class="m-0" for="reversePath">Reverse Patch</label>
-            <input type="text" class="form-control form-control-sm mb-2" id="reversePath" th:field="*{reversePath}" placeholder="Reverse Path">
+        <div class="form-group col-md-2 align-items-center">
+            <div class="form-check mt-4" style="background: aquamarine">
+                <input class="form-check-input" type="checkbox"
+                       id="visible" name="newsletter" th:field="*{visible}">
+                <label class="form-check-label" for="visible">
+                    Visinble
+                </label>
+            </div>
         </div>
     </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="composition">Composition</label>
+            <textarea class="form-control" id="composition" rows="5" th:field="*{composition}" placeholder="Skład Medalu"></textarea>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" rows="5" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="aversPath">Avers Path</label>
+        <input type="text" class="form-control form-control-sm mb-2" id="aversPath" th:field="*{aversPath}" placeholder="Avers Path">
+    </div>
+    <div class="form-group">
+        <label for="reversePath">Reverse Path</label>
+        <input type="text" class="form-control form-control-sm mb-2" id="reversePath" th:field="*{reversePath}" placeholder="Reverse Path">
+    </div>
+
+<!--    <div>-->
+<!--        <div>-->
+<!--            <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Currency Series</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{currencies.id}">-->
+<!--                    <span th:if="*{currencies.id == null}">-->
+<!--                        <option value="">SELECT CURRENCY</option>-->
+<!--                    </span>-->
+<!--                <option th:each="currency : ${currencies}"-->
+<!--                        th:value="${currency.id}"-->
+<!--                        th:text="${currency.currencySeries}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Date Buy</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateBuy}">-->
+<!--            <div th:if="${#fields.hasErrors('dateBuy')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--&lt;!&ndash;                <span th:errors="*{dateBuy}" ></span>&ndash;&gt;-->
+<!--                <span th:text="${errorDateBuy}"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Bought</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{boughts.id}">-->
+<!--                    <span th:if="*{boughts.id == null}">-->
+<!--                        <option value="">SELECT BOUGHT</option>-->
+<!--                    </span>-->
+<!--                <option th:each="bought : ${boughts}"-->
+<!--                        th:value="${bought.id}"-->
+<!--                        th:text="${bought.name}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('boughts.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{boughts.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0" for="denomination">Denomination</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="denomination" th:field="*{denomination}" placeholder="Denomiation">-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0" for="nameCurrency">Name Currency</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="nameCurrency" th:field="*{nameCurrency}" placeholder="Name Currency">-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0" for="series">Series</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="series" th:field="*{series}" placeholder="Series">-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0" for="itemDate">Item Date</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="itemDate" th:field="*{itemDate}" placeholder="Item Date">-->
+<!--            <div th:if="${#fields.hasErrors('itemDate')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{itemDate}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <div style="float: left; max-width: 110px">-->
+<!--                <label class="m-0" for="itemDate">Quantity</label>-->
+<!--                <input type="number" class="form-control form-control-sm mb-2" id="quality" th:field="*{quantity}" min="0" placeholder="quantity">-->
+<!--                <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{quantity}" style="display: inline-block; font-size: xx-small" ></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div style="float:left; max-width: 100px">-->
+<!--                <label class="m-0" for="itemDate">Unit</label>-->
+<!--                <select class="form-control form-control-sm mb-2" th:field="*{unitQuantity}">-->
+<!--                    <option th:value="'szt'" th:text="szt"></option>-->
+<!--                    <option th:value="'set'" th:text="set"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Active</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{actives.id}">-->
+<!--                    <span th:if="*{actives.id == null}">-->
+<!--                        <option value="">SELECT ACTIVE</option>-->
+<!--                    </span>-->
+<!--                <option th:each="active : ${actives}"-->
+<!--                        th:value="${active.id}"-->
+<!--                        th:text="${active.name}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('actives.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{actives.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Price Buy</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{priceBuy}" placeholder="0.00">-->
+<!--            <div th:if="${#fields.hasErrors('priceBuy')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{priceBuy}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Price Sell</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{priceSell}" placeholder="0.00">-->
+<!--            <div th:if="${#fields.hasErrors('priceSell')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{priceSell}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Quality</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{qualities.id}">-->
+<!--                    <span th:if="*{qualities.id == null}">-->
+<!--                        <option value="">SELECT QUALITY</option>-->
+<!--                    </span>-->
+<!--                <option th:each="quality : ${qualities}"-->
+<!--                        th:value="${quality.id}"-->
+<!--                        th:text="${quality.quality}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('qualities.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{qualities.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Diameter(mm)</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{diameter}">-->
+<!--            <div th:if="${#fields.hasErrors('diameter')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{diameter}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Thickness(mm)</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{thickness}">-->
+<!--            <div th:if="${#fields.hasErrors('thickness')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{thickness}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Weight(gr)</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01" min="0"  th:field="*{weight}">-->
+<!--            <div th:if="${#fields.hasErrors('weight')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{weight}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Status</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{statuses.id}">-->
+<!--                    <span th:if="*{statuses.id == null}">-->
+<!--                        <option value="">SELECT STATUS</option>-->
+<!--                    </span>-->
+<!--                <option th:each="status : ${statuses}"-->
+<!--                        th:value="${status.id}"-->
+<!--                        th:text="${status.status}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('statuses.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{statuses.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Image Typ</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{imageTypes.id}">-->
+<!--                    <span th:if="*{imageTypes.id == null}">-->
+<!--                        <option value="">SELECT IMAGE TYPE</option>-->
+<!--                    </span>-->
+<!--                <option th:each="imageType : ${imageTypes}"-->
+<!--                        th:value="${imageType.id}"-->
+<!--                        th:text="${imageType.type}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('imageTypes.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{imageTypes.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Status Sell</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{statusSell}">-->
+<!--        </div>-->
+<!--        <div class="col-auto" style="text-align: center;background: darkcyan;">-->
+<!--            <label class="m-0">Visible</label><br>-->
+<!--            <input lass="form-control form-control-sm mb-2" type="checkbox" th:field="*{visible}" placeholder="visible"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label class="m-0">Composition</label>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{composition}" placeholder="Composition"></textarea>-->
+<!--        </div>-->
+<!--        <div class="col">-->
+<!--            <label class="m-0">Description</label>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label class="m-0" for="aversPath">Avers Patch</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="aversPath" th:field="*{aversPath}" placeholder="Avers Path">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label class="m-0" for="reversePath">Reverse Patch</label>-->
+<!--            <input type="text" class="form-control form-control-sm mb-2" id="reversePath" th:field="*{reversePath}" placeholder="Reverse Path">-->
+<!--        </div>-->
+<!--    </div>-->
 
 </header>
