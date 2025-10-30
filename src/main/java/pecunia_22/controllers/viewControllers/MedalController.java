@@ -102,7 +102,7 @@ public class MedalController {
 
         modelMap.addAttribute("currency", currencyDtoByPattern);
         modelMap.addAttribute("medals", medalDtoByCurrencies);
-        return "/medal/medal_list";
+        return "medal/medal_list";
     }
 
     @GetMapping("/medal/new/")
@@ -229,7 +229,7 @@ public class MedalController {
 
         modelMap.addAttribute("medal", medalDto);
         modelMap.addAttribute("json", JsonUtils.gsonPretty(medalDto));
-        return "/medal/show";
+        return "medal/show";
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
