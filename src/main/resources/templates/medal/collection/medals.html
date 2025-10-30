@@ -9,7 +9,6 @@
 </head>
 <body>
     <div layout:fragment="content" class="container">
-
         <div class="jumbotron">
             <h2 class="display-4" style="text-align: center" >MEDALS COLECTION</H2>
             <hr class="my-2">
@@ -21,10 +20,10 @@
                 <a th:replace="~{fragments/button/_button-back :: back(back = '/medal/collection/currency/?selectCountryId=' + ${medals[0].currencies.countries.id})}"></a>
             </div>
             <hr class="my-2">
-            <div class="form-row align-items-center">
-                <div class="form-row align-items-center">
+            <div class="container my-4">
+                <div class="form-row justify-content-center">
                     <th:block th:each="medal : ${medals}">
-                        <div class="col-auto note-box">
+                        <div class="col-auto note-box" style="border-radius: 20px;">
                             <div >
                                 <a th:href="@{'/medal/collection/show/' + ${medal.id}}" data-toggle="modal" th:attr="data-target='#Medal-' + ${medal.id}"
                                    style="display: flex; justify-content: center">
@@ -35,7 +34,7 @@
                                     <div th:replace="~{medal/collection/_showModal :: showModal}"></div>
                                 </div>
                             </div>
-                            <div style="text-align: left; font-size: small">
+                            <div class="container" style="text-align: left; font-size: small">
                                 <span th:text="${medal.denomination >= 1 ? #numbers.formatDecimal(medal.denomination,1,0,'COMMA') :  #numbers.formatDecimal(medal.denomination,1,2,'COMMA')} + ' ' + ${medal.nameCurrency}"></span><br>
                                 <span th:text="${'Year: ' + medal.itemDate}"></span><br>
                                 <span th:text="${'Quality: ' + medal.qualities.quality}"></span><br>
@@ -58,6 +57,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>
