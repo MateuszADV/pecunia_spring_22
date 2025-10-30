@@ -7,50 +7,47 @@
     <title>Medal Currency</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
-
-        <div class="jumbotron">
-            <h1 class="display-4" style="text-align: center">Medal Currency</h1>
-            <hr class="my-2">
-            <div th:if="${currencies.size} > 0">
-                <!--            <h2 th:text="${currencies[0].countries.countryEn}"></h2>-->
-                <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+    <div layout:fragment="content">
+        <section class="py-5">
+            <div class="container">
+                <h1 class="display-4" style="text-align: center">Medal Currency</h1>
                 <hr class="my-2">
-                <div class="container" style="display: inline-block">
-                    <a th:replace="~{fragments/button/_button-back :: back(back = '/medal')}"></a>
-                </div>
-                <hr class="my-2">
-                <div class="container">
-                    <table class="table table-striped table-bordered table-hover table-sm">
-                        <thead class="thead-dark">
-                        <tr>
-                            <!--                <th>CON</th>-->
-                            <th class="pt-1 pb-1">Lp:</th>
-                            <th class="pt-1 pb-1">Id</th>
-                            <th class="pt-1 pb-1">Seria</th>
-                            <th class="pt-1 pb-1">Total</th>
-                            <!--                        <th style="width: 156px">Akcja</th>-->
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <Block th:each="currency, i : ${currencies}">
+                <div th:if="${currencies.size} > 0">
+                    <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+                    <hr class="my-2">
+                    <div class="container" style="display: inline-block">
+                        <a th:replace="~{fragments/button/_button-back :: back(back = '/medal')}"></a>
+                    </div>
+                    <hr class="my-2">
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover table-sm">
+                            <thead class="thead-dark">
                             <tr>
-                                <!--                    <td th:text="${country.getContinents().getContinentCode()}"></td>-->
-                                <td th:text="${i.index +1}" class="pt-1 pb-1"></td>
-                                <td th:text="${currency.id}" class="pt-1 pb-1"></td>
-                                <td class="pt-1 pb-1">
-                                    <a th:href="@{'/medal/medal_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}" style="color: black">
-                                        [[${currency.currencySeries}]]
-                                    </a>
-                                </td>
-                                <td th:text="${currency.medals.size}"></td>
+                                <th class="pt-1 pb-1">Lp:</th>
+                                <th class="pt-1 pb-1">Id</th>
+                                <th class="pt-1 pb-1">Seria</th>
+                                <th class="pt-1 pb-1">Total</th>
                             </tr>
-                        </Block>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <Block th:each="currency, i : ${currencies}">
+                                    <tr>
+                                        <td th:text="${i.index +1}" class="pt-1 pb-1"></td>
+                                        <td th:text="${currency.id}" class="pt-1 pb-1"></td>
+                                        <td class="pt-1 pb-1">
+                                            <a th:href="@{'/medal/medal_list/?currencySeries=' + ${currency.currencySeries} + '&curId=' + ${currency.id}}" style="color: black">
+                                                [[${currency.currencySeries}]]
+                                            </a>
+                                        </td>
+                                        <td th:text="${currency.medals.size}"></td>
+                                    </tr>
+                                </Block>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 </html>

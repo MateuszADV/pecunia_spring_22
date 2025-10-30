@@ -61,7 +61,7 @@
                                 <a th:href="@{'/medal/delete/' + ${medal.id}}" class="btn btn-sm btn-danger" style="font-size: 10px; float: right" data-toggle="modal" th:attr="data-target='#medal' + ${medal.id}"
                                    th:insert="~{fragments/button/_button-delete :: delete_icon}"></a>
                                 <div class="modal fade" th:attr="id= 'medal' + ${medal.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div th:replace="~{/medal/_confirmDeleteModal :: confirmDeleteModal}"></div>
+                                    <div th:replace="~{medal/_confirmDeleteModal :: confirmDeleteModal}"></div>
                                 </div>
                             </td>
                         </tr>
