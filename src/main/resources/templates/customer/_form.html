@@ -1,70 +1,146 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-    <div class="form-row align-items-center">
-        <div class="col-md-4">
-            <label>Unique Id</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{uniqueId}" placeholder="Unique Id" readonly />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label class="m-0" for="uid">Unique Id</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="uid" th:field="*{uniqueId}" placeholder="Unique Id" readonly />
         </div>
-        <div class="col-auto" style="text-align: center;background: darkcyan;">
-            <label class="m-0">Active</label><br>
-            <input lass="form-control form-control-sm mb-2" type="checkbox" th:field="*{active}" placeholder="visible"/>
-        </div>
-    </div>
-    <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-md-3">
-            <label>Name</label><br>
-            <input class="form-control form-control-sm mb-2" type="text"th:field="*{name}" placeholder="Name"/>
-            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{name}" ></span>
+        <div class="form-group col-md-2 align-items-center">
+            <div class="form-check mt-4" style="background: aquamarine">
+                <input class="form-control-input" id="active" name="active" type="checkbox" th:field="*{active}"/>
+                <label class="form-check-label" for="active">
+                    Active
+                </label>
             </div>
         </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
         <div class="col-md-3">
-            <label>last Name</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{lastName}" placeholder="Last Name" />
+            <label class="m-0" for="name">Name</label><br>
+            <input type="text" class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                   placeholder="Name"
+                   id="name" name="name" th:field="*{name}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}">
+                Niepoprawna wartość
+            </div>
+<!--            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{name}" ></span>-->
+<!--            </div>-->
+        </div>
+        <div class="col-md-3">
+            <label class="m-0" for="lastName">last Name</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Last Name" />
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="col-md-3">
+            <label for="city">City</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="city" name="city" th:field="*{city}" placeholder="City" />
+        </div>
+        <div class="col-md-3">
+            <label for="zipCode">Zip Code</label><br>
+            <input class="form-control form-control-sm mb-2" id="zipCode" name="zipCode" type="text" th:field="*{zipCode}" placeholder="__-___" />
+        </div>
+        <div class="col-md-3">
+            <label for="street">Street</label><br>
+            <input class="form-control form-control-sm mb-2" id="street" name="street" type="text" th:field="*{Street}" placeholder="Street" />
+        </div>
+        <div class="col-md-3">
+            <label for="number">Number</label><br>
+            <input class="form-control form-control-sm mb-2" id="number" name="number" type="text" th:field="*{number}" placeholder="Number" />
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="col-md-3">
+            <label for="email">Email</label><br>
+            <input class="form-control form-control-sm mb-2" id="email" name="email" type="text" th:field="*{email}" placeholder="np. jan@mail.com" />
+        </div>
+        <div class="col-md-3">
+            <label for="nick">Nick</label><br>
+            <input class="form-control form-control-sm mb-2" id="nick" name="nick" type="text" th:field="*{nick}" placeholder="Nick" />
+        </div>
+        <div class="col-md-3">
+            <label for="phone">Phone</label><br>
+            <input class="form-control form-control-sm mb-2" id="phone" name="phone" type="text" th:field="*{phone}" placeholder="+48 ___ ___ ___" />
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
 
-        </div>
-    </div>
-    <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-md-3">
-            <label>City</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{city}" placeholder="City" />
-        </div>
-        <div class="col-md-3">
-            <label>Zip Code</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{zipCode}" placeholder="Zip Code" />
-        </div>
-        <div class="col-md-3">
-            <label>Street</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{Street}" placeholder="Street" />
-        </div>
-        <div class="col-md-3">
-            <label>Number</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{number}" placeholder="Number" />
-        </div>
-    </div>
-    <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-md-3">
-            <label>Email</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{email}" placeholder="Email" />
-        </div>
-        <div class="col-md-3">
-            <label>Nick</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{nick}" placeholder="Nick" />
-        </div>
-        <div class="col-md-3">
-            <label>Phone</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{phone}" placeholder="Phone" />
-        </div>
-    </div>
-    <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label>Description</label><br>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
-        </div>
-    </div>
-    <hr class="my-2">
+
+            <!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-4">-->
+<!--            <label>Unique Id</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{uniqueId}" placeholder="Unique Id" readonly />-->
+<!--        </div>-->
+<!--        <div class="col-auto" style="text-align: center;background: darkcyan;">-->
+<!--            <label class="m-0">Active</label><br>-->
+<!--            <input lass="form-control form-control-sm mb-2" type="checkbox" th:field="*{active}" placeholder="visible"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-3">-->
+<!--            <label>Name</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text"th:field="*{name}" placeholder="Name"/>-->
+<!--            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{name}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label>last Name</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{lastName}" placeholder="Last Name" />-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-3">-->
+<!--            <label>City</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{city}" placeholder="City" />-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="zipCode">Zip Code</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" id="zipCode" name="zipCode" type="text" th:field="*{zipCode}" placeholder="__-___" />-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label>Street</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{Street}" placeholder="Street" />-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label>Number</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{number}" placeholder="Number" />-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="email">Email</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" id="email" name="email" type="text" th:field="*{email}" placeholder="np. jan@mail.com" />-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label>Nick</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{nick}" placeholder="Nick" />-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="phone">Phone</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" id="phone" name="phone" type="text" th:field="*{phone}" placeholder="+48 ___ ___ ___" />-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label>Description</label><br>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
 </header>

@@ -73,15 +73,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 
 <script th:src="@{/js/lightbox.js}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Telefon: +48 123 456 789
-        Inputmask({ mask: "+48 999 999 999" }).mask("#phone");
+<script th:src="@{/js/mask.js}"></script>
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        // Telefon: +48 123 456 789-->
+<!--        Inputmask({ mask: "+48 999 999 999" }).mask("#phone");-->
 
-        // Kod pocztowy: 12-345
-        Inputmask({ mask: "99-999" }).mask("#zipcode");
-    });
-</script>
+<!--        // Kod pocztowy: 12-345-->
+<!--        Inputmask({ mask: "99-999" }).mask("#zipCode");-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 </html>
