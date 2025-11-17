@@ -1,85 +1,183 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-
-    <span th:text="${orderForm.customers.name}"></span><br>
-    <span th:text="${orderForm.customers.lastName}"></span><br>
-    <span th:text="${orderForm.customers.city}"></span><br>
-    <input type="text" th:field="*{customers.id}" th:readonly="id" class="form-control form-control-sm mb-1" style="width: auto"/>
+    <div>
+        <span th:text="${orderForm.customers.name}"></span><br>
+        <span th:text="${orderForm.customers.lastName}"></span><br>
+        <span th:text="${orderForm.customers.city}"></span><br>
+    </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-md-2">
-            <label class="m-0">Order Number</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{numberOrder}" th:readonly="numberOrder"  placeholder="Number Order"  />
+    <div class="form-row">
+        <div class="col-md-1">
+            <label class="m-0" for="customerId">Customer Id</label><br>
+<!--            <input class="form-control form-control-sm mb-2" type="text" id="customerId" th:field="*{customer.id}" readonly />-->
+            <input class="form-control form-control-sm mb-2" type="text" id="customerId" th:field="*{customers.id}" placeholder="customer Id" readonly />
         </div>
-        <div class="col-auto">
-            <label class="m-0">Data Order</label>
-            <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateOrder}">
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="col-md-3">
+            <label class="m-0" for="orderNumber">Order Number</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="orderNumber" th:field="*{numberOrder}" th:readonly="numberOrder" readonly/>
+        </div>
+        <div class="col-md-3">
+            <label class="m-0" for="dataOrder">Data Order</label>
+            <input class="form-control form-control-sm mb-2" type="date" id="dataOrder" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateOrder}">
             <div th:if="${#fields.hasErrors('dateOrder')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
                 <span th:text="${errorDateOrder}"></span>
             </div>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Status Order</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{statusOrders.id}">
-                    <span th:if="*{statusOrders.id == null}">
-                        <option value="">SELECT Status</option>
-                    </span>
+        <div class="col-md-3">
+            <label class="m-0" for="statusOrder">Status Order</label>
+            <select class="form-control form-control-sm mb-2"  id="statusOrder" th:field="*{statusOrders.id}">
+                <option value="">-- SELECT STATUS --</option>
                 <option th:each="status : ${statusOrders}"
                         th:value="${status.id}"
                         th:text="${status.statusPl}">
+                    Status
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('statusOrders.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{statusOrders.id}" ></span>
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('statusOrders.id')}"
+                 th:errors="*{statusOrders.id}">
             </div>
+<!--            <div th:if="${#fields.hasErrors('statusOrders.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{statusOrders.id}" ></span>-->
+<!--            </div>-->
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <label class="m-0">Shipping Type</label>
-            <select class="form-control form-control-sm mb-2" th:field="*{shippingTypes.id}">
-                    <span th:if="*{shippingTypes.id == null}">
-                        <option value="">SELECT Shipping</option>
-                    </span>
+    <div class="form-row">
+        <div class="col-md-3">
+            <label class="m-0" for="shippingType">Shipping Type</label>
+            <select class="form-control form-control-sm mb-2" id="shippingType" th:field="*{shippingTypes.id}">
+                <option value="">-- SELECT SHIPPING --</option>
                 <option th:each="shipping : ${shippingTypes}"
                         th:value="${shipping.id}"
                         th:text="${shipping.shippingTypePl}">
                 </option>
             </select>
-            <div th:if="${#fields.hasErrors('shippingTypes.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{shippingTypes.id}" ></span>
+            <div class="invalid-feedback d-block"
+                 th:if="${#fields.hasErrors('shippingTypes.id')}"
+                 th:errors="*{shippingTypes.id}">
             </div>
+
+<!--            <div th:if="${#fields.hasErrors('shippingTypes.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{shippingTypes.id}" ></span>-->
+<!--            </div>-->
         </div>
         <div class="col-md-3">
-            <label class="m-0">Tracking Number</label><br>
-            <input class="form-control form-control-sm mb-2" type="text"th:field="*{trackingNumber}" placeholder="Tracking Number"/>
+            <label class="m-0" for="trackingNumber">Tracking Number</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="trackingNumber" th:field="*{trackingNumber}" placeholder="Tracking Number"/>
         </div>
-        <div class="col-auto">
-            <label class="m-0">Shipping Cost</label>
-            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{shippingCost}" placeholder="0.00">
-            <div th:if="${#fields.hasErrors('shippingCost')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{shippingCost}" ></span>
+        <div class="col-md-3">
+            <label class="m-0" for="shippingCost">Shipping Cost</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('shippingCost')} ? ' is-invalid' : ''"
+                   placeholder="0.00"
+                   id="shippingCost" type="number" step="0.01"  th:field="*{shippingCost}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('shippingCost')}"
+                 th:errors="*{shippingCost}">
+                Niepoprawna wartość
+            </div>
+
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  id="shippingCost" th:field="*{shippingCost}" placeholder="0.00">-->
+<!--            <div th:if="${#fields.hasErrors('shippingCost')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{shippingCost}" ></span>-->
+<!--            </div>-->
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="col-md-3">
+            <label class="m-0" for="dataSendOrder">Data Send Order</label>
+            <input class="form-control form-control-sm mb-2" type="date" id="dataSendOrder" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateSendOrder}">
+            <div th:if="${#fields.hasErrors('dateSendOrder')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
+                <span th:text="${dateSendOrder}"></span>
             </div>
         </div>
     </div>
     <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <label class="m-0">Data Send Order</label>
-            <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateSendOrder}">
-            <div th:if="${#fields.hasErrors('dateSendOrder')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:text="${errorDateSendOrder}"></span>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="3" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
     </div>
 
-    <hr class="my-2">
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label>Description</label><br>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
-        </div>
-    </div>
-    <hr class="my-2">
+<!--    <input type="text" th:field="*{customers.id}" th:readonly="id" class="form-control form-control-sm mb-1" style="width: auto"/>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-2">-->
+<!--            <label class="m-0">Order Number</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{numberOrder}" th:readonly="numberOrder"  placeholder="Number Order"  />-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Data Order</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateOrder}">-->
+<!--            <div th:if="${#fields.hasErrors('dateOrder')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:text="${errorDateOrder}"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Status Order</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{statusOrders.id}">-->
+<!--                    <span th:if="*{statusOrders.id == null}">-->
+<!--                        <option value="">SELECT Status</option>-->
+<!--                    </span>-->
+<!--                <option th:each="status : ${statusOrders}"-->
+<!--                        th:value="${status.id}"-->
+<!--                        th:text="${status.statusPl}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('statusOrders.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{statusOrders.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Shipping Type</label>-->
+<!--            <select class="form-control form-control-sm mb-2" th:field="*{shippingTypes.id}">-->
+<!--                    <span th:if="*{shippingTypes.id == null}">-->
+<!--                        <option value="">SELECT Shipping</option>-->
+<!--                    </span>-->
+<!--                <option th:each="shipping : ${shippingTypes}"-->
+<!--                        th:value="${shipping.id}"-->
+<!--                        th:text="${shipping.shippingTypePl}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--            <div th:if="${#fields.hasErrors('shippingTypes.id')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{shippingTypes.id}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label class="m-0">Tracking Number</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text"th:field="*{trackingNumber}" placeholder="Tracking Number"/>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Shipping Cost</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="number" step="0.01"  th:field="*{shippingCost}" placeholder="0.00">-->
+<!--            <div th:if="${#fields.hasErrors('shippingCost')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{shippingCost}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-auto">-->
+<!--            <label class="m-0">Data Send Order</label>-->
+<!--            <input class="form-control form-control-sm mb-2" type="date" th:max="${#dates.format(standartDate, 'yyyy-MM-dd')}" th:field="*{dateSendOrder}">-->
+<!--            <div th:if="${#fields.hasErrors('dateSendOrder')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:text="${errorDateSendOrder}"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <hr class="my-2">-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label>Description</label><br>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
 </header>
