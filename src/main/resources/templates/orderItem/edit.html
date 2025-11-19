@@ -27,7 +27,7 @@
                     <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
                     <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
                 </div>
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/orderItems/' + ${orderItemForm.orders.id})}"></a>
+                <a th:replace="~{fragments/button/_button-back :: back(back = '/orderItem/' + ${orderItemForm.orders.id})}"></a>
                 <span></span>
                 <div class="form-row align-items-center">
                     <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Unique Id" readonly th:type="hidden" />
