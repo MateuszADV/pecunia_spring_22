@@ -7,37 +7,61 @@
     <title>Edit Order Item</title>
 </head>
 <body>
-    <div layout:fragment="content" class="container">
-        <div class="jumbotron">
-            <h1 class="display-4" style="text-align: center">EDIT ORDER ITEM</h1>
-            <hr class="my-2">
-            <form th:action="@{/orderItem/edit}" method="post" th:object="${orderItemForm}">
-                <div th:if="${orderItemForm.pattern} == 'NOTE'">
-                    <div th:replace="~{orderItem/_formNote :: form}"></div>
-                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
-    <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
-                </div>
-                <div th:if="${orderItemForm.pattern} == 'COIN'">
-                    <div th:replace="~{orderItem/_formCoin :: form}"></div>
-                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
+    <section layout:fragment="content" class="container">
+        <div class="hero py-5">
+            <div class="container">
+                <div class="card shadow-sm mb-4">
+                    <h1 class="display-4" style="text-align: center">EDIT ORDER ITEM</h1>
+                    <hr class="my-2">
+                    <div class="container">
+                        <div class="card-body">
+                            <form th:action="@{/orderItem/edit}" method="post" th:object="${orderItemForm}">
+                                <div class="form-group col-md-3">
+                                    <input class="form-control form-control-sm mb-2" type="text"
+                                           th:field="*{created_at}" style="max-width: 220px;" placeholder="Created At" readonly>
+                                    <input class="form-control form-control-sm" type="text"
+                                           th:field="*{updated_at}" style="max-width: 220px;" placeholder="Updated At" readonly>
+                                </div>
+                                <div th:if="${orderItemForm.pattern} == 'NOTE'">
+                                    <div th:replace="~{orderItem/_formNote :: form}"></div>
+                                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
                     <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
+                                </div>
+                                <div th:if="${orderItemForm.pattern} == 'COIN'">
+                                    <div th:replace="~{orderItem/_formCoin :: form}"></div>
+                                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
+                                    <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
+                                </div>
+                                <div th:if="${orderItemForm.pattern} == 'SECURITY'">
+                                    <div th:replace="~{orderItem/_formSecurity :: form}"></div>
+<!--                                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">-->
+                                    <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
+                                </div>
+<!--                                <a th:replace="~{fragments/button/_button-back :: back(back = '/orderItem/' + ${orderItemForm.orders.id})}"></a>-->
+                                <span></span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <!-- Lewa strona: przycisk back -->
+                                    <div>
+                                        <a th:replace="~{fragments/button/_button-back :: back(back = '/orderItem/' + ${orderItemForm.orders.id})}"></a>
+                                    </div>
+                                    <!-- Prawa strona: przyciski Wyczyść i Zapisz -->
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                    </div>
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Unique Id" readonly th:type="hidden" />
+                                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="Unique Id" readonly th:type="hidden" />
+                                </div>
+                            </form>
+                            <div>
+                                <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${orderItemForm.pattern} == 'SECURITY'">
-                    <div th:replace="~{orderItem/_formSecurity :: form}"></div>
-                    <input type="submit" value="Zapisz zmiany" class="btn btn-sm btn-primary" style="  float: left; margin-right: 5px">
-                    <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
-                </div>
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/orderItem/' + ${orderItemForm.orders.id})}"></a>
-                <span></span>
-                <div class="form-row align-items-center">
-                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{id}" placeholder="Unique Id" readonly th:type="hidden" />
-                    <input class="form-control form-control-sm mb-2" type="text" th:field="*{created_at}" placeholder="Unique Id" readonly th:type="hidden" />
-                </div>
-            </form>
-            <div>
-                <!--                <a th:replace="fragments/button/_button-back :: back(back = '/order/' + ${orderForm.customers.uniqueId})"></a>-->
             </div>
         </div>
-    </div>
+    </section>
 </body>
 </html>

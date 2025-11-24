@@ -8,7 +8,6 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <span th:text="${orderItemForm.orders.id}"></span>
         <section class="hero py-5">
             <div class="container">
                 <div class="card shadow-sm mb-4">
@@ -19,7 +18,6 @@
                             <form th:action="@{/orderItem/new}" method="post" th:object="${orderItemForm}">
                                 <div th:if="${orderItemForm.pattern} == 'NOTE'">
                                     <div th:replace="~{orderItem/_formNote :: form}"></div>
-
                                     <div class="d-flex justify-content-between align-items-center">
                                         <!-- Lewa strona: przycisk back -->
                                         <div>
