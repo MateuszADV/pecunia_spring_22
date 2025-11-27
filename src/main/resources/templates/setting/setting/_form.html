@@ -1,37 +1,86 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
 
-    <div class="form-row align-items-center">
-        <div class="col-md-4">
-            <label>Name</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{name}" placeholder="Name" />
-            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{name}" ></span>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="col-md-3">
+            <label class="m-0" for="name">Name</label>
+            <input type="text" class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                   placeholder = "Name"
+                   id="name" name="name" th:field="*{name}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}">
+                Niepoprawna wartość
             </div>
         </div>
+        <div class="col-md-3">
+            <label class="m-0" for="setting">Setting</label>
+            <input type="text" class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('setting')} ? ' is-invalid' : ''"
+                   placeholder = "Setting"
+                   id="setting" name="setting" th:field="*{setting}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('setting')}"
+                 th:errors="*{setting}">
+                Niepoprawna wartość
+            </div>
 
-        <div class="col-md-4">
-            <label>Setting</label><br>
-            <input class="form-control form-control-sm mb-2" type="text" th:field="*{setting}" placeholder="Setting" />
-            <div th:if="${#fields.hasErrors('setting')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{setting}" ></span>
-            </div>
-        </div>
-    </div>
-    <div class="form-row align-items-center">
-        <div class="col">
-                <label>Parameter</label><br>
-                <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{parameter}" placeholder="Parameter"></textarea>
-<!--                <div th:if="${#fields.hasErrors('parameter')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
-<!--                    <span th:errors="*{Parameter}" ></span>-->
-<!--                </div>-->
-        </div>
-    </div>
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label>Description</label><br>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
+
+<!--            <input class="form-control form-control-sm mb-2" type="text" id="setting" th:field="*{setting}" placeholder="Setting" />-->
+<!--            <div th:if="${#fields.hasErrors('setting')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{setting}" ></span>-->
+<!--            </div>-->
         </div>
     </div>
     <hr class="my-2">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="parameter">Parameter</label>
+            <textarea class="form-control" rows="4" id="parameter" style="resize: none" th:field="*{parameter}" placeholder="Tutaj możesz poacparametry ustwawień"></textarea>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="description">Description</label>
+<!--            <textarea class="form-control" id="description" rows="3" id="description" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>-->
+            <textarea class="form-control" rows="4" id="description" style="resize: none" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+
+        </div>
+    </div>
+
+
+    <!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-4">-->
+<!--            <label>Name</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{name}" placeholder="Name" />-->
+<!--            <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{name}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-4">-->
+<!--            <label>Setting</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text" th:field="*{setting}" placeholder="Setting" />-->
+<!--            <div th:if="${#fields.hasErrors('setting')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{setting}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--                <label>Parameter</label><br>-->
+<!--                <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{parameter}" placeholder="Parameter"></textarea>-->
+<!--&lt;!&ndash;                <div th:if="${#fields.hasErrors('parameter')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span th:errors="*{Parameter}" ></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label>Description</label><br>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
 </header>
