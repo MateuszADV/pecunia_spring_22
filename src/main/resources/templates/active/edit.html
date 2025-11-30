@@ -7,14 +7,46 @@
     <title>New Active</title>
 </head>
 <body>
-<div layout:fragment="content" class="container">
-    <h1 style="text-align: center">ACTIVE NEW</h1>
-
-    <form th:action="@{/active/edit}" method="post" th:object="${activeForm}">
-        <div th:replace="~{active/_form :: form}"></div>
-        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
-    </form>
-
+<div layout:fragment="content">
+    <section class="hero py-5">
+        <div class="container">
+            <div class="card shadow-sm mb-4">
+                <h1 style="text-align: center">ACTIVE NEW</h1>
+                <hr class="my-2">
+                <div class="container">
+                    <div class="card-body">
+                        <form th:action="@{/active/edit}" method="post" th:object="${activeForm}">
+                            <div class="form-group col-md-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <label for="idOrder" class="mr-2 mb-0">Id:</label>
+                                    <input class="form-control form-control-sm" type="text" id="idOrder"
+                                           th:field="*{id}" style="max-width: 80px;" readonly>
+                                </div>
+                                <input class="form-control form-control-sm mb-2" type="text"
+                                       th:field="*{created_at}" style="max-width: 220px;" placeholder="Created At" readonly>
+                                <input class="form-control form-control-sm" type="text"
+                                       th:field="*{updated_at}" style="max-width: 220px;" placeholder="Updated At" readonly>
+                            </div>
+                            <hr class="my-2">
+                            <div th:replace="~{active/_form :: form}"></div>
+                            <hr class="my-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Lewa strona: przycisk back -->
+                                <div>
+                                    <a th:replace="~{fragments/button/_button-back :: back(back = '/active')}"></a>
+                                </div>
+                                <!-- Prawa strona: przyciski Wyczyść i Zapisz -->
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                </div>
+                            </div>
+<!--                            <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>
