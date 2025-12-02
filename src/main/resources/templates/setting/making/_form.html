@@ -1,28 +1,58 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-    <table>
-        <tr>
-            <td>
-                <label>Making</label><br>
-                <input class="input" type="text" th:field="*{making}" placeholder="Making" />
-                <div th:if="${#fields.hasErrors('making')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{making}" ></span>
-                </div>
-            </td>
-            <td>
-                <label>Making Pl</label><br>
-                <input class="input" type="text" th:field="*{makingPl}" placeholder="Making Pl"/>
-<!--                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
-<!--                    <span th:errors="*{name}" ></span>-->
+
+    <div class="form-row">
+        <div class="col-md-4">
+            <label class="m-0" for="making">Making</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('making')} ? ' is-invalid' : ''"
+                   id="making" type="text" th:field="*{making}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('making')}"
+                 th:errors="*{making}">
+                Niepoprawna wartość
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label class="m-0" for="makingPl">Making Pl</label>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('makingPl')} ? ' is-invalid' : ''"
+                   id="makingPl" type="text" th:field="*{makingPl}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('makingPl')}"
+                 th:errors="*{makingPl}">
+                Niepoprawna wartość
+            </div>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
+    <hr class="my-2">
+
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Making</label><br>-->
+<!--                <input class="input" type="text" th:field="*{making}" placeholder="Making" />-->
+<!--                <div th:if="${#fields.hasErrors('making')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{making}" ></span>-->
 <!--                </div>-->
-            </td>
-        <tr>
-            <td>
-                <label>Description</label><br>
-                <div>
-                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>
-                </div>
-            </td>
-        </tr>
-    </table>
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Making Pl</label><br>-->
+<!--                <input class="input" type="text" th:field="*{makingPl}" placeholder="Making Pl"/>-->
+<!--&lt;!&ndash;                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span th:errors="*{name}" ></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </td>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Description</label><br>-->
+<!--                <div>-->
+<!--                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
 </header>

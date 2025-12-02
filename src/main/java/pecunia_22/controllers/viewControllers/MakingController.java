@@ -1,9 +1,11 @@
 package pecunia_22.controllers.viewControllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,8 +47,11 @@ public class MakingController {
     }
 
     @PostMapping("/making/new")
-    public String postNew(@ModelAttribute("makingForm") MakingDtoForm makingDtoForm ) {
+    public String postNew(@ModelAttribute("makingForm")@Valid MakingDtoForm makingDtoForm, BindingResult result ) {
         Making making = new ModelMapper().map(makingDtoForm, Making.class);
+        if (result.hasErrors()) {
+            return "setting/making/new";
+        }
 
         makingService.saveMaking(making);
         return "redirect:/making";
@@ -66,7 +71,10 @@ public class MakingController {
     }
 
     @PostMapping("/making/edit")
-    public String postEdit(@ModelAttribute("makingForm") MakingDtoForm makingDtoForm) {
+    public String postEdit(@ModelAttribute("makingForm")@Valid MakingDtoForm makingDtoForm, BindingResult result, ModelMap modelMap) {
+        if (result.hasErrors()) {
+            return "setting/making/edit";
+        }
         makingDtoForm.setId(makingTmp.get().getId());
         makingDtoForm.setCreated_at(makingTmp.get().getCreated_at());
         Making making = new ModelMapper().map(makingDtoForm, Making.class);
