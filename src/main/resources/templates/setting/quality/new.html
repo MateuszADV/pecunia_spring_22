@@ -7,14 +7,34 @@
     <title>New Quality</title>
 </head>
 <body>
-<div layout:fragment="content" class="container">
-    <h1 style="text-align: center">QUALITY NEW</h1>
-
-    <form th:action="@{/quality/new}" method="post" th:object="${qualityForm}">
-        <div th:replace="~{setting/quality/_form :: form}"></div>
-        <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>
-    </form>
-
+<div layout:fragment="content">
+    <section class="hero py-5">
+        <div class="container">
+            <div class="card shadow-sm mb-4">
+                <h1 style="text-align: center">QUALITY NEW</h1>
+                <hr class="my-2">
+                <div class="container">
+                    <div class="card-body">
+                        <form th:action="@{/quality/new}" method="post" th:object="${qualityForm}">
+                            <div th:replace="~{setting/quality/_form :: form}"></div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Lewa strona: przycisk back -->
+                                <div>
+                                    <a th:replace="~{fragments/button/_button-back :: back(back = '/quality')}"></a>
+                                </div>
+                                <!-- Prawa strona: przyciski Wyczyść i Zapisz -->
+                                <div>
+                                    <button type="reset" class="btn btn-outline-secondary mr-2">Wyczyść</button>
+                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                </div>
+                            </div>
+        <!--                    <p> <input type="submit" value="Dodaj" class="btn btn-sm btn-primary"></p>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>

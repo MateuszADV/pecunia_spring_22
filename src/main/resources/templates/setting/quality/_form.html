@@ -1,28 +1,59 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-    <table>
-        <tr>
-            <td>
-                <label>Quality</label><br>
-                <input class="input" type="text" th:field="*{quality}" placeholder="Quality" />
-                <div th:if="${#fields.hasErrors('quality')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                    <span th:errors="*{quality}" ></span>
-                </div>
-            </td>
-            <td>
-                <label>Quality Pl</label><br>
-                <input class="input" type="text" th:field="*{qualityPl}" placeholder="Quality Pl"/>
-<!--                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
-<!--                    <span th:errors="*{name}" ></span>-->
+
+    <div class="form-row">
+        <div class="col-md-4">
+            <label class="m-0" for="quality">Quality</label><br>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('quality')} ? ' is-invalid' : ''"
+                   id="quality" type="text" th:field="*{quality}"
+                   placeholder="Quality">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('quality')}"
+                 th:errors="*{quality}">
+                Niepoprawna wartość
+            </div>
+
+
+<!--            <input class="input" type="text" th:field="*{quality}" placeholder="Quality" />-->
+<!--            <div th:if="${#fields.hasErrors('quality')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{quality}" ></span>-->
+<!--            </div>-->
+        </div>
+        <div class="col-md-4">
+            <label class="m-0" for="qualityPl">Quality Pl</label><br>
+            <input class="form-control form-control-sm mb-2" type="text" id="qualityPl" th:field="*{qualityPl}" placeholder="Quality Pl"/>
+        </div>
+    </div>
+    <hr class="my-2">
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
+    <hr class="my-2">
+
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Quality</label><br>-->
+<!--                <input class="input" type="text" th:field="*{quality}" placeholder="Quality" />-->
+<!--                <div th:if="${#fields.hasErrors('quality')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                    <span th:errors="*{quality}" ></span>-->
 <!--                </div>-->
-            </td>
-        <tr>
-            <td>
-                <label>Description</label><br>
-                <div>
-                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>
-                </div>
-            </td>
-        </tr>
-    </table>
+<!--            </td>-->
+<!--            <td>-->
+<!--                <label>Quality Pl</label><br>-->
+<!--                <input class="input" type="text" th:field="*{qualityPl}" placeholder="Quality Pl"/>-->
+<!--&lt;!&ndash;                <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span th:errors="*{name}" ></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </td>-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <label>Description</label><br>-->
+<!--                <div>-->
+<!--                    <textarea class="input" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
 </header>
