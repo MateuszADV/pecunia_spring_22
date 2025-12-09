@@ -12,7 +12,9 @@
             <section class="hero">
                 <div class="container" style="text-align: left">
                     <h1 style="text-align: center">STATUS</h1>
+                    <hr class="my-2">
                     <a th:href="@{/status/new}" class="btn btn-sm btn-primary">Add new Status</a>
+                    <hr class="my-2">
                     <table class="table table-striped table-bordered table-hover table-sm">
                         <thead class="thead-dark">
                         <tr>
@@ -36,7 +38,11 @@
                                         <div th:replace="~{setting/status/_showModal :: showModal}"></div>
                                     </div>
                                     <a th:href="@{'/status/edit/' + ${status.id}}" class="btn btn-sm btn-primary" style="font-size: 10px" >EDIT</a>
-                                    <a th:href="@{'/status/delete/' + ${status.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">Delete</a>
+<!--                                    <a th:href="@{'/status/delete/' + ${status.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">Delete</a>-->
+                                    <a th:href="@{'/status/delete/' + ${status.id}}" class="btn btn-sm btn-danger" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#deleteStatus' + ${status.id}" >Delete</a>
+                                    <div class="modal fade" th:attr="id= 'deleteStatus' + ${status.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div th:replace="~{setting/status/_confirmDeleteModal :: confirmDeleteModal}"></div>
+                                    </div>
                                 </td>
                             </tr>
                         </Block>
