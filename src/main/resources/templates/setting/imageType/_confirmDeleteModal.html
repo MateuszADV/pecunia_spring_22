@@ -1,0 +1,17 @@
+<header th:fragment="confirmDeleteModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container" style="text-align: center; padding: 25px;">
+                <h1>Delete Status</h1>
+                <p>Are you sure you want to delete Image Type?</p>
+                <p th:text="${'Id: ' + imgTyp.id}"></p>
+                <p th:text="${'Name: ' + imgTyp.type}"></p>
+                <div class="clearfix">
+                    <a  class="btn cancelbtn" data-dismiss="modal">Cancel</a>
+                    <a th:href="@{'/imageType/delete/' + ${imgTyp.id}}" class="btn deletebtn" >Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
