@@ -21,18 +21,18 @@
                             <th>Lp:</th>
                             <th>Type</th>
                             <th>Type Pl</th>
-                            <th>Desctiption</th>
+<!--                            <th>Desctiption</th>-->
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <Block th:each="imgTyp, i : ${imageTypeDtos}">
                             <tr>
-                                <td th:text="${i.index + 1}" class="pt-1 pb-1"></td>
+                                <td th:text="${i.index + 1}" class="pt-1 pb-1" style="width: 50px;"></td>
                                 <td th:text="${imgTyp.type}" class="pt-1 pb-1"></td>
                                 <td th:text="${imgTyp.typePl}" class="pt-1 pb-1"></td>
-                                <td th:text="${imgTyp.description}" class="pt-1 pb-1"></td>
-                                <td class="pt-1 pb-1">
+<!--                                <td th:text="${imgTyp.description}" class="pt-1 pb-1"></td>-->
+                                <td class="pt-1 pb-1" style="width: 180px">
                                     <a th:href="@{'/imageType/show/' + ${imgTyp.id}}" class="btn btn-sm btn-info" style="font-size: 10px" data-toggle="modal" th:attr="data-target='#type-' + ${imgTyp.id}" >SHOW</a>
                                     <div class="modal fade" th:attr="id= 'type-' + ${imgTyp.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div th:replace="~{setting/imageType/_showModal :: showModal}"></div>
