@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @EqualsAndHashCode
 public class ShippingTypeDtoForm {
     private Long id;
+    @NotEmpty(message = "Rodzaj przesyłki musi być podany")
     private String shippingTypeEn;
     @NotEmpty(message = "Rodzaj przesyłki musi być podany")
     private String shippingTypePl;
