@@ -1,26 +1,60 @@
 <header th:fragment="form"
     xmlns:th="http://www.thymeleaf.org">
-    <div class="form-row align-items-center">
+
+    <div class="form-row">
         <div class="col-md-4">
-            <label>Status Order En</label><br>
-            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusEn}" placeholder="EN"/>
-            <div th:if="${#fields.hasErrors('statusEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{statusEn}" ></span>
+            <label class="m-0" for="statusEn">Satus Order En</label><br>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('statusEn')} ? ' is-invalid' : ''"
+                   id="statusEn" type="text" th:field="*{statusEn}"
+                   placeholder="statusEn">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('statusEn')}"
+                 th:errors="*{statusEn}">
+                Niepoprawna wartość
             </div>
         </div>
         <div class="col-md-4">
-            <label>Status Order Pl</label><br>
-            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusPl}" placeholder="PL"/>
-            <div th:if="${#fields.hasErrors('statusPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >
-                <span th:errors="*{statusPl}" ></span>
+            <label class="m-0" for="statusPl">Satus Order Pl</label><br>
+            <input class="form-control form-control-sm mb-2"
+                   th:classappend="${#fields.hasErrors('statusPl')} ? ' is-invalid' : ''"
+                   id="statusPl" type="text" th:field="*{statusPl}"
+                   placeholder="statusPl">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('statusPl')}"
+                 th:errors="*{statusPl}">
+                Niepoprawna wartość
             </div>
-        </div>
-    </div>
-    <div class="form-row align-items-center">
-        <div class="col">
-            <label>Description</label><br>
-            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>
         </div>
     </div>
     <hr class="my-2">
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4" th:field="*{description}" placeholder="Tutaj możesz dodać dodatkowe informacje"></textarea>
+    </div>
+    <hr class="my-2">
+
+
+
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col-md-4">-->
+<!--            <label>Status Order En</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusEn}" placeholder="EN"/>-->
+<!--            <div th:if="${#fields.hasErrors('statusEn')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{statusEn}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-4">-->
+<!--            <label>Status Order Pl</label><br>-->
+<!--            <input class="form-control form-control-sm mb-2" type="text"th:field="*{statusPl}" placeholder="PL"/>-->
+<!--            <div th:if="${#fields.hasErrors('statusPl')}" class="alert alert-danger alert-sm" role="alert" style="padding: 0px 10px 0px 10px" >-->
+<!--                <span th:errors="*{statusPl}" ></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="form-row align-items-center">-->
+<!--        <div class="col">-->
+<!--            <label>Description</label><br>-->
+<!--            <textarea class="input form-control form-control-sm mb-4" rows="6" style="max-width: 400px; resize: none" th:field="*{description}" placeholder="Description"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr class="my-2">-->
 </header>
