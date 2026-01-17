@@ -1,0 +1,18 @@
+<header th:fragment="confirmDeleteModal"
+    xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container" style="text-align: center; padding: 25px;">
+                <h1>Delete Pattern</h1>
+                <p>Are you sure you want to delete Pattern?</p>
+                <p th:text="${'Id: ' + pattern.id}"></p>
+                <p th:text="${'Pattern: ' + pattern.pattern}"></p>
+                <div class="clearfix">
+                    <a  class="btn cancelbtn" data-dismiss="modal">Cancel</a>
+                    <a th:href="@{'/pattern/delete/' + ${pattern.id}}" class="btn deletebtn" >Delete</a>
+<!--                    <a th:href="@{'/making/delete/' + ${making.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">Delete</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
