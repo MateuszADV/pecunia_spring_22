@@ -34,6 +34,9 @@ public class CoinCollectionController {
     @GetMapping("/coin/collection")
     public String getIndex(ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+        System.out.println("+++++++++++++++++++++++++++++++ROLE+++++++++++++++++++++++++++++++++++");
+        System.out.println(role);
+        System.out.println("+++++++++++++++++++++++++++++++ROLE+++++++++++++++++++++++++++++++++++");
 
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
         if (role == "ADMIN") {
@@ -41,7 +44,7 @@ public class CoinCollectionController {
         } else {
             countryByStatusList = coinService.getCountryByStatus("KOLEKCJA", role);
             System.out.println("Brak uprawnień to tu");
-            modelMap.addAttribute("error", "Brak Uprawnień");
+//            modelMap.addAttribute("error", "Brak Uprawnień");
 //            return "error";
         }
         modelMap.addAttribute("countryByStatusList", countryByStatusList);

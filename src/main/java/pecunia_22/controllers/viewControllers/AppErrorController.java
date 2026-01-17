@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import utils.JsonUtils;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,12 @@ public class AppErrorController implements ErrorController {
         String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
 
         if (uri == null) uri = request.getRequestURI();
+        System.out.println("+++++++++++++++++++ERROR++++++++++++++++++++++++++++");
+//        System.out.println(JsonUtils.gsonPretty(request));
+        System.out.println(JsonUtils.gsonPretty(request.getTrailerFields()));
+        System.out.println(request);
+        System.out.println("+++++++++++++++++++ERROR++++++++++++++++++++++++++++");
+        System.out.println(uri.toString());
 
         // ✅ logowanie do konsoli / pliku
         logger.error("""

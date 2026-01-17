@@ -1,5 +1,6 @@
 <div th:fragment="note-show"
-     xmlns:th="http://www.thymeleaf.org">
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <!--     xmlns:th="http://www.w3.org/1999/xhtml">-->
     <hr class="my-2">
     <div class="container">
@@ -8,7 +9,7 @@
         </div>
         <hr class="my-2">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-            <div class="col field " style="float: left">
+            <div sec:authorize="hasAuthority('ADMIN')" class="col field " style="float: left">
                 <strong>Id: </strong>
                 <span th:text="${note.id}"></span><br>
                 <strong>Date Buy: </strong>
@@ -51,8 +52,8 @@
                 <span th:text="${#numbers.formatDecimal(note.width,1,0)} + 'mm'"></span><br>
                 <strong>Height: </strong>
                 <span th:text="${#numbers.formatDecimal(note.height,1,0)} + 'mm'"></span><br>
-                <strong>Price Buy: </strong>
-                <span th:text="${#numbers.formatDecimal(note.priceBuy,1,2)} + 'zł'"></span><br>
+                <strong sec:authorize="hasAuthority('ADMIN')">Price Buy: </strong>
+                <span sec:authorize="hasAuthority('ADMIN')" th:text="${#numbers.formatDecimal(note.priceBuy,1,2)} + 'zł'"></span><br>
                 <strong>Price Sell: </strong>
                 <span th:text="${#numbers.formatDecimal(note.priceSell,1,2)} + 'zł'"></span><br>
                 <strong>Status: </strong>

@@ -70,6 +70,8 @@ public class WebSecurityConfig  {
 //                ********************NOTE FOR SELL ******************************************
                 .requestMatchers("/note/forSell/**")
                 .permitAll()
+//                ********************COIN COLLECTOIN*****************************************
+                .requestMatchers("/coin/collection/**").hasAnyAuthority("ADMIN", "USER")
 //                ********************Coin FOR SELL ******************************************
                 .requestMatchers("/coin/forSell/**")
                 .permitAll()
