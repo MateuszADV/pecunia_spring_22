@@ -57,8 +57,8 @@ public class PatternController {
         System.out.println(JsonUtils.gsonPretty(patternGet));
         System.out.println("))))))))))))))))))))))))))((((((((((((((((((((((((((((");
 
-//        return "redirect:/pattern";
-        return getShow(pattern.getId(), modelMap);
+        return "redirect:/pattern";
+//        return getShow(pattern.getId(), modelMap);
     }
 
     @GetMapping("/pattern/edit/{patternId}")
@@ -81,7 +81,8 @@ public class PatternController {
         System.out.println(JsonUtils.gsonPretty(patternDto));
         System.out.println("---------------------------------------");
         Pattern patternGet = patternService.savePatternGet(pattern);
-        return getShow(pattern.getId(), modelMap);
+//        return getShow(pattern.getId(), modelMap);
+        return "redirect:/pattern";
     }
 
 
