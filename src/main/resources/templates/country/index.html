@@ -16,7 +16,9 @@
 <!--    <h1 style="text-align: center">COUNTRY</h1>-->
         <section class="py-5">
             <div class="container">
-                <a th:href="@{/country/new}" class="btn btn-sm btn-primary">Add new Country</a>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{/country/new}" class="btn btn-sm btn-primary">Add new Country</a>
+                </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover table-striped mb-0">
@@ -58,21 +60,22 @@
                                         <div class="modal fade" th:attr="id= 'Country' + ${country.id}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div th:replace="~{country/_showModal :: showModal}"></div>
                                         </div>
-
-                                        <a th:href="@{'/country/edit/' + ${country.id}}"
-                                           class="btn btn-sm btn-outline-primary mr-1">
-                                            <i class="fas fa-edit"></i> Edytuj
-                                        </a>
+                                        <div sec:authorize="hasAuthority('ADMIN')">
+                                            <a th:href="@{'/country/edit/' + ${country.id}}"
+                                               class="btn btn-sm btn-outline-primary mr-1">
+                                                <i class="fas fa-edit"></i> Edytuj
+                                            </a>
         <!--                                <a th:href="@{'/country/edit/' + ${country.id}}" class="btn btn-sm btn-primary" style="font-size: 10px">EDIT</a>-->
         <!--                                <a th:href="@{'/country/delete/' + ${country.id}}" class="btn btn-sm btn-danger" style="font-size: 10px">DELETE</a>-->
                                         <!-- Usuń -->
-                                        <a th:href="@{'/country/delete/' + ${country.id}}"
-                                              method="post" style="display:inline;">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Czy na pewno chcesz usunąć to państwo?');">
-                                                <i class="fas fa-trash"></i> Usuń
-                                            </button>
-                                        </a>
+                                            <a th:href="@{'/country/delete/' + ${country.id}}"
+                                                  method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Czy na pewno chcesz usunąć to państwo?');">
+                                                    <i class="fas fa-trash"></i> Usuń
+                                                </button>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             </Block>

@@ -1,5 +1,6 @@
 <div th:fragment="coin-show"
-     xmlns:th="http://www.thymeleaf.org">
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <!--     xmlns:th="http://www.w3.org/1999/xhtml"-->
     <hr class="my-2">
         <div class="container">
@@ -7,8 +8,8 @@
                 <h3 th:text="${coin.currencies.currencySeries}"></h3>
             </div>
             <hr class="my-2">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-                <div class="col field " style="float: left">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 justify-content-center" >
+                <div sec:authorize="hasAuthority('ADMIN')" class="col field " style="float: left">
                     <strong>Id: </strong>
                     <span th:text="${coin.id}"></span><br>
                     <strong>Date Buy: </strong>
@@ -49,10 +50,12 @@
                     <span th:text="${#numbers.formatDecimal(coin.thickness,1,2)} + 'mm'"></span><br>
                     <strong>Weight: </strong>
                     <span th:text="${#numbers.formatDecimal(coin.weight,1,2)} + 'gr'"></span><br>
-                    <strong>Price Buy: </strong>
-                    <span th:text="${#numbers.formatDecimal(coin.priceBuy,1,2)} + 'zł'"></span><br>
-                    <strong>Price Sell: </strong>
-                    <span th:text="${#numbers.formatDecimal(coin.priceSell,1,2)} + 'zł'"></span><br>
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        <strong>Price Buy: </strong>
+                        <span th:text="${#numbers.formatDecimal(coin.priceBuy,1,2)} + 'zł'"></span><br>
+                        <strong>Price Sell: </strong>
+                        <span th:text="${#numbers.formatDecimal(coin.priceSell,1,2)} + 'zł'"></span><br>
+                    </div>
                     <strong>Status: </strong>
                     <span th:text="${coin.statuses.status}"></span><br>
                     <strong>Status Sell: </strong>

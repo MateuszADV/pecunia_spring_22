@@ -8,7 +8,7 @@
             <h3 th:text="${note.currencies.currencySeries}"></h3>
         </div>
         <hr class="my-2">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 justify-content-center">
             <div sec:authorize="hasAuthority('ADMIN')" class="col field " style="float: left">
                 <strong>Id: </strong>
                 <span th:text="${note.id}"></span><br>
@@ -52,10 +52,12 @@
                 <span th:text="${#numbers.formatDecimal(note.width,1,0)} + 'mm'"></span><br>
                 <strong>Height: </strong>
                 <span th:text="${#numbers.formatDecimal(note.height,1,0)} + 'mm'"></span><br>
-                <strong sec:authorize="hasAuthority('ADMIN')">Price Buy: </strong>
-                <span sec:authorize="hasAuthority('ADMIN')" th:text="${#numbers.formatDecimal(note.priceBuy,1,2)} + 'zł'"></span><br>
-                <strong>Price Sell: </strong>
-                <span th:text="${#numbers.formatDecimal(note.priceSell,1,2)} + 'zł'"></span><br>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <strong>Price Buy: </strong>
+                    <span th:text="${#numbers.formatDecimal(note.priceBuy,1,2)} + 'zł'"></span><br>
+                    <strong>Price Sell: </strong>
+                    <span th:text="${#numbers.formatDecimal(note.priceSell,1,2)} + 'zł'"></span><br>
+                </div>
                 <strong>Status: </strong>
                 <span th:text="${note.statuses.status}"></span><br>
                 <strong>Status Sell: </strong>
