@@ -30,7 +30,7 @@ public class AppErrorController implements ErrorController {
         System.out.println("+++++++++++++++++++ERROR++++++++++++++++++++++++++++");
 //        System.out.println(JsonUtils.gsonPretty(request));
         System.out.println(JsonUtils.gsonPretty(request.getTrailerFields()));
-        System.out.println(request);
+        System.out.println(JsonUtils.gsonPretty(logger));
         System.out.println("+++++++++++++++++++ERROR++++++++++++++++++++++++++++");
         System.out.println(uri.toString());
 

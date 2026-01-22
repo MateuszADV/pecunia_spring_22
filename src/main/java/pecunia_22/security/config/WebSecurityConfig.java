@@ -80,14 +80,11 @@ public class WebSecurityConfig  {
 //               *********************NBP******************************************
                 .requestMatchers("/nbp/**").hasAnyAuthority("ADMIN", "USER")
 //               *********************CURRENCY******************************************
-                .requestMatchers("/currency", "/currency/show/**", "/currency/list/**")
-                .permitAll()
+                .requestMatchers("/currency", "/currency/show/**", "/currency/list/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/search")
                 .permitAll()
 //                .antMatchers("/test").hasAnyAuthority("USER")
                 .anyRequest().hasAnyAuthority("ADMIN"));
-
-
 
         http
                 .formLogin(withDefaults())
