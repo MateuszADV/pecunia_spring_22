@@ -11,8 +11,9 @@
         <section class="hero">
             <div class="container">
                 <h1 style="text-align: center">CONTINENT</h1>
-                <a th:href="@{/continent/new}" class="btn btn-sm btn-primary">Add new Continent</a>
-
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{/continent/new}" class="btn btn-sm btn-primary">Add new Continent</a>
+                </div>
                 <div class="container">
                     <div class="row">
                         <Block th:each="continent : ${continents}">

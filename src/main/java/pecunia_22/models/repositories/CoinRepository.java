@@ -48,13 +48,13 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             "    ON cou = cur.countries" +
             "  LEFT JOIN Continent con" +
             "    ON con = cou.continents" +
-            " WHERE stat = coin.statuses AND coin.visible = ?2" +
+            " WHERE stat = coin.statuses AND coin.visible = ?2 " +
             " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
             " ORDER BY cou.countryEn")
     List<Object[]> countryByStatus(String status, Boolean visible);
 
     @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
+            " cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
             "  FROM Coin coin" +
             "  LEFT JOIN Status stat" +
             "    ON stat.status = ?1" +
@@ -90,7 +90,7 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
 
     @Query(value = "SELECT coin FROM Coin coin " +
             "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2" +
+            "    ON stat.status = ?2 " +
             "WHERE coin.currencies.id = ?1 AND stat = coin.statuses  AND coin.visible = ?3 " +
             "ORDER BY coin.denomination")
     Page<Coin> coinPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);

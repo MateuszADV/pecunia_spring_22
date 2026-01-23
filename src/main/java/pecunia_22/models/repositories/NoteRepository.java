@@ -197,7 +197,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Query(value = "SELECT note FROM Note note " +
             "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2" +
+            "    ON stat.status = ?2 " +
             "WHERE note.currencies.id = ?1 AND stat = note.statuses  AND note.visible = ?3 " +
             "ORDER BY note.denomination")
     Page<Note> notePageable(Long currencyId, String status, Boolean visible, final Pageable pageable);

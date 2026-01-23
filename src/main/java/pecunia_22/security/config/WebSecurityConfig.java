@@ -70,19 +70,22 @@ public class WebSecurityConfig  {
 //                ********************NOTE FOR SELL ******************************************
                 .requestMatchers("/note/forSell/**")
                 .permitAll()
+//                ********************COIN COLLECTOIN*****************************************
+                .requestMatchers("/coin/collection/**").hasAnyAuthority("ADMIN", "USER")
 //                ********************Coin FOR SELL ******************************************
                 .requestMatchers("/coin/forSell/**")
                 .permitAll()
 //                ********************CONTINENT*****************************************
-                .requestMatchers("/continent/**")
-                .permitAll()
-//                *********************CURRENCY******************************************
-                .requestMatchers("/currency", "/currency/show/**", "/currency/list/**")
-                .permitAll()
+                .requestMatchers("/continent/**").hasAnyAuthority("ADMIN", "USER")
+//               *********************NBP******************************************
+                .requestMatchers("/nbp/**").hasAnyAuthority("ADMIN", "USER")
+//               *********************CURRENCY******************************************
+                .requestMatchers("/currency", "/currency/show/**", "/currency/list/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/search")
                 .permitAll()
 //                .antMatchers("/test").hasAnyAuthority("USER")
                 .anyRequest().hasAnyAuthority("ADMIN"));
+
         http
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults())
