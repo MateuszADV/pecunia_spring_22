@@ -103,6 +103,7 @@ public class SecureJsonMvcLoggerAspect {
         logData.put("ip", clientIp);
         logData.put("user", username);
         logData.put("uri", uri);
+//        logData.put("test",auth);
 
         if (log.isDebugEnabled()) {
             logData.put("model", maskSensitive(extractModelMap(args)));
