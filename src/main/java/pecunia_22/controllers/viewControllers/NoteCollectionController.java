@@ -57,7 +57,10 @@ public class NoteCollectionController {
                              ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
+        System.out.println("+++++++++++++++++++++++++++TU TUTUTU------------------------");
         System.out.println(continentEn);
+        System.out.println("+++++++++++++++++++++++++++TU TUTUTU------------------------");
+
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
         if (role == "ADMIN") {
             countryByStatusList = noteService.getCountryByStatus(continentEn, "KOLEKCJA", role);
