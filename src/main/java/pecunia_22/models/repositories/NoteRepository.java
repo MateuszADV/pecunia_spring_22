@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Note;
+import pecunia_22.models.dto.note.NoteUserDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
 
 import java.sql.Date;
@@ -16,13 +17,40 @@ import java.util.List;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
-    @Query(value = "SELECT note FROM Note note " +
-            "WHERE note.currencies.id = ?1")
-    List<Note> getNoteByCurrencyId(Long currencyId);
+//    @Query(value = "SELECT note FROM Note note " +
+//            "WHERE note.currencies.id = ?1")
+//    List<Note> getNoteByCurrencyId(Long currencyId);
+
+    // 1️⃣ Admin – pełna encja, z opcjonalnym filtrem po walucie
+    @Query("SELECT note FROM Note note " +
+           "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
+    List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
 
     @Query(value = "SELECT note FROM Note note " +
             "WHERE note.currencies.id = ?1 AND note.visible = ?2")
     List<Note> getNoteByCurrencyId(Long currencyId, Boolean visible);
+
+//    ------------------------------------------------------------------------------------------
+
+// 1️⃣ Admin – pełna encja, z opcjonalnym filtrem po walucie
+//@Query("SELECT note FROM Note note " +
+//        "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
+//List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
+//
+//    // 2️⃣ User – projekcja, tylko widoczne banknoty i opcjonalnie po walucie
+//    @Query("""
+//           SELECT new pecunia_22.models.dto.note.NoteUserDto(
+//               note.id, note.nameCurrency, note.priceSell,
+//               note.quantity, note.unitQuantity, note.description,
+//               note.aversPath, note.reversePath
+//           )
+//           FROM Note note
+//           WHERE note.visible = true
+//             AND (:currencyId IS NULL OR note.currencies.id = :currencyId)
+//           """)
+//    List<NoteUserDto> findVisibleNotes(@Param("currencyId") Long currencyId);
+
+//    ------------------------------------------------------------------------------------------
 
 
     @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
@@ -209,16 +237,75 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 //    ****NOTE UPDATE****
 //    *******************
 
-    @Transactional
     @Modifying
-    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5, " +
-                   "note.boughts.id = ?6, note.itemDate = ?7, note.quantity = ?8, note.unitQuantity = ?9, note.actives.id = ?10, note.priceBuy = ?11, note.priceSell = ?12, " +
-                   "note.makings.id = ?13, note.qualities.id = ?14, note.width = ?15, note.height = ?16, note.statuses.id = ?17, note.imageTypes.id = ?18, " +
-                   "note.statusSell = ?19, note.visible = ?20, note.description = ?21, note.aversPath = ?22, note.reversePath = ?23, note.serialNumber = ?24 "+
-                   "where note.id = ?25")
-    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
-                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
-                    Long making, Long quality, Integer width, Integer height, Long status, Long imageType,
-                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath, String serialNumber,
-                    Long noteId);
+    @Transactional
+    @Query("""
+UPDATE Note note SET
+    note.currencies.id = :currencyId,
+    note.denomination = :denomination,
+    note.dateBuy = :dateBuy,
+    note.nameCurrency = :nameCurrency,
+    note.series = :series,
+    note.boughts.id = :boughtId,
+    note.itemDate = :itemDate,
+    note.quantity = :quantity,
+    note.unitQuantity = :unitQuantity,
+    note.actives.id = :activesId,
+    note.priceBuy = :priceBuy,
+    note.priceSell = :priceSell,
+    note.makings.id = :makingId,
+    note.qualities.id = :qualityId,
+    note.width = :width,
+    note.height = :height,
+    note.statuses.id = :statusId,
+    note.imageTypes.id = :imageTypeId,
+    note.statusSell = :statusSell,
+    note.visible = :visible,
+    note.description = :description,
+    note.aversPath = :aversPath,
+    note.reversePath = :reversePath,
+    note.serialNumber = :serialNumber
+WHERE note.id = :noteId
+""")
+    void updateNote(
+            @Param("currencyId") Long currencyId,
+            @Param("denomination") Double denomination,
+            @Param("dateBuy") Date dateBuy,
+            @Param("nameCurrency") String nameCurrency,
+            @Param("series") String series,
+            @Param("boughtId") Long boughtId,
+            @Param("itemDate") String itemDate,
+            @Param("quantity") Integer quantity,
+            @Param("unitQuantity") String unitQuantity,
+            @Param("activesId") Long activesId,
+            @Param("priceBuy") Double priceBuy,
+            @Param("priceSell") Double priceSell,
+            @Param("makingId") Long makingId,
+            @Param("qualityId") Long qualityId,
+            @Param("width") Integer width,
+            @Param("height") Integer height,
+            @Param("statusId") Long statusId,
+            @Param("imageTypeId") Long imageTypeId,
+            @Param("statusSell") String statusSell,
+            @Param("visible") Boolean visible,
+            @Param("description") String description,
+            @Param("aversPath") String aversPath,
+            @Param("reversePath") String reversePath,
+            @Param("serialNumber") String serialNumber,
+            @Param("noteId") Long noteId
+    );
+
+
+//    @Transactional
+//    @Modifying
+//    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5, " +
+//                   "note.boughts.id = ?6, note.itemDate = ?7, note.quantity = ?8, note.unitQuantity = ?9, note.actives.id = ?10, note.priceBuy = ?11, note.priceSell = ?12, " +
+//                   "note.makings.id = ?13, note.qualities.id = ?14, note.width = ?15, note.height = ?16, note.statuses.id = ?17, note.imageTypes.id = ?18, " +
+//                   "note.statusSell = ?19, note.visible = ?20, note.description = ?21, note.aversPath = ?22, note.reversePath = ?23, note.serialNumber = ?24 "+
+//                   "where note.id = ?25")
+//    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+//                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
+//                    Long making, Long quality, Integer width, Integer height, Long status, Long imageType,
+//                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath, String serialNumber,
+//                    Long noteId);
 }
