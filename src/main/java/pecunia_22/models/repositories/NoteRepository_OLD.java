@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface NoteRepository extends JpaRepository<Note, Long> {
+public interface NoteRepository_OLD extends JpaRepository<Note, Long> {
     @Query(value = "SELECT note FROM Note note " +
             "WHERE note.currencies.id = ?1")
     List<Note> getNoteByCurrencyId(Long currencyId);
@@ -45,37 +45,35 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
      * @param continent
      * @return
      */
+    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
+            "  FROM Note note" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = note.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            "  LEFT JOIN Continent con" +
+            "    ON con = cou.continents" +
+            " WHERE stat = note.statuses AND con.continentEn = ?2" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
+            " ORDER BY cou.countryEn")
+    List<Object[]> countryByStatus(String status, String continent);
 
-    @Query("""
-    SELECT new pecunia_22.models.sqlClass.CountryByStatus(
-        con.continentEn,
-        con.continentCode,
-        cou.id,
-        cou.countryEn,
-        cou.countryPl,
-        COUNT(note.id)
-    )
-    FROM Note note
-    LEFT JOIN note.statuses stat
-    LEFT JOIN note.currencies cur
-    LEFT JOIN cur.countries cou
-    LEFT JOIN cou.continents con
-    WHERE stat.status = :status
-      AND con.continentEn = :continent
-      AND (:visible IS NULL OR note.visible = :visible)
-    GROUP BY
-        con.continentEn,
-        con.continentCode,
-        cou.id,
-        cou.countryEn,
-        cou.countryPl
-    ORDER BY cou.countryEn
-""")
-    List<CountryByStatus> countryByStatus(
-            @Param("status") String status,
-            @Param("continent") String continent,
-            @Param("visible") Boolean visible
-    );
+        @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
+            "  FROM Note note" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = note.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            "  LEFT JOIN Continent con" +
+            "    ON con = cou.continents" +
+            " WHERE stat = note.statuses AND con.continentEn = ?2 AND note.visible = ?3" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
+            " ORDER BY cou.countryEn")
+    List<Object[]> countryByStatus(String status, String continent, Boolean visible);
 
     @Query(value = "SELECT new map(cou.id AS countryId, con.continentEn AS continentEn, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
             "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +

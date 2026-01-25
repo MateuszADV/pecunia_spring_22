@@ -34,8 +34,8 @@ public class NoteForSellController {
         return "note/forSell/notes";
     }
 
-    @GetMapping("/note/forSell/list/")
-    private String getNoteForSellList(ModelMap modelMap) {
+    @GetMapping("/note/forSell/list")
+    public String getNoteForSellList(ModelMap modelMap) {
 //        List<Object[]> objects = noteRepository.getNotesByStatus("FOR SELL");
 //        List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
 //        for (Object[] object : objects) {

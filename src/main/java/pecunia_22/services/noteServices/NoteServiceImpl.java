@@ -71,12 +71,12 @@ public class NoteServiceImpl implements NoteService {
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = noteRepository.countryByStatus(status, continent);
+            countryByStatusList = noteRepository.countryByStatus(status, continent, null);
             for (Object[] object : objects) {
                 countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
             }
         } else {
-            objects = noteRepository.countryByStatus(status, continent, true);
+            countryByStatusList = noteRepository.countryByStatus(status, continent, true);
             for (Object[] object : objects) {
                 countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
             }
