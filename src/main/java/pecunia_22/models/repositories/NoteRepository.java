@@ -9,49 +9,41 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Note;
-import pecunia_22.models.dto.note.NoteUserDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
+import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.sql.Date;
 import java.util.List;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
-//    @Query(value = "SELECT note FROM Note note " +
-//            "WHERE note.currencies.id = ?1")
-//    List<Note> getNoteByCurrencyId(Long currencyId);
 
+    /**
+     * Pobiera wszystkie banknoty (Note) – widoczne dla administratora.
+     * -------
+     * Umożliwia opcjonalne filtrowanie po walucie.
+     * Jeśli `currencyId` jest null, zwraca wszystkie banknoty niezależnie od waluty.
+     *
+     * @param currencyId  ID waluty, po której można filtrować (opcjonalnie)
+     * @return Lista encji Note z pełnymi danymi banknotów
+     */
     // 1️⃣ Admin – pełna encja, z opcjonalnym filtrem po walucie
     @Query("SELECT note FROM Note note " +
            "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
     List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
 
+    /**
+     * Pobiera wszystkie banknoty (Note) widoczne dla użytkownika.
+     * --------
+     * Filtrowanie odbywa się po walucie (`currencyId`) oraz widoczności (`visible`).
+     *
+     * @param currencyId  ID waluty, po której filtrujemy
+     * @param visible     Widoczność banknotu dla użytkownika (true = widoczne)
+     * @return Lista encji Note spełniających kryteria filtrowania
+     */
     @Query(value = "SELECT note FROM Note note " +
             "WHERE note.currencies.id = ?1 AND note.visible = ?2")
     List<Note> getNoteByCurrencyId(Long currencyId, Boolean visible);
-
-//    ------------------------------------------------------------------------------------------
-
-// 1️⃣ Admin – pełna encja, z opcjonalnym filtrem po walucie
-//@Query("SELECT note FROM Note note " +
-//        "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
-//List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
-//
-//    // 2️⃣ User – projekcja, tylko widoczne banknoty i opcjonalnie po walucie
-//    @Query("""
-//           SELECT new pecunia_22.models.dto.note.NoteUserDto(
-//               note.id, note.nameCurrency, note.priceSell,
-//               note.quantity, note.unitQuantity, note.description,
-//               note.aversPath, note.reversePath
-//           )
-//           FROM Note note
-//           WHERE note.visible = true
-//             AND (:currencyId IS NULL OR note.currencies.id = :currencyId)
-//           """)
-//    List<NoteUserDto> findVisibleNotes(@Param("currencyId") Long currencyId);
-
-//    ------------------------------------------------------------------------------------------
-
 
     @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
             "  FROM Note note" +
@@ -69,11 +61,21 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Object[]> countryByStatus(String status);
 
     /**
-     * @param status
-     * @param continent
-     * @return
+     * Zwraca listę krajów w obrębie danego kontynentu wraz z liczbą not
+     * o określonym statusie.
+     * ------
+     * Zapytanie wykorzystywane do statystyk / zestawień (np. dashboard).
+     *
+     * @param status     status noty (np. COLLECTION, FOR_SALE, SOLD)
+     * @param continent  nazwa kontynentu (np. "Europe", "Asia")
+     * @param visible    opcjonalny filtr widoczności:
+     *                   - null  → wszystkie rekordy
+     *                   - true  → tylko widoczne
+     *                   - false → tylko niewidoczne
+     * -------
+     * @return lista krajów posortowana alfabetycznie według nazwy kraju (EN),
+     *         zawierająca liczbę not dla każdego kraju
      */
-
     @Query("""
     SELECT new pecunia_22.models.sqlClass.CountryByStatus(
         con.continentEn,
@@ -105,57 +107,106 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             @Param("visible") Boolean visible
     );
 
-    @Query(value = "SELECT new map(cou.id AS countryId, con.continentEn AS continentEn, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = note.statuses AND cou.id = ?2" +
-            " GROUP BY cou.countryEn, con.continentEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
-            " ORDER BY cur.currencySeries")
-    List<Object[]> currencyByStatus(String status, Long countryId);
+    /**
+     * Zwraca statystyki walut dla danego kraju i statusu notatek.
+     *
+     * @param status     status noty (np. COLLECTION, FOR_SALE)
+     * @param countryId  identyfikator kraju
+     * @param visible    opcjonalny filtr widoczności:
+     *                   - true  → tylko widoczne
+     *                   - false → tylko niewidoczne
+     *                   - null  → bez filtra widoczności
+     *
+     * @return lista statystyk walut (ilość not według serii waluty)
+     */
+    @Query("""
+    SELECT new pecunia_22.models.sqlClass.CurrencyByStatus(
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries,
+        COUNT(cur.id)
+    )
+    FROM Note note
+        JOIN note.statuses stat
+        JOIN note.currencies cur
+        JOIN cur.countries cou
+        JOIN cou.continents con
+    WHERE stat.status = :status
+      AND cou.id = :countryId
+      AND (:visible IS NULL OR note.visible = :visible)
+    GROUP BY
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries
+    ORDER BY cur.currencySeries
+""")
+    List<CurrencyByStatus> currencyByStatus(
+            @Param("status") String status,
+            @Param("countryId") Long countryId,
+            @Param("visible") Boolean visible
+    );
 
-    @Query(value = "SELECT new map(cou.id AS countryId, con.continentEn AS continentEn, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = note.statuses AND cou.id = ?2 AND note.visible = ?3" +
-            " GROUP BY cou.countryEn, con.continentEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
-            " ORDER BY cur.currencySeries")
-    List<Object[]> currencyByStatus(String status, Long countryId, Boolean visible);
 
-    @Query(value = "SELECT new map(note.qualities AS qualities, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
-            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
-            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
-            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Bought bou" +
-            "    ON bou = note.boughts" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            " WHERE stat = note.statuses AND bou.name = ?2" +
-            " GROUP BY note.qualities, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
-            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
-            " ORDER BY cou.countryEn, note.denomination")
-    List<Object[]> getNotesByStatusAndBought(String status, String bought);
+    /**
+     * Pobiera listę banknotów (Note) z uwzględnieniem statusu i miejsca zakupu (bought).
+     * ----
+     * Każdy rekord jest mapowany do klasy GetNotesByStatus, która zawiera:
+     * - dane kraju i kontynentu (countryId, countryEn, countryPl, continent)
+     * - dane waluty (currencyId, currencySeries)
+     * - informacje o zakupie (bought)
+     * - szczegóły banknotu (denomination, nameCurrency, itemDate, priceBuy, priceSell, quantity, unitQuantity)
+     * - encje powiązane: Quality i Making
+     * - dodatkowe informacje (visible, description, aversPath, reversePath, noteId, width, height)
+     * ----
+     * @param status  Status banknotu (np. "kolekcja", "na sprzedaż")
+     * @param bought  Nazwa miejsca zakupu banknotu
+     * @return Lista obiektów GetNotesByStatus z wszystkimi powiązanymi informacjami
+     */
+    @Query("""
+SELECT new map(
+    cou.id AS countryId,
+    cou.countryEn AS countryEn,
+    cou.countryPl AS countryPl,
+    cur.id AS currencyId,
+    cur.currencySeries AS currencySeries,
+    bou.name AS bought,
+    note.denomination AS denomination,
+    note.nameCurrency AS nameCurrency,
+    note.itemDate AS itemDate,
+    note.priceBuy AS priceBuy,
+    note.priceSell AS priceSell,
+    note.quantity AS quantity,
+    note.unitQuantity AS unitQuantity,
+    note.qualities AS qualities,
+    note.visible AS visible,
+    note.description AS description,
+    note.aversPath AS aversPath,
+    note.reversePath AS reversePath,
+    note.id AS noteId,
+    note.makings AS makings,
+    note.width AS width,
+    note.height AS height
+)
+    FROM Note note
+        JOIN note.statuses stat
+        JOIN note.boughts bou
+        JOIN note.currencies cur
+        JOIN cur.countries cou
+    WHERE stat.status = :status
+      AND bou.name = :bought
+    ORDER BY cou.countryEn, note.denomination
+""")
+    List<Object[]> getNotesByStatusAndBought(
+            @Param("status") String status,
+            @Param("bought") String bought
+    );
+
 
     @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
             "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
@@ -294,18 +345,4 @@ WHERE note.id = :noteId
             @Param("serialNumber") String serialNumber,
             @Param("noteId") Long noteId
     );
-
-
-//    @Transactional
-//    @Modifying
-//    @Query(value = "update Note note set note.currencies.id = ?1, note.denomination = ?2, note.dateBuy = ?3, note.nameCurrency = ?4, note.series = ?5, " +
-//                   "note.boughts.id = ?6, note.itemDate = ?7, note.quantity = ?8, note.unitQuantity = ?9, note.actives.id = ?10, note.priceBuy = ?11, note.priceSell = ?12, " +
-//                   "note.makings.id = ?13, note.qualities.id = ?14, note.width = ?15, note.height = ?16, note.statuses.id = ?17, note.imageTypes.id = ?18, " +
-//                   "note.statusSell = ?19, note.visible = ?20, note.description = ?21, note.aversPath = ?22, note.reversePath = ?23, note.serialNumber = ?24 "+
-//                   "where note.id = ?25")
-//    void updateNote(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
-//                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
-//                    Long making, Long quality, Integer width, Integer height, Long status, Long imageType,
-//                    String statusSell, Boolean visible, String  description, String aversePath, String ReversePath, String serialNumber,
-//                    Long noteId);
 }
