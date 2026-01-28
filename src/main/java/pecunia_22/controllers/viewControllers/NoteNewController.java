@@ -60,7 +60,9 @@ public class NoteNewController {
     @GetMapping("/note/newNotes/loc/")
     public String getNewNotesLoc(ModelMap modelMap) {
         List<Object[]> objects = noteRepository.getNotesByStatusAndBought("NEW", "LOC");
+
         List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
+//        getNotesByStatusList = noteRepository.getNotesByStatusAndBought("NEW", "LOC");
         for (Object[] object : objects) {
             getNotesByStatusList.add(new ModelMapper().map(object[0],GetNotesByStatus.class));
         }

@@ -94,15 +94,15 @@ public class NoteServiceImpl implements NoteService {
         System.out.println("=========================================================");
 
         if (role == "ADMIN") {
-            objects = noteRepository.currencyByStatus(status, countryId);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = noteRepository.currencyByStatus(status, countryId, null);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         } else {
-            objects = noteRepository.currencyByStatus(status, countryId, true);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = noteRepository.currencyByStatus(status, countryId, true);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         }
         return currencyByStatusList;
     }
