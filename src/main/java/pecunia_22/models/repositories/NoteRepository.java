@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import pecunia_22.models.Note;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.models.sqlClass.GetNotesByStatus;
 
 import java.sql.Date;
 import java.util.List;
@@ -45,20 +46,44 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "WHERE note.currencies.id = ?1 AND note.visible = ?2")
     List<Note> getNoteByCurrencyId(Long currencyId, Boolean visible);
 
-    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = note.statuses" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
-            " ORDER BY cou.countryEn")
-    List<Object[]> countryByStatus(String status);
+    /**
+     * Zwraca listę krajów pogrupowanych według kontynentu dla podanego statusu not.
+     * ------
+     * Zapytanie agregujące (GROUP BY), wykorzystywane do statystyk oraz widoków zbiorczych
+     * (np. listy krajów z liczbą not w danym statusie).
+     * ------
+     *   Każdy rekord reprezentuje jeden kraj
+     *   Wartość {@code total} oznacza liczbę not przypisanych do kraju
+     *   Wynik zwracany jest jako projekcja DTO {@link CountryByStatus}
+     *
+     * @param status status not (np. COLLECTION, SELL, SOLD)
+     * @return lista krajów z liczbą not w danym statusie
+     */
+    @Query("""
+    SELECT new pecunia_22.models.sqlClass.CountryByStatus(
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl,
+        COUNT(note.id)
+    )
+    FROM Note note
+        JOIN note.statuses stat
+        JOIN note.currencies cur
+        JOIN cur.countries cou
+        JOIN cou.continents con
+    WHERE stat.status = :status
+    GROUP BY
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    ORDER BY cou.countryEn
+""")
+    List<CountryByStatus> countryByStatus(@Param("status") String status);
+
 
     /**
      * Zwraca listę krajów w obrębie danego kontynentu wraz z liczbą not
@@ -208,67 +233,154 @@ SELECT new map(
     );
 
 
-    @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
-            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
-            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
-            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Bought bou" +
-            "    ON bou = note.boughts" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            " WHERE stat = note.statuses AND note.statusSell != ?2" +
-            " GROUP BY note.qualities, note.makings, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
-            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
-            " ORDER BY cou.countryEn, note.denomination")
-    List<Object[]> getNotesByStatus(String status, String statusSell);
+    /**
+     * Pobiera listę notatek dla podanego statusu.
+     * Każdy element Object[] zawiera w kolejności:
+     * 0 - countryId (Long)
+     * 1 - countryEn (String)
+     * 2 - countryPl (String)
+     * 3 - currencyId (Long)
+     * 4 - currencySeries (String)
+     * 5 - bought (String)
+     * 6 - denomination (Double)
+     * 7 - nameCurrency (String)
+     * 8 - itemDate (String)
+     * 9 - priceBuy (Double)
+     * 10 - priceSell (Double)
+     * 11 - quantity (Integer)
+     * 12 - unitQuantity (String)
+     * 13 - qualities (Quality entity)
+     * 14 - visible (Boolean)
+     * 15 - description (String)
+     * 16 - aversPath (String)
+     * 17 - reversePath (String)
+     * 18 - noteId (Long)
+     * 19 - makings (Making entity)
+     * 20 - width (Integer)
+     * 21 - height (Integer)
+     */
 
-    @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
-            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
-            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
-            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Bought bou" +
-            "    ON bou = note.boughts" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            " WHERE stat = note.statuses" +
-            " GROUP BY note.qualities, note.makings, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
-            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
-            " ORDER BY cou.countryEn, note.denomination")
-    List<Object[]> getNotesByStatus(String status);
+    /**
+     * Zwraca listę not dla danego statusu.
+     * ----------
+     * Zapytanie wykorzystywane do wyświetlania list not (widoki admina),
+     * z możliwością opcjonalnego:
+     *   wykluczenia statusu sprzedaży
+     *   filtrowania po kraju
+     * ------
+     * Wynik zwracany jest jako {@code Object[]} i mapowany dalej do DTO
+     * za pomocą ModelMappera.
+     *
+     * @param status wymagany status not (np. COLLECTION)
+     * @param excludedStatusSell opcjonalny status sprzedaży do wykluczenia (NULL = bez filtra)
+     * @param countryId opcjonalny identyfikator kraju (NULL = wszystkie kraje)
+     * @return lista not jako Object[]
+     */
+    @Query("""
+SELECT new map(
+    cou.id AS countryId,
+    cou.countryEn AS countryEn,
+    cou.countryPl AS countryPl,
+    cur.id AS currencyId,
+    cur.currencySeries AS currencySeries,
+    bou.name AS bought,
+    note.denomination AS denomination,
+    note.nameCurrency AS nameCurrency,
+    note.itemDate AS itemDate,
+    note.priceBuy AS priceBuy,
+    note.priceSell AS priceSell,
+    note.quantity AS quantity,
+    note.unitQuantity AS unitQuantity,
+    note.qualities AS qualities,
+    note.visible AS visible,
+    note.description AS description,
+    note.aversPath AS aversPath,
+    note.reversePath AS reversePath,
+    note.id AS noteId,
+    note.makings AS makings,
+    note.width AS width,
+    note.height AS height
+)
+FROM Note note
+        JOIN note.statuses stat
+        JOIN note.boughts bou
+        JOIN note.currencies cur
+        JOIN cur.countries cou
+    WHERE stat.status = :status
+      AND (:excludedStatusSell IS NULL OR note.statusSell <> :excludedStatusSell)
+      AND (:countryId IS NULL OR cou.id = :countryId)
+    ORDER BY cou.countryEn, note.denomination
+""")
+    List<Object[]> getNotesByStatus(
+            @Param("status") String status,
+            @Param("excludedStatusSell") String excludedStatusSell,
+            @Param("countryId") Long countryId
+    );
 
-    @Query(value = "SELECT new map(note.qualities AS qualities, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
-            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
-            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
-            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
-            "  FROM Note note" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Bought bou" +
-            "    ON bou = note.boughts" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = note.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Quality qua" +
-            "    ON qua = note.qualities" +
-            " WHERE stat = note.statuses AND cou.id = ?2" +
-            " GROUP BY note.qualities, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
-            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
-            " ORDER BY cou.countryEn, note.denomination")
-    List<Object[]> getNotesByStatus(String status, Long countrtyId);
+
+
+
+//    @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+//            "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
+//            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
+//            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
+//            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
+//            "  FROM Note note" +
+//            "  LEFT JOIN Status stat" +
+//            "    ON stat.status = ?1" +
+//            "  LEFT JOIN Bought bou" +
+//            "    ON bou = note.boughts" +
+//            "  LEFT JOIN Currency cur" +
+//            "    ON cur = note.currencies" +
+//            "  LEFT JOIN Country cou" +
+//            "    ON cou = cur.countries" +
+//            " WHERE stat = note.statuses AND note.statusSell != ?2" +
+//            " GROUP BY note.qualities, note.makings, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
+//            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
+//            " ORDER BY cou.countryEn, note.denomination")
+//    List<Object[]> getNotesByStatus(String status, String statusSell);
+//
+//    @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+//            "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
+//            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
+//            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
+//            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
+//            "  FROM Note note" +
+//            "  LEFT JOIN Status stat" +
+//            "    ON stat.status = ?1" +
+//            "  LEFT JOIN Bought bou" +
+//            "    ON bou = note.boughts" +
+//            "  LEFT JOIN Currency cur" +
+//            "    ON cur = note.currencies" +
+//            "  LEFT JOIN Country cou" +
+//            "    ON cou = cur.countries" +
+//            " WHERE stat = note.statuses" +
+//            " GROUP BY note.qualities, note.makings, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
+//            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
+//            " ORDER BY cou.countryEn, note.denomination")
+//    List<Object[]> getNotesByStatus(String status);
+//
+//    @Query(value = "SELECT new map(note.qualities AS qualities, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+//            "cur.currencySeries AS currencySeries, bou.name AS bought, note.denomination AS denomination, note.nameCurrency AS nameCurrency, note.itemDate AS itemDate, " +
+//            "note.priceBuy AS priceBuy, note.priceSell AS priceSell, note.quantity AS quantity, note.unitQuantity AS unitQuantity, " +
+//            "note.width AS width, note.height AS height, note.visible AS visible, note.description AS description, " +
+//            "note.aversPath AS aversPath, note.reversePath AS reversePath ) " +
+//            "  FROM Note note" +
+//            "  LEFT JOIN Status stat" +
+//            "    ON stat.status = ?1" +
+//            "  LEFT JOIN Bought bou" +
+//            "    ON bou = note.boughts" +
+//            "  LEFT JOIN Currency cur" +
+//            "    ON cur = note.currencies" +
+//            "  LEFT JOIN Country cou" +
+//            "    ON cou = cur.countries" +
+//            "  LEFT JOIN Quality qua" +
+//            "    ON qua = note.qualities" +
+//            " WHERE stat = note.statuses AND cou.id = ?2" +
+//            " GROUP BY note.qualities, note.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, bou.name, note.denomination, note.nameCurrency, note.itemDate, " +
+//            "          note.priceBuy, note.priceSell, note.quantity, note.unitQuantity, note.width, note.height, note.visible, note.description, note.aversPath, note.reversePath " +
+//            " ORDER BY cou.countryEn, note.denomination")
+//    List<Object[]> getNotesByStatus(String status, Long countrtyId);
 
     @Query(value = "SELECT note FROM Note note " +
             "  LEFT JOIN Status stat " +
