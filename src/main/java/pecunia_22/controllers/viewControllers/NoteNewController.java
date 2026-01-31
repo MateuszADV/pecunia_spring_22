@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.GetNotesByStatus;
+import pecunia_22.services.noteServices.NoteServiceImpl;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -19,20 +20,24 @@ import java.util.List;
 public class NoteNewController {
 
     private NoteRepository noteRepository;
+    private NoteServiceImpl noteService;
 
     @GetMapping("/note/newNotes")
     public String getIndex(ModelMap modelMap) {
         List<Object[]> objects;
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
-        objects = noteRepository.countryByStatus("NEW");
-        try {
-            System.out.println(JsonUtils.gsonPretty(objects));
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
 
+        try {
+             countryByStatusList = noteService.getCountryByStatusNote("NEW");
             modelMap.addAttribute("countryByStatusList", countryByStatusList);
-        }catch (Exception e) {
+//            countryByStatusList = noteRepository.countryByStatus("NEW");
+//            System.out.println(JsonUtils.gsonPretty(objects));
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
+            modelMap.addAttribute("countryByStatusList", countryByStatusList);
+        }
+        catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -46,7 +51,7 @@ public class NoteNewController {
         System.out.println("[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]C");
 
         List<Object[]> objects;
-        objects = noteRepository.getNotesByStatus("NEW", countryId);
+        objects = noteRepository.getNotesByStatus("NEW",null, countryId);
         List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getNotesByStatusList.add(new ModelMapper().map(object[0],GetNotesByStatus.class));

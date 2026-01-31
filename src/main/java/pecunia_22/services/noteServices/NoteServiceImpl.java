@@ -121,7 +121,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<GetNotesByStatus> getNoteByStatus(String status) {
-        List<Object[]> objects = noteRepository.getNotesByStatus(status);
+        List<Object[]> objects = noteRepository.getNotesByStatus(status, null, null);
         List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getNotesByStatusList.add(new ModelMapper().map(object[0],GetNotesByStatus.class));
@@ -131,8 +131,9 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<GetNotesByStatus> getNoteByStatus(String status, String statusSell) {
-        List<Object[]> objects = noteRepository.getNotesByStatus(status, statusSell);
         List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
+        List<Object[]> objects = noteRepository.getNotesByStatus(status, statusSell, null);
+
         for (Object[] object : objects) {
             getNotesByStatusList.add(new ModelMapper().map(object[0],GetNotesByStatus.class));
         }
@@ -142,7 +143,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<GetNotesByStatus> getNoteByStatus(String status, Long countryId) {
-        List<Object[]> objects = noteRepository.getNotesByStatus(status, countryId);
+        List<Object[]> objects = noteRepository.getNotesByStatus(status,null, countryId);
         List<GetNotesByStatus> getNotesByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getNotesByStatusList.add(new ModelMapper().map(object[0],GetNotesByStatus.class));
@@ -154,12 +155,13 @@ public class NoteServiceImpl implements NoteService {
     public List<CountryByStatus> getCountryByStatusNote(String status) {
         List<Object[]> objects;
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
-        objects = noteRepository.countryByStatus(status);
+
         try {
-            System.out.println(JsonUtils.gsonPretty(objects));
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = noteRepository.countryByStatus(status);
+//            System.out.println(JsonUtils.gsonPretty(objects));
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
