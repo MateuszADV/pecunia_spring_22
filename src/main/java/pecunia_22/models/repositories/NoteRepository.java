@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import pecunia_22.models.Note;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
-import pecunia_22.models.sqlClass.GetNotesByStatus;
 
 import java.sql.Date;
 import java.util.List;
@@ -234,8 +233,7 @@ SELECT new map(
             @Param("bought") String bought
     );
 
-
-    /**
+    /*
      * Pobiera listę notatek dla podanego statusu.
      * Każdy element Object[] zawiera w kolejności:
      * 0 - countryId (Long)
@@ -318,8 +316,6 @@ FROM Note note
             @Param("excludedStatusSell") String excludedStatusSell,
             @Param("countryId") Long countryId
     );
-
-
 
 
 //    @Query(value = "SELECT new map(note.qualities AS qualities, note.makings AS makings, note.id AS noteId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
