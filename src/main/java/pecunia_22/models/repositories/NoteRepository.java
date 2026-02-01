@@ -82,7 +82,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
         cou.countryPl
     ORDER BY cou.countryEn
 """)
-    List<CountryByStatus> countryByStatus(@Param("status") String status);
+    List<CountryByStatus> countryByStatus(
+            @Param("status") String status
+    );
 
 
     /**
