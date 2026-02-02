@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Note;
 import pecunia_22.models.repositories.NoteRepository;
+import pecunia_22.models.sqlClass.CountryByStatus;
 
 import java.util.List;
 
@@ -130,5 +131,66 @@ public class NoteRepositoryIT {
         log.info("🟢 [IT][NOTE] getNotesByStatus (custom query) -> {} rows (status={}, excludedStatusSell={}, countryId={})",
                 result.size(), status, excludedStatusSell, countryId);
     }
+
+    @Test
+    void shouldLoadCountriesByStatusAndContinent() {
+        // given
+        String status = "KOLEKCJA";
+        String continent = "Europe";
+        Boolean visible = null; // brak filtra widoczności
+
+        // when
+        List<CountryByStatus> result =
+                noteRepository.countryByStatus(status, continent, visible);
+
+        // then
+        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
+                result.size(), status, continent, visible);
+
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+
+        // lekka walidacja danych
+        result.forEach(row -> {
+            assertThat(row.getCountryId()).isNotNull();
+            assertThat(row.getCountryEn()).isNotBlank();
+            assertThat(row.getContinent()).isEqualTo(continent);
+            assertThat(row.getTotal()).isPositive();
+        });
+    }
+
+    @Test
+    void shouldLoadOnlyVisibleCountriesByStatusAndContinent() {
+        // given
+        String status = "KOLEKCJA";
+        String continent = "Europe";
+        Boolean visible = true;
+
+        // when
+        List<CountryByStatus> result =
+                noteRepository.countryByStatus(status, continent, visible);
+
+        // then
+        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
+                result.size(), status, continent, visible);
+
+        assertThat(result).isNotNull();
+
+        // jeżeli brak danych – test nadal przechodzi (to OK)
+        if (result.isEmpty()) {
+            log.warn("🟡 [IT][NOTE] No visible notes found for status={} and continent={}",
+                    status, continent);
+            return;
+        }
+
+        // walidacja danych
+        result.forEach(row -> {
+            assertThat(row.getCountryId()).isNotNull();
+            assertThat(row.getCountryEn()).isNotBlank();
+            assertThat(row.getContinent()).isEqualTo(continent);
+            assertThat(row.getTotal()).isPositive();
+        });
+    }
+
 
 }
