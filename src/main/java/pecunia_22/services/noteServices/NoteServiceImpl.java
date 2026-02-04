@@ -1,5 +1,6 @@
 package pecunia_22.services.noteServices;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetNotesByStatus;
+import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -112,7 +114,7 @@ public class NoteServiceImpl implements NoteService {
         List<Note> notes = new ArrayList<>();
         if (role == "ADMIN") {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-            return this.noteRepository.notePageable(currencyId, status, pageable);
+            return this.noteRepository.notePageable(currencyId, status, null, pageable);
         } else {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.noteRepository.notePageable(currencyId, status, true, pageable);
@@ -168,12 +170,20 @@ public class NoteServiceImpl implements NoteService {
         return countryByStatusList;
     }
 
+    @MeasureTime(value = "Update note in DB", color = MeasureTime.ConsoleColor.GREEN)
+//    @MeasureTime("Update note in DB")
     @Override
+    @Transactional
     public void updateNote(Note note) {
-        noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(),
-                note.getBoughts().getId(), note.getItemDate(), note.getQuantity(), note.getUnitQuantity(), note.getActives().getId(), note.getPriceBuy(), note.getPriceSell(),
-                note.getMakings().getId(), note.getQualities().getId(), note.getWidth(), note.getHeight(), note.getStatuses().getId(), note.getImageTypes().getId(),
-                note.getStatusSell(), note.getVisible(), note.getDescription(), note.getAversPath(), note.getReversePath(), note.getSerialNumber(),
-                note.getId());
+        noteRepository.updateNote(note);
     }
+//
+//    @Override
+//    public void updateNote(Note note) {
+//        noteRepository.updateNote(note.getCurrencies().getId(), note.getDenomination(), note.getDateBuy(), note.getNameCurrency(), note.getSeries(),
+//                note.getBoughts().getId(), note.getItemDate(), note.getQuantity(), note.getUnitQuantity(), note.getActives().getId(), note.getPriceBuy(), note.getPriceSell(),
+//                note.getMakings().getId(), note.getQualities().getId(), note.getWidth(), note.getHeight(), note.getStatuses().getId(), note.getImageTypes().getId(),
+//                note.getStatusSell(), note.getVisible(), note.getDescription(), note.getAversPath(), note.getReversePath(), note.getSerialNumber(),
+//                note.getId());
+//    }
 }
