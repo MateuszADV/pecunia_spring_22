@@ -144,8 +144,7 @@ public class NoteRepositoryIT {
                 noteRepository.countryByStatus(status, continent, visible);
 
         // then
-        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
-                result.size(), status, continent, visible);
+        getInfo(result, status, continent, visible);
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -171,8 +170,7 @@ public class NoteRepositoryIT {
                 noteRepository.countryByStatus(status, continent, visible);
 
         // then
-        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
-                result.size(), status, continent, visible);
+        getInfo(result, status, continent, visible);
 
         assertThat(result).isNotNull();
 
@@ -190,6 +188,11 @@ public class NoteRepositoryIT {
             assertThat(row.getContinent()).isEqualTo(continent);
             assertThat(row.getTotal()).isPositive();
         });
+    }
+
+    private static void getInfo(List<CountryByStatus> result, String status, String continent, Boolean visible) {
+        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
+                result.size(), status, continent, visible);
     }
 
 
