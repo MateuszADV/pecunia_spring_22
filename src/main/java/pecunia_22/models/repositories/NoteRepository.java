@@ -317,79 +317,150 @@ FROM Note note
             @Param("countryId") Long countryId
     );
 
-    @Query(value = "SELECT note FROM Note note " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE note.currencies.id = ?1 AND stat = note.statuses " +
-            "ORDER BY note.denomination")
-    Page<Note> notePageable(Long currencyId, String status, final Pageable pageable);
 
-    @Query(value = "SELECT note FROM Note note " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE note.currencies.id = ?1 AND stat = note.statuses  AND note.visible = ?3 " +
-            "ORDER BY note.denomination")
-    Page<Note> notePageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
+    /**
+     * Returns paginated notes filtered by:
+     * <ul>
+     *   <li>currency ID</li>
+     *   <li>note status (e.g. NEW, USED)</li>
+     *   <li>optional visibility flag</li>
+     * </ul>
+     *
+     * <p>If {@code visible} is {@code null}, notes are returned regardless of visibility.</p>
+     *
+     * <p>Results are ordered by note denomination in ascending order.</p>
+     *
+     * @param currencyId required currency identifier
+     * @param status     required note status
+     * @param visible    optional visibility filter (true / false / null)
+     * @param pageable   pagination and sorting information
+     * @return paginated list of {@link Note}
+     */
+    @Query("""
+    SELECT note
+    FROM Note note
+        JOIN note.statuses stat
+    WHERE note.currencies.id = :currencyId
+      AND stat.status = :status
+      AND (:visible IS NULL OR note.visible = :visible)
+    ORDER BY note.denomination
+""")
+    Page<Note> notePageable(
+            @Param("currencyId") Long currencyId,
+            @Param("status") String status,
+            @Param("visible") Boolean visible,
+            Pageable pageable
+    );
+
+
+//
+//    @Query(value = "SELECT note FROM Note note " +
+//            "  LEFT JOIN Status stat " +
+//            "    ON stat.status = ?2 " +
+//            "WHERE note.currencies.id = ?1 AND stat = note.statuses " +
+//            "ORDER BY note.denomination")
+//    Page<Note> notePageable(Long currencyId, String status, final Pageable pageable);
+//
+//    @Query(value = "SELECT note FROM Note note " +
+//            "  LEFT JOIN Status stat " +
+//            "    ON stat.status = ?2 " +
+//            "WHERE note.currencies.id = ?1 AND stat = note.statuses  AND note.visible = ?3 " +
+//            "ORDER BY note.denomination")
+//    Page<Note> notePageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
 
 //    *******************
 //    ****NOTE UPDATE****
 //    *******************
 
-    @Modifying
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
     @Query("""
-UPDATE Note note SET
-    note.currencies.id = :currencyId,
-    note.denomination = :denomination,
-    note.dateBuy = :dateBuy,
-    note.nameCurrency = :nameCurrency,
-    note.series = :series,
-    note.boughts.id = :boughtId,
-    note.itemDate = :itemDate,
-    note.quantity = :quantity,
-    note.unitQuantity = :unitQuantity,
-    note.actives.id = :activesId,
-    note.priceBuy = :priceBuy,
-    note.priceSell = :priceSell,
-    note.makings.id = :makingId,
-    note.qualities.id = :qualityId,
-    note.width = :width,
-    note.height = :height,
-    note.statuses.id = :statusId,
-    note.imageTypes.id = :imageTypeId,
-    note.statusSell = :statusSell,
-    note.visible = :visible,
-    note.description = :description,
-    note.aversPath = :aversPath,
-    note.reversePath = :reversePath,
-    note.serialNumber = :serialNumber
-WHERE note.id = :noteId
-""")
-    void updateNote(
-            @Param("currencyId") Long currencyId,
-            @Param("denomination") Double denomination,
-            @Param("dateBuy") Date dateBuy,
-            @Param("nameCurrency") String nameCurrency,
-            @Param("series") String series,
-            @Param("boughtId") Long boughtId,
-            @Param("itemDate") String itemDate,
-            @Param("quantity") Integer quantity,
-            @Param("unitQuantity") String unitQuantity,
-            @Param("activesId") Long activesId,
-            @Param("priceBuy") Double priceBuy,
-            @Param("priceSell") Double priceSell,
-            @Param("makingId") Long makingId,
-            @Param("qualityId") Long qualityId,
-            @Param("width") Integer width,
-            @Param("height") Integer height,
-            @Param("statusId") Long statusId,
-            @Param("imageTypeId") Long imageTypeId,
-            @Param("statusSell") String statusSell,
-            @Param("visible") Boolean visible,
-            @Param("description") String description,
-            @Param("aversPath") String aversPath,
-            @Param("reversePath") String reversePath,
-            @Param("serialNumber") String serialNumber,
-            @Param("noteId") Long noteId
-    );
+        UPDATE Note n
+        SET
+            n.currencies.id = :#{#note.currencies.id},
+            n.denomination = :#{#note.denomination},
+            n.dateBuy = :#{#note.dateBuy},
+            n.nameCurrency = :#{#note.nameCurrency},
+            n.series = :#{#note.series},
+            n.boughts.id = :#{#note.boughts.id},
+            n.itemDate = :#{#note.itemDate},
+            n.quantity = :#{#note.quantity},
+            n.unitQuantity = :#{#note.unitQuantity},
+            n.actives.id = :#{#note.actives.id},
+            n.priceBuy = :#{#note.priceBuy},
+            n.priceSell = :#{#note.priceSell},
+            n.makings.id = :#{#note.makings.id},
+            n.qualities.id = :#{#note.qualities.id},
+            n.width = :#{#note.width},
+            n.height = :#{#note.height},
+            n.statuses.id = :#{#note.statuses.id},
+            n.imageTypes.id = :#{#note.imageTypes.id},
+            n.statusSell = :#{#note.statusSell},
+            n.visible = :#{#note.visible},
+            n.description = :#{#note.description},
+            n.aversPath = :#{#note.aversPath},
+            n.reversePath = :#{#note.reversePath},
+            n.serialNumber = :#{#note.serialNumber}
+        WHERE n.id = :#{#note.id}
+    """)
+    void updateNote(@Param("note") Note note);
+
+//    @Modifying
+//    @Transactional
+//    @Query("""
+//UPDATE Note note SET
+//    note.currencies.id = :currencyId,
+//    note.denomination = :denomination,
+//    note.dateBuy = :dateBuy,
+//    note.nameCurrency = :nameCurrency,
+//    note.series = :series,
+//    note.boughts.id = :boughtId,
+//    note.itemDate = :itemDate,
+//    note.quantity = :quantity,
+//    note.unitQuantity = :unitQuantity,
+//    note.actives.id = :activesId,
+//    note.priceBuy = :priceBuy,
+//    note.priceSell = :priceSell,
+//    note.makings.id = :makingId,
+//    note.qualities.id = :qualityId,
+//    note.width = :width,
+//    note.height = :height,
+//    note.statuses.id = :statusId,
+//    note.imageTypes.id = :imageTypeId,
+//    note.statusSell = :statusSell,
+//    note.visible = :visible,
+//    note.description = :description,
+//    note.aversPath = :aversPath,
+//    note.reversePath = :reversePath,
+//    note.serialNumber = :serialNumber
+//WHERE note.id = :noteId
+//""")
+//    void updateNote(
+//            @Param("currencyId") Long currencyId,
+//            @Param("denomination") Double denomination,
+//            @Param("dateBuy") Date dateBuy,
+//            @Param("nameCurrency") String nameCurrency,
+//            @Param("series") String series,
+//            @Param("boughtId") Long boughtId,
+//            @Param("itemDate") String itemDate,
+//            @Param("quantity") Integer quantity,
+//            @Param("unitQuantity") String unitQuantity,
+//            @Param("activesId") Long activesId,
+//            @Param("priceBuy") Double priceBuy,
+//            @Param("priceSell") Double priceSell,
+//            @Param("makingId") Long makingId,
+//            @Param("qualityId") Long qualityId,
+//            @Param("width") Integer width,
+//            @Param("height") Integer height,
+//            @Param("statusId") Long statusId,
+//            @Param("imageTypeId") Long imageTypeId,
+//            @Param("statusSell") String statusSell,
+//            @Param("visible") Boolean visible,
+//            @Param("description") String description,
+//            @Param("aversPath") String aversPath,
+//            @Param("reversePath") String reversePath,
+//            @Param("serialNumber") String serialNumber,
+//            @Param("noteId") Long noteId
+//    );
 }

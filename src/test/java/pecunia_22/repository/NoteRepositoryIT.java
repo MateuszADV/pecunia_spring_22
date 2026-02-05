@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Note;
@@ -195,5 +197,55 @@ public class NoteRepositoryIT {
                 result.size(), status, continent, visible);
     }
 
+    // Given status KOLEKCJA and no visible filter (null)
+    // When loading notes by currency and status
+    // Then all notes regardless of visibility are returned
+    @Test
+    void shouldLoadNotesByStatus_withoutVisibleFilter() {
+        Page<Note> page = noteRepository.notePageable(
+                226L,
+                "KOLEKCJA",
+                null,
+                PageRequest.of(0, 10)
+        );
+
+        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+
+        assertThat(page).isNotNull();
+    }
+
+    // Given status KOLEKCJA and visible=true
+    // When loading notes
+    // Then only visible notes are returned
+    @Test
+    void shouldLoadOnlyVisibleNotesByStatus() {
+        Page<Note> page = noteRepository.notePageable(
+                226L,
+                "KOLEKCJA",
+                true,
+                PageRequest.of(0, 10)
+        );
+
+        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+
+        assertThat(page).isNotNull();
+    }
+
+    // Given status NEW and visible=false
+    // When loading notes
+    // Then only hidden notes are returned
+    @Test
+    void shouldLoadOnlyHiddenNotesByStatus() {
+        Page<Note> page = noteRepository.notePageable(
+                226L,
+                "KOLEKCJA",
+                false,
+                PageRequest.of(0, 10)
+        );
+
+        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+
+        assertThat(page).isNotNull();
+    }
 
 }

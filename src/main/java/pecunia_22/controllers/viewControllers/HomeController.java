@@ -36,6 +36,7 @@ import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
 import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.apiService.ApiServiceImpl;
+import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
 import java.io.BufferedReader;
@@ -57,6 +58,7 @@ public class HomeController {
     private ApiServiceImpl apiService;
     private CountryRepository countryRepository;
 
+    @MeasureTime(value = "HOME INDEX", color = MeasureTime.ConsoleColor.GREEN)
     @GetMapping("/")
     public String getIndex(ModelMap modelMap) {
         GetRateCurrencyTableA getRateCurrencyTableA = new GetRateCurrencyTableA();
