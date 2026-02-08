@@ -6,16 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Coin;
-import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface CoinRepository extends JpaRepository<Coin, Long> {
+public interface CoinRepository_OLD extends JpaRepository<Coin, Long> {
 
     @Query(value = "SELECT coin FROM Coin coin " +
             " WHERE coin.currencies.id = ?1")
@@ -40,7 +38,7 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             " ORDER BY cou.countryEn")
     List<Object[]> countryByStatus(String status);
 
-        @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
+    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
             "  FROM Coin coin" +
             "  LEFT JOIN Status stat" +
             "    ON stat.status = ?1" +
@@ -55,67 +53,33 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             " ORDER BY cou.countryEn")
     List<Object[]> countryByStatus(String status, Boolean visible);
 
+    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+            " cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
+            "  FROM Coin coin" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = coin.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            " WHERE stat = coin.statuses AND cou.id = ?2" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
+            " ORDER BY cur.currencySeries")
+    List<Object[]> currencyByStatus(String status, Long countryId);
 
-    /**
-     * Zwraca listę walut (Currency) pogrupowanych według kraju,
-     * wraz z liczbą monet przypisanych do danej waluty,
-     * filtrowanych po statusie oraz opcjonalnej widoczności.
-     *
-     * <p>Zapytanie:
-     * <ul>
-     *   <li>filtruje monety po {@code status}</li>
-     *   <li>ogranicza wynik do jednego kraju ({@code countryId})</li>
-     *   <li>opcjonalnie filtruje po polu {@code visible}
-     *       (jeśli {@code visible} = {@code null}, filtr jest pomijany)</li>
-     * </ul>
-     *
-     * <p>Wynik mapowany jest bezpośrednio do DTO {@link CurrencyByStatus},
-     * co eliminuje potrzebę ręcznego mapowania {@code Object[]}.
-     *
-     * <p>Typowe zastosowanie:
-     * <ul>
-     *   <li>statystyki kolekcji monet</li>
-     *   <li>widoki agregujące dane per waluta</li>
-     * </ul>
-     *
-     * @param status    status monety (np. {@code KOLEKCJA})
-     * @param countryId identyfikator kraju
-     * @param visible   opcjonalny filtr widoczności ({@code true}/{@code false}/{@code null})
-     * @return lista walut wraz z liczbą przypisanych monet
-     */
-    @Query("""
-SELECT new pecunia_22.models.sqlClass.CurrencyByStatus(
-    cou.id,
-    con.continentEn,
-    cou.countryEn,
-    cou.countryPl,
-    cur.id,
-    cur.currencySeries,
-    COUNT(coin.id)
-)
-FROM Coin coin
-    JOIN coin.statuses stat
-    JOIN coin.currencies cur
-    JOIN cur.countries cou
-    JOIN cou.continents con
-WHERE stat.status = :status
-  AND cou.id = :countryId
-  AND (:visible IS NULL OR coin.visible = :visible)
-GROUP BY
-    cou.id,
-    con.continentEn,
-    cou.countryEn,
-    cou.countryPl,
-    cur.id,
-    cur.currencySeries
-ORDER BY cur.currencySeries
-""")
-    List<CurrencyByStatus> currencyByStatus(
-            @Param("status") String status,
-            @Param("countryId") Long countryId,
-            @Param("visible") Boolean visible
-    );
-
+    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
+            "  FROM Coin coin" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = coin.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            " WHERE stat = coin.statuses AND cou.id = ?2 AND coin.visible = ?3" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
+            " ORDER BY cur.currencySeries")
+    List<Object[]> currencyByStatus(String status, Long countryId, Boolean visible);
 
     @Query(value = "SELECT coin FROM Coin coin " +
             "  LEFT JOIN Status stat " +

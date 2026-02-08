@@ -103,15 +103,17 @@ public class CoinServiceImpl implements CoinService {
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = coinRepository.currencyByStatus(status, countryId);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = coinRepository.currencyByStatus(status, countryId, null);
+//            objects = coinRepository.currencyByStatus(status, countryId, null);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         } else {
-            objects = coinRepository.currencyByStatus(status, countryId, true);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = coinRepository.currencyByStatus(status, countryId, true);
+//            objects = coinRepository.currencyByStatus(status, countryId, true);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         }
         return currencyByStatusList;
     }

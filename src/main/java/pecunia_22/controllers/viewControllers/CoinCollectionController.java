@@ -55,6 +55,10 @@ public class CoinCollectionController {
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
+        System.out.println("==================================================");
+        System.out.println("Coin Country");
+        System.out.println("==================================================");
+
         System.out.println(countryId);
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
         if (role == "ADMIN") {
