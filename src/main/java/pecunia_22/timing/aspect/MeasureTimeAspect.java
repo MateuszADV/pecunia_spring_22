@@ -29,7 +29,7 @@ public class MeasureTimeAspect {
         String colorPrefix = getColorPrefix(measureTime.color());
         String colorSuffix = getColorSuffix(measureTime.color());
 
-        String message = String.format("%s⏱ [MeasureTime] %s %s executed in %d ms%s",
+        String message = String.format("\n%s⏱ [MeasureTime] %s %s executed in %d ms%s",
                 colorPrefix,
                 description.isEmpty() ? "" : "[" + description + "]",
                 methodName,

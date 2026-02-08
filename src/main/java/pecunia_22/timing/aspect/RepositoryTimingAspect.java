@@ -24,7 +24,7 @@ public class RepositoryTimingAspect {
         String color = elapsed > 50 ? "\u001B[31m" : "\u001B[32m"; // ANSI: 32=green, 31=red
         String reset = "\u001B[0m";
 
-        log.info(color + "🕒 [REPO] {} executed in {} ms" + reset, methodName, elapsed);
+        log.info(color + "\n🕒 [REPO] {} executed in {} ms" + reset, methodName, elapsed);
 
         return result;
     }
@@ -42,7 +42,7 @@ public class RepositoryTimingAspect {
         String color = elapsed > 50 ? "\u001B[31m" : "\u001B[32m"; // ANSI: 32=green, 31=red
         String reset = "\u001B[0m";
 
-        log.info(color + "🕒 [REPO] {} executed in {} ms" + reset, methodName, elapsed);
+        log.info(color + "\n🕒 [REPO] {} executed in {} ms" + reset, methodName, elapsed);
 
         return result;
     }
