@@ -24,12 +24,14 @@ public class CoinForSellController {
     public String getindex(ModelMap modelMap) {
         List<Object[]> objects;
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
-        objects = coinRepository.countryByStatus("FOR SELL");
+//        objects = coinRepository.countryByStatus("FOR SELL");
+
         try {
-            System.out.println(JsonUtils.gsonPretty(objects));
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+//            System.out.println(JsonUtils.gsonPretty(objects));
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
+            countryByStatusList = coinRepository.countryByStatus("FOR SELL");
 
             modelMap.addAttribute("countryByStatusList", countryByStatusList);
         }catch (Exception e) {

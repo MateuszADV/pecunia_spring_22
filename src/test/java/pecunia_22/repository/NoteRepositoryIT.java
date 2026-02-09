@@ -86,7 +86,7 @@ public class NoteRepositoryIT {
 
         log.info("getNotesByStatus returned {} rows for status={}",
                 result.size(), status);
-        log.info("🟢 [IT][NOTE] getNotesByStatus -> {} rows (status={})",
+        log.info("\n🟢 [IT][NOTE] getNotesByStatus -> {} rows (status={})",
                 result.size(), status);
     }
 
@@ -125,12 +125,12 @@ public class NoteRepositoryIT {
 
         // dodatkowy wariant – bez filtrów excludedStatusSell i countryId null
         List<Object[]> resultNoFilter = noteRepository.getNotesByStatus(status, null, null);
-        log.info("🟢 [IT][NOTE] getNotesByStatus (no filters) -> {} rows (status={})", resultNoFilter.size(), status);
+        log.info("\n🟢 [IT][NOTE] getNotesByStatus (no filters) -> {} rows (status={})", resultNoFilter.size(), status);
         assertThat(resultNoFilter).isNotEmpty();
     }
 
     private static void getInfo(List<Object[]> result, String status, String excludedStatusSell, Long countryId) {
-        log.info("🟢 [IT][NOTE] getNotesByStatus (custom query) -> {} rows (status={}, excludedStatusSell={}, countryId={})",
+        log.info("\n🟢 [IT][NOTE] getNotesByStatus (custom query) -> {} rows (status={}, excludedStatusSell={}, countryId={})",
                 result.size(), status, excludedStatusSell, countryId);
     }
 
@@ -178,7 +178,7 @@ public class NoteRepositoryIT {
 
         // jeżeli brak danych – test nadal przechodzi (to OK)
         if (result.isEmpty()) {
-            log.warn("🟡 [IT][NOTE] No visible notes found for status={} and continent={}",
+            log.warn("\n🟡 [IT][NOTE] No visible notes found for status={} and continent={}",
                     status, continent);
             return;
         }
@@ -193,7 +193,7 @@ public class NoteRepositoryIT {
     }
 
     private static void getInfo(List<CountryByStatus> result, String status, String continent, Boolean visible) {
-        log.info("🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
+        log.info("\n🟢 [IT][NOTE] countryByStatus -> {} rows (status={}, continent={}, visible={})",
                 result.size(), status, continent, visible);
     }
 
@@ -209,7 +209,7 @@ public class NoteRepositoryIT {
                 PageRequest.of(0, 10)
         );
 
-        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+        log.info("\n🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
 
         assertThat(page).isNotNull();
     }
@@ -226,7 +226,7 @@ public class NoteRepositoryIT {
                 PageRequest.of(0, 10)
         );
 
-        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+        log.info("\n🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
 
         assertThat(page).isNotNull();
     }
@@ -243,7 +243,7 @@ public class NoteRepositoryIT {
                 PageRequest.of(0, 10)
         );
 
-        log.info("🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
+        log.info("\n🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
 
         assertThat(page).isNotNull();
     }

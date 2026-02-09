@@ -74,15 +74,17 @@ public class CoinServiceImpl implements CoinService {
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = coinRepository.countryByStatus(status);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = coinRepository.countryByStatus(status);
+//            objects = coinRepository.countryByStatus(status);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         } else {
-            objects = coinRepository.countryByStatus(status, true);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = coinRepository.countryByStatus(status, true);
+//            objects = coinRepository.countryByStatus(status, true);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         }
         return countryByStatusList;
     }
@@ -135,12 +137,13 @@ public class CoinServiceImpl implements CoinService {
 
         List<Object[]> objects;
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
-        objects = coinRepository.countryByStatus(status);
+        countryByStatusList = coinRepository.countryByStatus(status);
+//        objects = coinRepository.countryByStatus(status);
 
-        System.out.println(JsonUtils.gsonPretty(objects));
-        for (Object[] object : objects) {
-            countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-        }
+//        System.out.println(JsonUtils.gsonPretty(objects));
+//        for (Object[] object : objects) {
+//            countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//        }
         return countryByStatusList;
     }
 

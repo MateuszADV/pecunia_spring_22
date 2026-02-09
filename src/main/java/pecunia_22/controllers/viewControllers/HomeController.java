@@ -3,10 +3,8 @@ package pecunia_22.controllers.viewControllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Invocation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,14 +31,11 @@ import pecunia_22.models.others.moneyMetals.MoneyMetal;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.registration.RegistrationRequest;
 import pecunia_22.registration.RegistrationService;
-import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.apiService.ApiServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
@@ -49,16 +43,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class HomeController {
 
     private RegistrationService registrationService;
-    private UserCheckLoged userCheckLoged;
     private ApiServiceImpl apiService;
     private CountryRepository countryRepository;
 
-    @MeasureTime(value = "HOME INDEX", color = MeasureTime.ConsoleColor.GREEN)
+    @MeasureTime(
+            value = "HOME-PAGE",
+            thresholdMs = 100,
+            color = MeasureTime.ConsoleColor.GREEN
+    )
     @GetMapping("/")
     public String getIndex(ModelMap modelMap) {
         GetRateCurrencyTableA getRateCurrencyTableA = new GetRateCurrencyTableA();
@@ -114,7 +112,7 @@ public class HomeController {
     }
 
     @PostMapping("/registration")
-    public String postRegistration(@ModelAttribute("userForm") @Valid RegistrationRequest request, BindingResult result, Model model){
+    public String postRegistration(@ModelAttribute("userForm") @Valid RegistrationRequest request, BindingResult result){
         if (result.hasErrors()) {
             return "home/registration";
         }
@@ -122,7 +120,8 @@ public class HomeController {
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%TU COś POWINNO SIę DZIAć$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             registrationService.register(request);
         }catch (Exception e) {
-            System.out.println(e.fillInStackTrace());
+//            System.out.println(e.fillInStackTrace());
+            log.error("Błąd: {}", e.getMessage());
         }
         return "redirect:/";
     }
@@ -150,7 +149,6 @@ public class HomeController {
                           HttpServletResponse response){
         System.out.println("==============STRONA TESTOWA===================");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
         System.out.println(authentication.getName());
         System.out.println(authentication.getPrincipal().toString());
         System.out.println(authentication.getDetails().toString());
@@ -208,6 +206,11 @@ public class HomeController {
         return "home/test";
     }
 
+    @MeasureTime(
+            value = "METAL",
+            thresholdMs = 100,
+            color = MeasureTime.ConsoleColor.GREEN
+    )
     @GetMapping("/metal")
     public String getMetal(ModelMap modelMap){
         modelMap.addAttribute("standardDate", new Date());
@@ -264,9 +267,9 @@ public class HomeController {
                 Map<String, Object> rate = jsonObject.getJSONObject("spot_prices").toMap();
                 Date res = new Date(milliSec);
 
-                rate.forEach((k, v) -> {
-                    moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())));
-                });
+                rate.forEach((k, v) ->
+                    moneyMetals.add(new MoneyMetal(k, Float.parseFloat(v.toString())))
+                );
 
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println(moneyMetals);
@@ -330,12 +333,14 @@ public class HomeController {
 
                 connection.disconnect();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Błąd: {}", e.getMessage());
+//                e.printStackTrace();
             }
             System.out.println("+++++++++++++++++++++NAGŁÓWKI HTTP STOP+++++++++++++++++++++++++++++++++++++");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Błąd: {}", e.getMessage());
+//            e.printStackTrace();
         }
 
         return "home/moneyMetal";
