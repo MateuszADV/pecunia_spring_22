@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.repositories.CoinRepository;
+import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class CoinRepositoryIT {
         assertThat(result).isNotEmpty();
 
         log.info(
-                "🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=true)",
+                "\n🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=true)",
                 result.size(), status, countryId
         );
     }
@@ -59,7 +60,7 @@ public class CoinRepositoryIT {
         assertThat(result).isNotEmpty();
 
         log.info(
-                "🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=null)",
+                "\n🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=null)",
                 result.size(), status, countryId
         );
     }
@@ -80,8 +81,48 @@ public class CoinRepositoryIT {
         assertThat(result).isNotEmpty();
 
         log.info(
-                "🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=false)",
+                "\n🟢 [IT][COIN] currencyByStatus -> {} rows (status={}, countryId={}, visible=false)",
                 result.size(), status, countryId
+        );
+    }
+
+    @Test
+    void shouldLoadCountriesByStatus() {
+        // given
+        String status = "KOLEKCJA";
+
+        // when
+        List<CountryByStatus> result = coinRepository.countryByStatus(status);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+
+        log.info(
+                "\n🟢 [IT][COIN] countryByStatus -> {} rows (status={})",
+                result.size(), status
+        );
+    }
+
+    @Test
+    void shouldLoadCountriesByStatusAndVisibleTrue() {
+        // given
+        String status = "KOLEKCJA";
+        Boolean visible = true;
+
+        // when
+        List<CountryByStatus> result =
+                coinRepository.countryByStatus(status, visible);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result)
+                .allMatch(c -> c.getTotal() != null && c.getTotal() >= 0);
+
+        log.info(
+                "\n🟢 [IT][COIN] countryByStatus -> {} rows (status={}, visible={})",
+                result.size(), status, visible
         );
     }
 }
