@@ -47,7 +47,7 @@ public class CoinForSellController {
         System.out.println("[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]C");
 
         List<Object[]> objects;
-        objects = coinRepository.getCoinsByStatus("FOR SELL", countryId);
+        objects = coinRepository.getCoinsByStatus("FOR SELL", null, countryId);
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getCoinsByStatusList.add(new ModelMapper().map(object[0],GetCoinsByStatus.class));
@@ -60,7 +60,7 @@ public class CoinForSellController {
 
     @GetMapping("/coin/forSell/list")
     public String getCoinForSellList(ModelMap modelMap) {
-        List<Object[]> objects = coinRepository.getCoinsByStatus("FOR SELL");
+        List<Object[]> objects = coinRepository.getCoinsByStatus("FOR SELL",null, null);
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getCoinsByStatusList.add(new ModelMapper().map(object[0],GetCoinsByStatus.class));

@@ -91,7 +91,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public List<GetCoinsByStatus> getCoinsByStatus(String status) {
-        List<Object[]> objects = coinRepository.getCoinsByStatus(status);
+        List<Object[]> objects = coinRepository.getCoinsByStatus(status, null, null);
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getCoinsByStatusList.add(new ModelMapper().map(object[0], GetCoinsByStatus.class));
@@ -150,7 +150,7 @@ public class CoinServiceImpl implements CoinService {
     @Override
     public List<GetCoinsByStatus> getCoinsByStatus(String status, Long countryId) {
         List<Object[]> objects;
-        objects = coinRepository.getCoinsByStatus(status, countryId);
+        objects = coinRepository.getCoinsByStatus(status,null, countryId);
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getCoinsByStatusList.add(new ModelMapper().map(object[0],GetCoinsByStatus.class));
@@ -161,7 +161,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public List<GetCoinsByStatus> getCoinsByStatus(String status, String statusSell) {
-        List<Object[]> objects = coinRepository.getCoinsByStatus(status, statusSell);
+        List<Object[]> objects = coinRepository.getCoinsByStatus(status, statusSell, null);
         List<GetCoinsByStatus> getCoinsByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getCoinsByStatusList.add(new ModelMapper().map(object[0], GetCoinsByStatus.class));
