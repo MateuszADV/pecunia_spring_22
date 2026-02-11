@@ -268,3 +268,5 @@ ORDER BY cur.currencySeries
                     String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
                     Long coinId);
 }
+
+//test
