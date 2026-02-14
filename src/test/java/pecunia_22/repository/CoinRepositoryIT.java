@@ -1,14 +1,17 @@
 package pecunia_22.repository;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import pecunia_22.models.Coin;
 import pecunia_22.models.repositories.CoinRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.services.coinService.CoinServiceImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,10 @@ public class CoinRepositoryIT {
 
     @Autowired
     private CoinRepository coinRepository;
+    @Autowired
+    private CoinServiceImpl coinService;
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     void shouldLoadCurrencyByStatus_whenVisibleTrue() {
@@ -224,4 +231,46 @@ public class CoinRepositoryIT {
                 result.size(), status, excludedStatusSell);
     }
 
+    @Test
+    void shouldUpdateCoin_successfully() {
+
+        // given
+        Coin coin = coinRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No coin found in DB"));
+
+        Long coinId = coin.getId();
+
+        Double newPriceBuy = 999.99;
+        String newDescription = "UPDATED_DESCRIPTION_IT";
+        Boolean newVisible = !coin.getVisible();
+
+        coin.setPriceBuy(newPriceBuy);
+        coin.setDescription(newDescription);
+        coin.setVisible(newVisible);
+
+        // when
+        coinService.updateCoin(coin);
+
+        // ważne – czyścimy persistence context
+        entityManager.clear();
+
+        Coin updated = coinRepository.findById(coinId)
+                .orElseThrow(() -> new IllegalStateException("Updated coin not found"));
+
+        // then
+        assertThat(updated.getPriceBuy())
+                .as("PriceBuy should be updated")
+                .isEqualTo(newPriceBuy);
+
+        assertThat(updated.getDescription())
+                .as("Description should be updated")
+                .isEqualTo(newDescription);
+
+        assertThat(updated.getVisible())
+                .as("Visible flag should be updated")
+                .isEqualTo(newVisible);
+
+        log.info("\n🟢 [IT][COIN] updateCoin successful for coinId={}", coinId);
+    }
 }
