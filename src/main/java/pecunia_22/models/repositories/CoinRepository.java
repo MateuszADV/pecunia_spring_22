@@ -27,6 +27,10 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             " WHERE coin.currencies.id = ?1 AND coin.visible = ?2")
     List<Coin> getCoinByCurrencyId(Long currencyId, Boolean visible);
 
+    @Query("SELECT c FROM Coin c")
+    Page<Coin> findFirstForUpdate(Pageable pageable);
+
+
     /**
      * Zwraca listę krajów wraz z liczbą monet (Coin) dla danego statusu.
      * Grupowanie odbywa się po kraju i kontynencie.
