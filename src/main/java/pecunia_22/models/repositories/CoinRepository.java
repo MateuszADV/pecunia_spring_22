@@ -27,6 +27,10 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
             " WHERE coin.currencies.id = ?1 AND coin.visible = ?2")
     List<Coin> getCoinByCurrencyId(Long currencyId, Boolean visible);
 
+    @Query("SELECT c FROM Coin c")
+    Page<Coin> findFirstForUpdate(Pageable pageable);
+
+
     /**
      * Zwraca listę krajów wraz z liczbą monet (Coin) dla danego statusu.
      * Grupowanie odbywa się po kraju i kontynencie.
@@ -230,16 +234,52 @@ ORDER BY cur.currencySeries
     //    ****COIN UPDATE****
     //    *******************
 
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
-    @Modifying
-    @Query(value = "update Coin coin set     coin.currencies.id = ?1, coin.denomination = ?2, coin.dateBuy = ?3,      coin.nameCurrency = ?4, coin.series = ?5, " +
-                   "coin.boughts.id = ?6,    coin.itemDate = ?7,      coin.quantity = ?8,     coin.unitQuantity = ?9, coin.actives.id = ?10,  coin.priceBuy = ?11, coin.priceSell = ?12, " +
-                   "coin.qualities.id = ?13, coin.diameter = ?14,     coin.thickness = ?15,   coin.weight = ?16,      coin.statuses.id = ?17, coin.imageTypes.id = ?18, " +
-                   "coin.statusSell = ?19,   coin.visible = ?20,      coin.composition = ?21, coin.description = ?22, coin.aversPath = ?23,   coin.reversePath = ?24 "+
-                   "where coin.id = ?25")
-    void updateCoin(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
-                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
-                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
-                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
-                    Long coinId);
+    @Query("""
+    UPDATE Coin c
+    SET
+        c.currencies.id = :#{#coin.currencies.id},
+        c.denomination  = :#{#coin.denomination},
+        c.dateBuy       = :#{#coin.dateBuy},
+        c.nameCurrency  = :#{#coin.nameCurrency},
+        c.series        = :#{#coin.series},
+
+        c.boughts.id    = :#{#coin.boughts.id},
+        c.itemDate      = :#{#coin.itemDate},
+        c.quantity      = :#{#coin.quantity},
+        c.unitQuantity  = :#{#coin.unitQuantity},
+        c.actives.id    = :#{#coin.actives.id},
+        c.priceBuy      = :#{#coin.priceBuy},
+        c.priceSell     = :#{#coin.priceSell},
+
+        c.qualities.id  = :#{#coin.qualities.id},
+        c.diameter      = :#{#coin.diameter},
+        c.thickness     = :#{#coin.thickness},
+        c.weight        = :#{#coin.weight},
+        c.statuses.id   = :#{#coin.statuses.id},
+        c.imageTypes.id = :#{#coin.imageTypes.id},
+
+        c.statusSell    = :#{#coin.statusSell},
+        c.visible       = :#{#coin.visible},
+        c.composition   = :#{#coin.composition},
+        c.description   = :#{#coin.description},
+        c.aversPath     = :#{#coin.aversPath},
+        c.reversePath   = :#{#coin.reversePath}
+    WHERE c.id = :#{#coin.id}
+""")
+    void updateCoin(@Param("coin") Coin coin);
+
+//    @Transactional
+//    @Modifying
+//    @Query(value = "update Coin coin set     coin.currencies.id = ?1, coin.denomination = ?2, coin.dateBuy = ?3,      coin.nameCurrency = ?4, coin.series = ?5, " +
+//                   "coin.boughts.id = ?6,    coin.itemDate = ?7,      coin.quantity = ?8,     coin.unitQuantity = ?9, coin.actives.id = ?10,  coin.priceBuy = ?11, coin.priceSell = ?12, " +
+//                   "coin.qualities.id = ?13, coin.diameter = ?14,     coin.thickness = ?15,   coin.weight = ?16,      coin.statuses.id = ?17, coin.imageTypes.id = ?18, " +
+//                   "coin.statusSell = ?19,   coin.visible = ?20,      coin.composition = ?21, coin.description = ?22, coin.aversPath = ?23,   coin.reversePath = ?24 "+
+//                   "where coin.id = ?25")
+//    void updateCoin(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+//                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
+//                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
+//                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
+//                    Long coinId);
 }

@@ -1,5 +1,6 @@
 package pecunia_22.services.coinService;
 
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import pecunia_22.models.repositories.CoinRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetCoinsByStatus;
+import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -169,12 +171,21 @@ public class CoinServiceImpl implements CoinService {
         return getCoinsByStatusList;
     }
 
+    @MeasureTime(value = "Update coin in DB",
+            color = MeasureTime.ConsoleColor.GREEN)
     @Override
+    @Transactional
     public void updateCoin(Coin coin) {
-        coinRepository.updateCoin(coin.getCurrencies().getId(), coin.getDenomination(), coin.getDateBuy(), coin.getNameCurrency(), coin.getSeries(),
-                coin.getBoughts().getId(), coin.getItemDate(), coin.getQuantity(), coin.getUnitQuantity(), coin.getActives().getId(), coin.getPriceBuy(), coin.getPriceSell(),
-                coin.getQualities().getId(), coin.getDiameter(), coin.getThickness(), coin.getWeight(), coin.getStatuses().getId(), coin.getImageTypes().getId(),
-                coin.getStatusSell(), coin.getVisible(), coin.getComposition(), coin.getDescription(), coin.getAversPath(), coin.getReversePath(),
-                coin.getId());
+        coinRepository.updateCoin(coin);
     }
+
+
+//    @Override
+//    public void updateCoin(Coin coin) {
+//        coinRepository.updateCoin(coin.getCurrencies().getId(), coin.getDenomination(), coin.getDateBuy(), coin.getNameCurrency(), coin.getSeries(),
+//                coin.getBoughts().getId(), coin.getItemDate(), coin.getQuantity(), coin.getUnitQuantity(), coin.getActives().getId(), coin.getPriceBuy(), coin.getPriceSell(),
+//                coin.getQualities().getId(), coin.getDiameter(), coin.getThickness(), coin.getWeight(), coin.getStatuses().getId(), coin.getImageTypes().getId(),
+//                coin.getStatusSell(), coin.getVisible(), coin.getComposition(), coin.getDescription(), coin.getAversPath(), coin.getReversePath(),
+//                coin.getId());
+//    }
 }

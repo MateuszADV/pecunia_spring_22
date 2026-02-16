@@ -1,5 +1,6 @@
 package pecunia_22.repository;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import pecunia_22.models.Coin;
 import pecunia_22.models.Note;
 import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
+import pecunia_22.services.noteServices.NoteServiceImpl;
 
 import java.util.List;
 
@@ -21,8 +24,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 public class NoteRepositoryIT {
-    @Autowired
+
     private NoteRepository noteRepository;
+    private EntityManager entityManager;
+
+    @Autowired
+    public NoteRepositoryIT(
+            NoteRepository noteRepository,
+            EntityManager entityManager) {
+        this.noteRepository = noteRepository;
+        this.entityManager = entityManager;
+    }
 
     @Test
     void shouldLoadNotesFromTestDatabase() {
@@ -246,6 +258,54 @@ public class NoteRepositoryIT {
         log.info("\n🟢 [IT][NOTE] notePageable -> {} elements", page.getTotalElements());
 
         assertThat(page).isNotNull();
+    }
+
+    @Test
+    void shouldUpdateNote_successfully() {
+
+        // given
+        Note note = noteRepository
+                .findFirstForUpdate(PageRequest.of(0, 1))
+                .getContent()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No note found in DB"));
+
+
+        Long noteId = note.getId();
+
+        Double newPriceBuy = 999.99;
+        String newDescription = "UPDATED_DESCRIPTION_IT";
+        Boolean newVisible = !note.getVisible();
+
+        note.setPriceBuy(newPriceBuy);
+        note.setDescription(newDescription);
+        note.setVisible(newVisible);
+
+        // when
+//        noteService.updateNote(note);
+        noteRepository.updateNote(note);
+
+        // ważne – czyścimy persistence context
+        entityManager.clear();
+
+        Note updated = noteRepository.findById(noteId)
+                .orElseThrow(() -> new IllegalStateException("Updated note not found"));
+
+        // then
+        assertThat(updated.getPriceBuy())
+                .as("PriceBuy should be updated")
+                .isEqualTo(newPriceBuy);
+
+        assertThat(updated.getDescription())
+                .as("Description should be updated")
+                .isEqualTo(newDescription);
+
+        assertThat(updated.getVisible())
+                .as("Visible flag should be updated")
+                .isEqualTo(newVisible);
+
+        log.info("\n🟢 [IT][NOTE] updateNote successful for noteId={}", noteId);
     }
 
 }

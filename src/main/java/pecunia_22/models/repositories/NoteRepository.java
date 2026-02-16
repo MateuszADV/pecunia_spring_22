@@ -32,6 +32,10 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
            "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
     List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
 
+    @Query("SELECT n FROM Note n")
+    Page<Note> findFirstForUpdate(Pageable pageable);
+
+
     /**
      * Pobiera wszystkie banknoty (Note) widoczne dla użytkownika.
      * --------
