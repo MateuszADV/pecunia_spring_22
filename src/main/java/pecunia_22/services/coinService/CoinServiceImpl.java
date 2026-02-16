@@ -127,7 +127,7 @@ public class CoinServiceImpl implements CoinService {
         List<Coin> coins = new ArrayList<>();
         if (role == "ADMIN") {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-            return this.coinRepository.coinPageable(currencyId, status, pageable);
+            return this.coinRepository.coinPageable(currencyId, status, null, pageable);
         } else {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.coinRepository.coinPageable(currencyId, status, true, pageable);
