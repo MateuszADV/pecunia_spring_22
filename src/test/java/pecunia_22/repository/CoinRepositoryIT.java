@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Coin;
@@ -281,4 +283,207 @@ public class CoinRepositoryIT {
 
         log.info("\n🟢 [IT][COIN] updateCoin successful for coinId={}", coinId);
     }
+
+    @Test
+    void shouldReturnPaginatedCoinsSortedByDenomination() {
+
+        // given
+        Long currencyId = 655L; // dobierz pod swoje dane
+        String status = "KOLEKCJA";
+
+        Pageable pageable = PageRequest.of(0, 5); // pierwsza strona, 5 elementów
+
+        // when
+        Page<Coin> page = coinRepository.coinPageable(
+                currencyId,
+                status,
+                null,
+                pageable
+        );
+
+        // then
+        assertThat(page).isNotNull();
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getContent().size()).isLessThanOrEqualTo(5);
+
+        // sprawdzenie sortowania
+        List<Double> denominations = page.getContent()
+                .stream()
+                .map(Coin::getDenomination)
+                .toList();
+
+        assertThat(denominations)
+                .isSorted();
+
+        extracted(page);
+    }
+
+    private static void extracted(Page<Coin> page) {
+        log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements());
+    }
+
+    @Test
+    void shouldReturnPaginatedCoinsSortedByDenominationNotVisible() {
+
+        // given
+        Long currencyId = 655L; // dobierz pod swoje dane
+        String status = "KOLEKCJA";
+
+        Pageable pageable = PageRequest.of(0, 5); // pierwsza strona, 5 elementów
+
+        // when
+        Page<Coin> page = coinRepository.coinPageable(
+                currencyId,
+                status,
+                false,
+                pageable
+        );
+
+        // then
+        assertThat(page).isNotNull();
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getContent().size()).isLessThanOrEqualTo(5);
+
+        // sprawdzenie sortowania
+        List<Double> denominations = page.getContent()
+                .stream()
+                .map(Coin::getDenomination)
+                .toList();
+
+        assertThat(denominations)
+                .isSorted();
+
+        getInfo(page);
+    }
+
+    private static void getInfo(Page<Coin> page) {
+        log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements());
+    }
+
+    @Test
+    void shouldReturnPaginatedCoinsSortedByDenominationVisible() {
+
+        // given
+        Long currencyId = 655L; // dobierz pod swoje dane
+        String status = "KOLEKCJA";
+
+        Pageable pageable = PageRequest.of(0, 5); // pierwsza strona, 5 elementów
+
+        // when
+        Page<Coin> page = coinRepository.coinPageable(
+                currencyId,
+                status,
+                true,
+                pageable
+        );
+
+        // then
+        assertThat(page).isNotNull();
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getContent().size()).isLessThanOrEqualTo(5);
+
+        // sprawdzenie sortowania
+        List<Double> denominations = page.getContent()
+                .stream()
+                .map(Coin::getDenomination)
+                .toList();
+
+        assertThat(denominations)
+                .isSorted();
+
+        log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements());
+    }
+
+    @Test
+    void visibleFilterShouldReduceResultSet() {
+
+        Long currencyId = 655L;
+        String status = "KOLEKCJA";
+
+        Pageable pageable = PageRequest.of(0, 50);
+
+        Page<Coin> all = coinRepository.coinPageable(currencyId, status, null, pageable);
+        Page<Coin> onlyVisible = coinRepository.coinPageable(currencyId, status, true, pageable);
+
+        assertThat(onlyVisible.getTotalElements())
+                .isLessThanOrEqualTo(all.getTotalElements());
+    }
+
+    @Test
+    void shouldMaintainSortingAcrossPagesByDenomination() {
+
+        // given
+        Long currencyId = 655L; // dopasuj pod swoje dane
+        String status = "KOLEKCJA";
+
+        Pageable firstPageable = PageRequest.of(0, 5);
+        Pageable secondPageable = PageRequest.of(1, 5);
+
+        // when
+        Page<Coin> firstPage = coinRepository.coinPageable(
+                currencyId,
+                status,
+                null,
+                firstPageable
+        );
+
+        Page<Coin> secondPage = coinRepository.coinPageable(
+                currencyId,
+                status,
+                null,
+                secondPageable
+        );
+
+        // then
+        assertThat(firstPage).isNotNull();
+        assertThat(secondPage).isNotNull();
+
+        assertThat(firstPage.getContent()).isNotEmpty();
+
+        // sprawdzenie sortowania na pierwszej stronie
+        List<Double> firstDenominations = firstPage.getContent()
+                .stream()
+                .map(Coin::getDenomination)
+                .toList();
+
+        assertThat(firstDenominations).isSorted();
+
+        // jeśli druga strona istnieje — sprawdzamy ciągłość sortowania
+        if (!secondPage.getContent().isEmpty()) {
+
+            List<Double> secondDenominations = secondPage.getContent()
+                    .stream()
+                    .map(Coin::getDenomination)
+                    .toList();
+
+            assertThat(secondDenominations).isSorted();
+
+            Double lastFromFirstPage =
+                    firstDenominations.get(firstDenominations.size() - 1);
+
+            Double firstFromSecondPage =
+                    secondDenominations.get(0);
+
+            assertThat(firstFromSecondPage)
+                    .isGreaterThanOrEqualTo(lastFromFirstPage);
+
+            log.info("🟢 [IT][COIN] Sorting continuity OK -> {} <= {}",
+                    lastFromFirstPage, firstFromSecondPage);
+        }
+
+        log.info("🟢 [IT][COIN] Pagination continuity test -> firstPage={}, secondPage={}, totalElements={}",
+                firstPage.getNumber(),
+                secondPage.getNumber(),
+                firstPage.getTotalElements());
+    }
+
 }

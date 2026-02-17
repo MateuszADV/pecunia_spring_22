@@ -143,27 +143,30 @@ public class NoteCollectionController {
 
         Page<Note> page = noteService.findNotePaginated(pageNo, pageSize, currencyId, status, role);
         List<NoteDto> noteDtoList = new ArrayList<>();
+        if (page.getTotalPages() >= pageNo) {
+            for (Note note : page.getContent()) {
+                noteDtoList.add(new ModelMapper().map(note, NoteDto.class));
+            }
 
-        for (Note note : page.getContent()) {
-            noteDtoList.add(new ModelMapper().map(note, NoteDto.class));
+            String pathPage = "/note/collection/notes/page/";
+            modelMap.addAttribute("currentPage", pageNo);
+            modelMap.addAttribute("totalPages", page.getTotalPages());
+            modelMap.addAttribute("totalItems", page.getTotalElements());
+            modelMap.addAttribute("pageSize", pageSize);
+            modelMap.addAttribute("pathPage", pathPage);
+
+            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            System.out.println(page.getTotalElements());
+            System.out.println(page.getTotalPages());
+            System.out.println(page.getSize());
+
+            modelMap.addAttribute("notes", noteDtoList);
+            System.out.println(role);
+            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            return "note/collection/notes";
+        }else {
+            return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
         }
-
-        String pathPage = "/note/collection/notes/page/";
-        modelMap.addAttribute("currentPage", pageNo);
-        modelMap.addAttribute("totalPages", page.getTotalPages());
-        modelMap.addAttribute("totalItems", page.getTotalElements());
-        modelMap.addAttribute("pageSize", pageSize);
-        modelMap.addAttribute("pathPage", pathPage);
-
-        System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-        System.out.println(page.getTotalElements());
-        System.out.println(page.getTotalPages());
-        System.out.println(page.getSize());
-
-        modelMap.addAttribute("notes", noteDtoList);
-        System.out.println(role);
-        System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-        return "note/collection/notes";
     }
 
     @GetMapping("/note/collection/show/{noteId}")

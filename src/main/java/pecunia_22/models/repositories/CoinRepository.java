@@ -19,13 +19,47 @@ import java.util.List;
 @Repository
 public interface CoinRepository extends JpaRepository<Coin, Long> {
 
-    @Query(value = "SELECT coin FROM Coin coin " +
-            " WHERE coin.currencies.id = ?1")
-    List<Coin> getCoinByCurrencyId(Long currencyId);
+    /**
+     * Zwraca listę monet dla danej waluty.
+     * ----------
+     * Zapytanie wykorzystywane do pobrania wszystkich monet
+     * przypisanych do wskazanej waluty.
+     * ------
+     * Brak dodatkowych filtrów (np. widoczności).
+     *
+     * @param currencyId wymagany identyfikator waluty
+     * @return lista monet jako {@code List<Coin>}
+     */
+    @Query("""
+            SELECT coin FROM Coin coin 
+            WHERE coin.currencies.id = :currencyId
+            """)
+    List<Coin> getCoinByCurrencyId(
+            @Param("currencyId") Long currencyId
+    );
 
-    @Query(value = "SELECT coin FROM Coin coin " +
-            " WHERE coin.currencies.id = ?1 AND coin.visible = ?2")
-    List<Coin> getCoinByCurrencyId(Long currencyId, Boolean visible);
+    /**
+     * Zwraca listę monet dla danej waluty z filtrem widoczności.
+     * ----------
+     * Zapytanie wykorzystywane głównie w widokach publicznych,
+     * gdzie wymagane jest ograniczenie wyników do monet
+     * widocznych lub niewidocznych.
+     * ------
+     * Filtrowanie odbywa się na podstawie pola {@code visible}.
+     *
+     * @param currencyId wymagany identyfikator waluty
+     * @param visible wymagany parametr widoczności (true / false)
+     * @return lista monet jako {@code List<Coin>}
+     */
+    @Query("""
+            SELECT coin FROM Coin coin
+            WHERE coin.currencies.id = :currencyId
+            AND (:visible IS NULL OR coin.visible = :visible)
+            """)
+    List<Coin> getCoinByCurrencyId(
+            @Param("currencyId") Long currencyId,
+            @Param("visible") Boolean visible
+    );
 
     @Query("SELECT c FROM Coin c")
     Page<Coin> findFirstForUpdate(Pageable pageable);
@@ -156,20 +190,36 @@ ORDER BY cur.currencySeries
             @Param("visible") Boolean visible
     );
 
-
-    @Query(value = "SELECT coin FROM Coin coin " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE coin.currencies.id = ?1 AND stat = coin.statuses " +
-            "ORDER BY coin.denomination")
-    Page<Coin> coinPageable(Long currencyId, String status, final Pageable pageable);
-
-    @Query(value = "SELECT coin FROM Coin coin " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE coin.currencies.id = ?1 AND stat = coin.statuses  AND coin.visible = ?3 " +
-            "ORDER BY coin.denomination")
-    Page<Coin> coinPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
+    /**
+     * Zwraca stronicowaną listę monet dla danego statusu i waluty.
+     * ----------
+     * Zapytanie wykorzystywane do wyświetlania list monet (widoki admina),
+     * z możliwością opcjonalnego:
+     *   filtrowania po widoczności
+     * ------
+     * Dane sortowane są rosnąco po nominale monety (denomination).
+     *
+     * @param currencyId wymagany identyfikator waluty
+     * @param status wymagany status monety (np. KOLEKCJA)
+     * @param visible opcjonalny filtr widoczności (NULL = bez filtra)
+     * @param pageable parametry paginacji
+     * @return stronicowana lista monet jako {@code Page<Coin>}
+     */
+    @Query("""
+    SELECT coin
+    FROM Coin coin
+    JOIN coin.statuses stat
+    WHERE coin.currencies.id = :currencyId
+      AND stat.status = :status
+      AND (:visible IS NULL OR coin.visible = :visible)
+    ORDER BY coin.denomination
+""")
+    Page<Coin> coinPageable(
+            @Param("currencyId") Long currencyId,
+            @Param("status") String status,
+            @Param("visible") Boolean visible,
+            Pageable pageable
+    );
 
     /**
      * Zwraca listę not dla danego statusu.
@@ -269,17 +319,4 @@ ORDER BY cur.currencySeries
     WHERE c.id = :#{#coin.id}
 """)
     void updateCoin(@Param("coin") Coin coin);
-
-//    @Transactional
-//    @Modifying
-//    @Query(value = "update Coin coin set     coin.currencies.id = ?1, coin.denomination = ?2, coin.dateBuy = ?3,      coin.nameCurrency = ?4, coin.series = ?5, " +
-//                   "coin.boughts.id = ?6,    coin.itemDate = ?7,      coin.quantity = ?8,     coin.unitQuantity = ?9, coin.actives.id = ?10,  coin.priceBuy = ?11, coin.priceSell = ?12, " +
-//                   "coin.qualities.id = ?13, coin.diameter = ?14,     coin.thickness = ?15,   coin.weight = ?16,      coin.statuses.id = ?17, coin.imageTypes.id = ?18, " +
-//                   "coin.statusSell = ?19,   coin.visible = ?20,      coin.composition = ?21, coin.description = ?22, coin.aversPath = ?23,   coin.reversePath = ?24 "+
-//                   "where coin.id = ?25")
-//    void updateCoin(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
-//                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
-//                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
-//                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
-//                    Long coinId);
 }
