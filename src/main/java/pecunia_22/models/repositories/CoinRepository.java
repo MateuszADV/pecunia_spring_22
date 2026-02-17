@@ -19,13 +19,47 @@ import java.util.List;
 @Repository
 public interface CoinRepository extends JpaRepository<Coin, Long> {
 
-    @Query(value = "SELECT coin FROM Coin coin " +
-            " WHERE coin.currencies.id = ?1")
-    List<Coin> getCoinByCurrencyId(Long currencyId);
+    /**
+     * Zwraca listę monet dla danej waluty.
+     * ----------
+     * Zapytanie wykorzystywane do pobrania wszystkich monet
+     * przypisanych do wskazanej waluty.
+     * ------
+     * Brak dodatkowych filtrów (np. widoczności).
+     *
+     * @param currencyId wymagany identyfikator waluty
+     * @return lista monet jako {@code List<Coin>}
+     */
+    @Query("""
+            SELECT coin FROM Coin coin 
+            WHERE coin.currencies.id = :currencyId
+            """)
+    List<Coin> getCoinByCurrencyId(
+            @Param("currencyId") Long currencyId
+    );
 
-    @Query(value = "SELECT coin FROM Coin coin " +
-            " WHERE coin.currencies.id = ?1 AND coin.visible = ?2")
-    List<Coin> getCoinByCurrencyId(Long currencyId, Boolean visible);
+    /**
+     * Zwraca listę monet dla danej waluty z filtrem widoczności.
+     * ----------
+     * Zapytanie wykorzystywane głównie w widokach publicznych,
+     * gdzie wymagane jest ograniczenie wyników do monet
+     * widocznych lub niewidocznych.
+     * ------
+     * Filtrowanie odbywa się na podstawie pola {@code visible}.
+     *
+     * @param currencyId wymagany identyfikator waluty
+     * @param visible wymagany parametr widoczności (true / false)
+     * @return lista monet jako {@code List<Coin>}
+     */
+    @Query("""
+            SELECT coin FROM Coin coin
+            WHERE coin.currencies.id = :currencyId
+            AND (:visible IS NULL OR coin.visible = :visible)
+            """)
+    List<Coin> getCoinByCurrencyId(
+            @Param("currencyId") Long currencyId,
+            @Param("visible") Boolean visible
+    );
 
     @Query("SELECT c FROM Coin c")
     Page<Coin> findFirstForUpdate(Pageable pageable);

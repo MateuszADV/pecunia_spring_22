@@ -30,7 +30,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     // 1️⃣ Admin – pełna encja, z opcjonalnym filtrem po walucie
     @Query("SELECT note FROM Note note " +
            "WHERE (:currencyId IS NULL OR note.currencies.id = :currencyId)")
-    List<Note> getNoteByCurrencyId(@Param("currencyId") Long currencyId);
+    List<Note> getNoteByCurrencyId(
+            @Param("currencyId") Long currencyId
+    );
 
     @Query("SELECT n FROM Note n")
     Page<Note> findFirstForUpdate(Pageable pageable);
@@ -45,9 +47,16 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
      * @param visible     Widoczność banknotu dla użytkownika (true = widoczne)
      * @return Lista encji Note spełniających kryteria filtrowania
      */
-    @Query(value = "SELECT note FROM Note note " +
-            "WHERE note.currencies.id = ?1 AND note.visible = ?2")
-    List<Note> getNoteByCurrencyId(Long currencyId, Boolean visible);
+    @Query("""
+            SELECT note FROM Note note
+            WHERE note.currencies.id = :currencyId 
+            AND (:visible IS NULL OR note.visible = :visible)
+            """)
+    List<Note> getNoteByCurrencyId(
+            @Param("currencyId") Long currencyId,
+            @Param("visible") Boolean visible
+    );
+
 
     /**
      * Zwraca listę krajów pogrupowanych według kontynentu dla podanego statusu not.
