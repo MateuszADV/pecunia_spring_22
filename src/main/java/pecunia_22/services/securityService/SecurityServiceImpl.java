@@ -93,19 +93,21 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role) {
-        List<Object[]> objects = new ArrayList<>();
+//        List<Object[]> objects = new ArrayList<>();
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = securityRepository.currencyByStatus(status, countryId);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = securityRepository.currencyByStatus(status, countryId, null);
+//            objects = securityRepository.currencyByStatus(status, countryId);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         } else {
-            objects = securityRepository.currencyByStatus(status, countryId, true);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = securityRepository.currencyByStatus(status, countryId, true);
+//            objects = securityRepository.currencyByStatus(status, countryId, true);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         }
         return currencyByStatusList;
     }
