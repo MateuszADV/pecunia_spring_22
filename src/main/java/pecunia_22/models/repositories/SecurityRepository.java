@@ -43,7 +43,7 @@ public interface SecurityRepository extends JpaRepository<Security, Long> {
             " GROUP BY sec.qualities, sec.makings, sec.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, sec.denomination, sec.nameCurrency, sec.itemDate, " +
             "          sec.priceBuy, sec.priceSell, sec.quantity, sec.unitQuantity, sec.width, sec.height, sec.visible, sec.description, sec.aversPath, sec.reversePath " +
             " ORDER BY cou.countryEn, sec.denomination")
-    List<Object[]> getSecucountryritiesByStatus(String status);
+    List<Object[]> getSecuritiesByStatus(String status);
 
     /**
      * Zwraca statystyki krajów dla danego statusu papierów wartościowych.
