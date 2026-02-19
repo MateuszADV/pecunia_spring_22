@@ -6,16 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Security;
-import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface SecurityRepository extends JpaRepository<Security, Long> {
+public interface SecurityRepository_OLD extends JpaRepository<Security, Long> {
 
     @Query(value = "SELECT sec FROM Security sec ORDER BY sec.id")
     List<Security> getAllSecurityOrderById();
@@ -74,51 +72,33 @@ public interface SecurityRepository extends JpaRepository<Security, Long> {
             " ORDER BY cou.countryEn")
     List<Object[]> countryByStatus(String status, Boolean visible);
 
-    /**
-     * Zwraca statystyki walut dla danego kraju i statusu papierów wartościowych.
-     *
-     * @param status     status (np. KOLEKCJA, NA_SPRZEDAZ)
-     * @param countryId  identyfikator kraju
-     * @param visible    opcjonalny filtr widoczności:
-     *                   - true  → tylko widoczne
-     *                   - false → tylko niewidoczne
-     *                   - null  → bez filtra widoczności
-     *
-     * @return lista statystyk walut (ilość rekordów według serii waluty)
-     */
-    @Query("""
-    SELECT new pecunia_22.models.sqlClass.CurrencyByStatus(
-        cou.id,
-        con.continentEn,
-        cou.countryEn,
-        cou.countryPl,
-        cur.id,
-        cur.currencySeries,
-        COUNT(security.id)
-    )
-    FROM Security security
-        JOIN security.statuses stat
-        JOIN security.currencies cur
-        JOIN cur.countries cou
-        JOIN cou.continents con
-    WHERE stat.status = :status
-      AND cou.id = :countryId
-      AND (:visible IS NULL OR security.visible = :visible)
-    GROUP BY
-        cou.id,
-        con.continentEn,
-        cou.countryEn,
-        cou.countryPl,
-        cur.id,
-        cur.currencySeries
-    ORDER BY cur.currencySeries
-""")
-    List<CurrencyByStatus> currencyByStatus(
-            @Param("status") String status,
-            @Param("countryId") Long countryId,
-            @Param("visible") Boolean visible
-    );
+    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
+            "  FROM Security security" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = security.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            " WHERE stat = security.statuses AND cou.id = ?2" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
+            " ORDER BY cur.currencySeries")
+    List<Object[]> currencyByStatus(String status, Long countryId);
 
+    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
+            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
+            "  FROM Security security" +
+            "  LEFT JOIN Status stat" +
+            "    ON stat.status = ?1" +
+            "  LEFT JOIN Currency cur" +
+            "    ON cur = security.currencies" +
+            "  LEFT JOIN Country cou" +
+            "    ON cou = cur.countries" +
+            " WHERE stat = security.statuses AND cou.id = ?2 AND security.visible = ?3" +
+            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
+            " ORDER BY cur.currencySeries")
+    List<Object[]> currencyByStatus(String status, Long countryId, Boolean visible);
 
     @Query(value = "SELECT security FROM Security security " +
             "  LEFT JOIN Status stat " +
@@ -129,7 +109,7 @@ public interface SecurityRepository extends JpaRepository<Security, Long> {
 
     @Query(value = "SELECT security FROM Security security " +
             "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
+            "    ON stat.status = ?2" +
             "WHERE security.currencies.id = ?1 AND stat = security.statuses  AND security.visible = ?3 " +
             "ORDER BY security.denomination")
     Page<Security> securityPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);

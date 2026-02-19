@@ -65,16 +65,22 @@ public class WebSecurityConfig  {
                 .requestMatchers("/country", "/country/show/**")
                 .permitAll()
 //                .antMatchers("/continent").hasAnyAuthority("USER", "ADMIN")
+
 //                ********************NOTE COLLECTOIN*****************************************
                 .requestMatchers("/note/collection/**").hasAnyAuthority("ADMIN", "USER")
 //                ********************NOTE FOR SELL ******************************************
                 .requestMatchers("/note/forSell/**")
                 .permitAll()
+
 //                ********************COIN COLLECTOIN*****************************************
                 .requestMatchers("/coin/collection/**").hasAnyAuthority("ADMIN", "USER")
 //                ********************Coin FOR SELL ******************************************
                 .requestMatchers("/coin/forSell/**")
                 .permitAll()
+
+//                ********************Security COLLECTOIN*****************************************
+                .requestMatchers("/security/collection/**").hasAnyAuthority("ADMIN", "USER")
+
 //                ********************CONTINENT*****************************************
                 .requestMatchers("/continent/**").hasAnyAuthority("ADMIN", "USER")
 //               *********************NBP******************************************
