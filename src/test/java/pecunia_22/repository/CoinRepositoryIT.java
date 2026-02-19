@@ -132,7 +132,7 @@ public class CoinRepositoryIT {
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
         assertThat(result)
-                .allMatch(c -> c.getTotal() != null && c.getTotal() >= 0);
+                .allMatch(c -> c.total() != null && c.total() >= 0);
 
         log.info(
                 "\n🟢 [IT][COIN] countryByStatus -> {} rows (status={}, visible={})",

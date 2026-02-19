@@ -78,15 +78,17 @@ public class SecurityServiceImpl implements SecurityService {
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = securityRepository.countryByStatus(status);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = securityRepository.countryByStatus(status, null);
+//            objects = securityRepository.countryByStatus(status);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         } else {
-            objects = securityRepository.countryByStatus(status, true);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = securityRepository.countryByStatus(status, true);
+//            objects = securityRepository.countryByStatus(status, true);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         }
         return countryByStatusList;
     }

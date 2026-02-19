@@ -164,10 +164,10 @@ public class NoteRepositoryIT {
 
         // lekka walidacja danych
         result.forEach(row -> {
-            assertThat(row.getCountryId()).isNotNull();
-            assertThat(row.getCountryEn()).isNotBlank();
-            assertThat(row.getContinent()).isEqualTo(continent);
-            assertThat(row.getTotal()).isPositive();
+            assertThat(row.countryId()).isNotNull();
+            assertThat(row.countryEn()).isNotBlank();
+            assertThat(row.continent()).isEqualTo(continent);
+            assertThat(row.total()).isPositive();
         });
     }
 
@@ -196,10 +196,10 @@ public class NoteRepositoryIT {
 
         // walidacja danych
         result.forEach(row -> {
-            assertThat(row.getCountryId()).isNotNull();
-            assertThat(row.getCountryEn()).isNotBlank();
-            assertThat(row.getContinent()).isEqualTo(continent);
-            assertThat(row.getTotal()).isPositive();
+            assertThat(row.countryId()).isNotNull();
+            assertThat(row.countryEn()).isNotBlank();
+            assertThat(row.continent()).isEqualTo(continent);
+            assertThat(row.total()).isPositive();
         });
     }
 

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.repositories.SecurityRepository;
+import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class SecurityRepositoryIT {
     void shouldLoadCurrencyByStatus_whenVisibleTrue() {
         // given
         String status = "KOLEKCJA";
-        Long countryId = 244L;
+        Long countryId = 172l;
         Boolean visible = true;
 
         // when
@@ -140,5 +141,56 @@ public class SecurityRepositoryIT {
                 visibleFalse.size()
         );
     }
+
+    @Test
+    void shouldValidateCountryByStatus_visibleTrueFalseAndNull() {
+
+        // given
+        String status = "KOLEKCJA";
+
+        // when
+        List<CountryByStatus> visibleTrue =
+                securityRepository.countryByStatus(status, true);
+
+        List<CountryByStatus> visibleFalse =
+                securityRepository.countryByStatus(status, false);
+
+        List<CountryByStatus> all =
+                securityRepository.countryByStatus(status, null);
+
+        // then
+        assertThat(all).isNotNull();
+        assertThat(all).isNotEmpty();
+
+        // suma total dla każdego wariantu
+        long totalTrue = visibleTrue.stream()
+                .mapToLong(CountryByStatus::total)
+                .sum();
+
+        long totalFalse = visibleFalse.stream()
+                .mapToLong(CountryByStatus::total)
+                .sum();
+
+        long totalAll = all.stream()
+                .mapToLong(CountryByStatus::total)
+                .sum();
+
+        // kluczowa asercja logiczna
+        assertThat(totalTrue + totalFalse)
+                .isEqualTo(totalAll);
+
+        log.info("""
+            
+            🟢 [IT][SECURITY] countryByStatus
+               true  -> rows={}, total={}
+               false -> rows={}, total={}
+               null  -> rows={}, total={}
+            """,
+                visibleTrue.size(), totalTrue,
+                visibleFalse.size(), totalFalse,
+                all.size(), totalAll
+        );
+    }
+
 
 }

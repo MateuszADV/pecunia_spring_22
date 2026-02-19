@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Security;
+import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.sql.Date;
@@ -42,37 +43,47 @@ public interface SecurityRepository extends JpaRepository<Security, Long> {
             " GROUP BY sec.qualities, sec.makings, sec.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, sec.denomination, sec.nameCurrency, sec.itemDate, " +
             "          sec.priceBuy, sec.priceSell, sec.quantity, sec.unitQuantity, sec.width, sec.height, sec.visible, sec.description, sec.aversPath, sec.reversePath " +
             " ORDER BY cou.countryEn, sec.denomination")
-    List<Object[]> getSecuritiesByStatus(String status);
+    List<Object[]> getSecucountryritiesByStatus(String status);
 
-    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
-            "  FROM Security security" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = security.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = security.statuses" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
-            " ORDER BY cou.countryEn")
-    List<Object[]> countryByStatus(String status);
-
-    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
-            "  FROM Security security" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = security.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = security.statuses AND security.visible = ?2" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
-            " ORDER BY cou.countryEn")
-    List<Object[]> countryByStatus(String status, Boolean visible);
+    /**
+     * Zwraca statystyki krajów dla danego statusu papierów wartościowych.
+     *
+     * @param status   status security (np. KOLEKCJA, SPRZEDANE)
+     * @param visible  opcjonalny filtr widoczności:
+     *                 - true  → tylko widoczne
+     *                 - false → tylko niewidoczne
+     *                 - null  → bez filtra widoczności
+     *
+     * @return lista statystyk krajów (ilość security według kraju)
+     */
+    @Query("""
+    SELECT new pecunia_22.models.sqlClass.CountryByStatus(
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl,
+        COUNT(security.id)
+    )
+    FROM Security security
+        JOIN security.statuses stat
+        JOIN security.currencies cur
+        JOIN cur.countries cou
+        JOIN cou.continents con
+    WHERE stat.status = :status
+      AND (:visible IS NULL OR security.visible = :visible)
+    GROUP BY
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    ORDER BY cou.countryEn
+""")
+    List<CountryByStatus> countryByStatus(
+            @Param("status") String status,
+            @Param("visible") Boolean visible
+    );
 
     /**
      * Zwraca statystyki walut dla danego kraju i statusu papierów wartościowych.
