@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Note;
 import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
+import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.util.List;
 
@@ -374,6 +375,73 @@ public class NoteRepositoryIT {
                 .isEqualTo(newVisible);
 
         log.info("\n🟢 [IT][NOTE] updateNote successful for noteId={}", noteId);
+    }
+
+    /**
+     * Test zwraca ile banknotów widzi USER
+     * Zwraca Ili banknotow USER nie widzi
+     * Awraca ilość banknotów które widzi ADMIN
+     */
+
+    @Test
+    void shouldFilterProperlyByVisibleParameter() {
+
+        // given
+        String status = "KOLEKCJA";
+        Long countryId = 172L;
+
+        // when
+        List<CurrencyByStatus> all =
+                noteRepository.currencyByStatus(status, countryId, null);
+
+        List<CurrencyByStatus> visibleTrue =
+                noteRepository.currencyByStatus(status, countryId, true);
+
+        List<CurrencyByStatus> visibleFalse =
+                noteRepository.currencyByStatus(status, countryId, false);
+
+        long sumAll = all.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumTrue = visibleTrue.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumFalse = visibleFalse.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+        // then
+
+
+        assertThat(sumTrue + sumFalse).isEqualTo(sumAll);
+        assertThat(all).isNotEmpty();
+
+        // visible true i false nie mogą mieć więcej rekordów niż all
+        assertThat(visibleTrue.size()).isLessThanOrEqualTo(all.size());
+        assertThat(visibleFalse.size()).isLessThanOrEqualTo(all.size());
+
+        log.info("""
+        🟢 [IT][SECURITY] visible filter verification
+        ALL     -> {}
+        TRUE    -> {}
+        FALSE   -> {}
+        """,
+                all.size(),
+                visibleTrue.size(),
+                visibleFalse.size()
+        );
+
+        log.info("""
+        🟢 [IT][SECURITY] visible filter verification
+        ALL     -> {}
+        TRUE    -> {}
+        FALSE   -> {}
+        """,
+                sumAll,
+                sumTrue,
+                sumFalse
+        );
     }
 
 }

@@ -124,6 +124,19 @@ public class SecurityRepositoryIT {
                 securityRepository.currencyByStatus(status, countryId, false);
 
         // then
+        long sumAll = all.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumTrue = visibleTrue.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumFalse = visibleFalse.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        assertThat(sumTrue + sumFalse).isEqualTo(sumAll);
         assertThat(all).isNotEmpty();
 
         // visible true i false nie mogą mieć więcej rekordów niż all
