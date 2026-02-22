@@ -124,6 +124,19 @@ public class SecurityRepositoryIT {
                 securityRepository.currencyByStatus(status, countryId, false);
 
         // then
+        long sumAll = all.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumTrue = visibleTrue.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumFalse = visibleFalse.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        assertThat(sumTrue + sumFalse).isEqualTo(sumAll);
         assertThat(all).isNotEmpty();
 
         // visible true i false nie mogą mieć więcej rekordów niż all
@@ -190,6 +203,33 @@ public class SecurityRepositoryIT {
                 visibleFalse.size(), totalFalse,
                 all.size(), totalAll
         );
+    }
+
+    @Test
+    void shouldLoadSecuritiesByStatusWithFilters() {
+        // given – przykładowe wartości
+        String status = "FOR SELL";
+        String excludedStatusSell = null;
+        Long countryId = 244L; // dopasowane do danych w bazie testowej
+
+        // when
+        List<Object[]> result = securityRepository.getSecuritiesByStatus(status, excludedStatusSell, countryId);
+
+        // log w konwencji zielonej kropki
+        getInfo(result, status, excludedStatusSell, countryId);
+
+        // then – sprawdzamy tylko, że są wyniki
+        assertThat(result).isNotEmpty();
+
+        // dodatkowy wariant – bez filtrów excludedStatusSell i countryId null
+        List<Object[]> resultNoFilter = securityRepository.getSecuritiesByStatus(status, null, null);
+        log.info("\n🟢 [IT][SECURITY] getSecuritiesByStatus (no filters) -> {} rows (status={})", resultNoFilter.size(), status);
+        assertThat(resultNoFilter).isNotEmpty();
+    }
+
+    private static void getInfo(List<Object[]> result, String status, String excludedStatusSell, Long countryId) {
+        log.info("\n🟢 [IT][NOTE] getNotesByStatus (custom query) -> {} rows (status={}, excludedStatusSell={}, countryId={})",
+                result.size(), status, excludedStatusSell, countryId);
     }
 
 

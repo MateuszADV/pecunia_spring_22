@@ -329,7 +329,7 @@ public class CoinRepositoryIT {
     void shouldReturnPaginatedCoinsSortedByDenominationNotVisible() {
 
         // given
-        Long currencyId = 655L; // dobierz pod swoje dane
+        Long currencyId = 680L; // dobierz pod swoje dane
         String status = "KOLEKCJA";
 
         Pageable pageable = PageRequest.of(0, 5); // pierwsza strona, 5 elementów
@@ -484,6 +484,73 @@ public class CoinRepositoryIT {
                 firstPage.getNumber(),
                 secondPage.getNumber(),
                 firstPage.getTotalElements());
+    }
+
+    /**
+     * Test zwraca ile monet widzi USER
+     * Zwraca Ili monet USER nie widzi
+     * Awraca ilość monet które widzi ADMIN
+     */
+
+    @Test
+    void shouldFilterProperlyByVisibleParameter() {
+
+        // given
+        String status = "KOLEKCJA";
+        Long countryId = 172L;
+
+        // when
+        List<CurrencyByStatus> all =
+                coinRepository.currencyByStatus(status, countryId, null);
+
+        List<CurrencyByStatus> visibleTrue =
+                coinRepository.currencyByStatus(status, countryId, true);
+
+        List<CurrencyByStatus> visibleFalse =
+                coinRepository.currencyByStatus(status, countryId, false);
+
+        long sumAll = all.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumTrue = visibleTrue.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumFalse = visibleFalse.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+        // then
+
+
+        assertThat(sumTrue + sumFalse).isEqualTo(sumAll);
+        assertThat(all).isNotEmpty();
+
+        // visible true i false nie mogą mieć więcej rekordów niż all
+        assertThat(visibleTrue.size()).isLessThanOrEqualTo(all.size());
+        assertThat(visibleFalse.size()).isLessThanOrEqualTo(all.size());
+
+        log.info("""
+        🟢 [IT][SECURITY] visible filter verification \n(Currency Coin Visible)
+        ALL     -> {}
+        TRUE    -> {}
+        FALSE   -> {}
+        """,
+                all.size(),
+                visibleTrue.size(),
+                visibleFalse.size()
+        );
+
+        log.info("""
+        🟢 [IT][SECURITY] visible filter verification \n(Coin Visible)
+        ALL     -> {}
+        TRUE    -> {}
+        FALSE   -> {}
+        """,
+                sumAll,
+                sumTrue,
+                sumFalse
+        );
     }
 
 }
