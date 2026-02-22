@@ -1,16 +1,19 @@
 package pecunia_22.services.securityService;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pecunia_22.models.Note;
 import pecunia_22.models.Security;
 import pecunia_22.models.repositories.SecurityRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetSecuritiesByStatus;
+import pecunia_22.timing.annotation.MeasureTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +67,14 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public List<GetSecuritiesByStatus> getSecurityByStatus(String status) {
-        List<Object[]> objects = securityRepository.getSecuritiesByStatus(status);
+        List<Object[]> objects = securityRepository.getSecuritiesByStatus(status, null, null);
         List<GetSecuritiesByStatus> getSecuritiesByStatusList = new ArrayList<>();
         for (Object[] object : objects) {
             getSecuritiesByStatusList.add(new ModelMapper().map(object[0], GetSecuritiesByStatus.class));
         }
+        System.out.println("------------------SECURITIES FOR SELL--------------------------------");
+        System.out.println(getSecuritiesByStatusList);
+        System.out.println("------------------SECURITIES FOR SELL--------------------------------");
         return getSecuritiesByStatusList;
     }
 
@@ -126,12 +132,20 @@ public class SecurityServiceImpl implements SecurityService {
         }
     }
 
+    @MeasureTime(value = "Update security in DB", color = MeasureTime.ConsoleColor.GREEN)
+//    @MeasureTime("Update note in DB")
     @Override
+    @Transactional
     public void updateSecurity(Security security) {
-        securityRepository.updateSecurity(security.getCurrencies().getId(), security.getDenomination(), security.getDateBuy(), security.getNameCurrency(), security.getSeries(),
-                security.getBoughts().getId(), security.getItemDate(), security.getQuantity(), security.getUnitQuantity(), security.getActives().getId(), security.getPriceBuy(), security.getPriceSell(),
-                security.getMakings().getId(), security.getQualities().getId(), security.getWidth(), security.getHeight(), security.getStatuses().getId(), security.getImageTypes().getId(),
-                security.getStatusSell(), security.getVisible(), security.getDescription(), security.getAversPath(), security.getReversePath(), security.getSerialNumber(),
-                security.getId());
+        securityRepository.updateSecurity(security);
     }
+
+//    @Override
+//    public void updateSecurity(Security security) {
+//        securityRepository.updateSecurity(security.getCurrencies().getId(), security.getDenomination(), security.getDateBuy(), security.getNameCurrency(), security.getSeries(),
+//                security.getBoughts().getId(), security.getItemDate(), security.getQuantity(), security.getUnitQuantity(), security.getActives().getId(), security.getPriceBuy(), security.getPriceSell(),
+//                security.getMakings().getId(), security.getQualities().getId(), security.getWidth(), security.getHeight(), security.getStatuses().getId(), security.getImageTypes().getId(),
+//                security.getStatusSell(), security.getVisible(), security.getDescription(), security.getAversPath(), security.getReversePath(), security.getSerialNumber(),
+//                security.getId());
+//    }
 }

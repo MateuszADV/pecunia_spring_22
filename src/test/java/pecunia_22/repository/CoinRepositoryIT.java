@@ -329,7 +329,7 @@ public class CoinRepositoryIT {
     void shouldReturnPaginatedCoinsSortedByDenominationNotVisible() {
 
         // given
-        Long currencyId = 655L; // dobierz pod swoje dane
+        Long currencyId = 680L; // dobierz pod swoje dane
         String status = "KOLEKCJA";
 
         Pageable pageable = PageRequest.of(0, 5); // pierwsza strona, 5 elementów
