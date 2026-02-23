@@ -26,7 +26,8 @@ public class NBPController {
             List<GetGoldRateNBP> getGoldRateNBPList;
             getGoldRateNBPList = apiService.getGoldRateNBP("https://api.nbp.pl/api/cenyzlota/last/21");
 
-            getGoldRateNBPList.removeFirst();
+//            getGoldRateNBPList.removeFirst();
+            getGoldRateNBPList.remove(0);
             modelMap.addAttribute("npbGoldList", getGoldRateNBPList);
 
 //        ************* STATYSTYKA **********************
