@@ -125,7 +125,7 @@ public class SecurityServiceImpl implements SecurityService {
         List<Security> securities = new ArrayList<>();
         if (role == "ADMIN") {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-            return this.securityRepository.securityPageable(currencyId, status, pageable);
+            return this.securityRepository.securityPageable(currencyId, status, null, pageable);
         } else {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.securityRepository.securityPageable(currencyId, status, true, pageable);
