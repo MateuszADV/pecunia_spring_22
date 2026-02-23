@@ -6,8 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import pecunia_22.models.Note;
+import pecunia_22.models.Security;
 import pecunia_22.models.repositories.SecurityRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
@@ -230,6 +235,74 @@ public class SecurityRepositoryIT {
     private static void getInfo(List<Object[]> result, String status, String excludedStatusSell, Long countryId) {
         log.info("\n🟢 [IT][NOTE] getNotesByStatus (custom query) -> {} rows (status={}, excludedStatusSell={}, countryId={})",
                 result.size(), status, excludedStatusSell, countryId);
+    }
+
+    @Test
+    void shouldMaintainSortingAcrossPagesByDenomination() {
+
+        // given
+        Long currencyId = 336L; // dopasuj pod swoje dane
+        String status = "KOLEKCJA";
+
+        Pageable firstPageable = PageRequest.of(0, 5);
+        Pageable secondPageable = PageRequest.of(1, 5);
+
+        // when
+        Page<Security> firstPage = securityRepository.securityPageable(
+                currencyId,
+                status,
+                null,
+                firstPageable
+        );
+
+        Page<Security> secondPage = securityRepository.securityPageable(
+                currencyId,
+                status,
+                null,
+                secondPageable
+        );
+
+        // then
+        assertThat(firstPage).isNotNull();
+        assertThat(secondPage).isNotNull();
+
+        assertThat(firstPage.getContent()).isNotEmpty();
+
+        // sprawdzenie sortowania na pierwszej stronie
+        List<Double> firstDenominations = firstPage.getContent()
+                .stream()
+                .map(Security::getDenomination)
+                .toList();
+
+        assertThat(firstDenominations).isSorted();
+
+        // jeśli druga strona istnieje — sprawdzamy ciągłość sortowania
+        if (!secondPage.getContent().isEmpty()) {
+
+            List<Double> secondDenominations = secondPage.getContent()
+                    .stream()
+                    .map(Security::getDenomination)
+                    .toList();
+
+            assertThat(secondDenominations).isSorted();
+
+            Double lastFromFirstPage =
+                    firstDenominations.get(firstDenominations.size() - 1);
+
+            Double firstFromSecondPage =
+                    secondDenominations.get(0);
+
+            assertThat(firstFromSecondPage)
+                    .isGreaterThanOrEqualTo(lastFromFirstPage);
+
+            log.info("🟢 [IT][SECURITY] Sorting continuity OK -> {} <= {}",
+                    lastFromFirstPage, firstFromSecondPage);
+        }
+
+        log.info("🟢 [IT][SECURITY] Pagination continuity test -> firstPage={}, secondPage={}, totalElements={}",
+                firstPage.getNumber(),
+                secondPage.getNumber(),
+                firstPage.getTotalElements());
     }
 
 
