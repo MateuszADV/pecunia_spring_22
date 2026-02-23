@@ -1,7 +1,5 @@
 package pecunia_22.repository;
 
-
-import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import pecunia_22.models.Note;
 import pecunia_22.models.Security;
 import pecunia_22.models.repositories.SecurityRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
@@ -28,19 +25,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SecurityRepositoryIT {
 
     private final SecurityRepository securityRepository;
-    private final EntityManager entityManager;
 
     @Autowired
-    public SecurityRepositoryIT(SecurityRepository securityRepository, EntityManager entityManager) {
+    public SecurityRepositoryIT(SecurityRepository securityRepository) {
         this.securityRepository = securityRepository;
-        this.entityManager = entityManager;
     }
 
     @Test
     void shouldLoadCurrencyByStatus_whenVisibleTrue() {
         // given
         String status = "KOLEKCJA";
-        Long countryId = 172l;
+        Long countryId = 172L;
         Boolean visible = true;
 
         // when

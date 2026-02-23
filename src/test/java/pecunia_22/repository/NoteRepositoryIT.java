@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class NoteRepositoryIT {
 
-    private NoteRepository noteRepository;
-    private EntityManager entityManager;
+    private final NoteRepository noteRepository;
+    private final EntityManager entityManager;
 
     @Autowired
     public NoteRepositoryIT(
