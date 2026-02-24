@@ -300,5 +300,26 @@ public class SecurityRepositoryIT {
                 firstPage.getTotalElements());
     }
 
+    @Test
+    void getSecurityByCurrencyId() {
+        //Given
+        Long currencyId = 336L;
+
+        //Then
+
+        List<Security> securities = securityRepository.getSecurityByCurrencyId(currencyId);
+
+        log.info("🟢 Ilość pobranych elementów -> {}", securities.size());
+    }
+
+    @Test
+    void getAllSecurityOrderById() {
+
+        //Then
+
+        List<Security> securities = securityRepository.getAllSecurityOrderById();
+        log.info("🟢 Ilość wysztkich pobranych elementów -> {}", securities.size());
+    }
+
 
 }

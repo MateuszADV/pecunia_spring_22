@@ -19,12 +19,19 @@ import java.util.List;
 @Repository
 public interface SecurityRepository extends JpaRepository<Security, Long> {
 
-    @Query(value = "SELECT sec FROM Security sec ORDER BY sec.id")
+    @Query("""
+    SELECT sec FROM Security sec 
+    ORDER BY sec.id
+    """)
     List<Security> getAllSecurityOrderById();
 
-    @Query(value = "SELECT sec FROM Security sec " +
-            "WHERE sec.currencies.id = ?1")
-    List<Security> getSecurityByCurrencyId(Long currencyId);
+    @Query("""
+    SELECT sec FROM Security sec
+    WHERE sec.currencies.id = :currencyId
+""")
+    List<Security> getSecurityByCurrencyId(
+            @Param("currencyId") Long currencyId
+    );
 
     @Query("""
 SELECT new map(
