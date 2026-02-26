@@ -40,6 +40,8 @@ public class NoteRepositoryTimingIT {
         // wywołanie kilku metod repozytorium
         List<Note> notes = noteRepository.findAll();
         noteRepository.getNoteByCurrencyId(null);
+        log.info("Iloś Pobranych Elementów -> {}",
+                notes.size());
 
         // prosty insert/update żeby zobaczyć czas
 //        Note note = new Note();

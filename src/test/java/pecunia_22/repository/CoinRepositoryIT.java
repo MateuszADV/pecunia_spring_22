@@ -315,14 +315,7 @@ public class CoinRepositoryIT {
         assertThat(denominations)
                 .isSorted();
 
-        extracted(page);
-    }
-
-    private static void extracted(Page<Coin> page) {
-        log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements());
+        getInfo(page);
     }
 
     @Test
@@ -359,13 +352,6 @@ public class CoinRepositoryIT {
         getInfo(page);
     }
 
-    private static void getInfo(Page<Coin> page) {
-        log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements());
-    }
-
     @Test
     void shouldReturnPaginatedCoinsSortedByDenominationVisible() {
 
@@ -396,7 +382,10 @@ public class CoinRepositoryIT {
 
         assertThat(denominations)
                 .isSorted();
+        getInfo(page);
+    }
 
+    private static void getInfo(Page<Coin> page) {
         log.info("🟢 [IT][COIN] Pagination test -> page={}, size={}, totalElements={}",
                 page.getNumber(),
                 page.getSize(),

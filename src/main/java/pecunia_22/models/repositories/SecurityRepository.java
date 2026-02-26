@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pecunia_22.models.Note;
 import pecunia_22.models.Security;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
@@ -18,12 +19,19 @@ import java.util.List;
 @Repository
 public interface SecurityRepository extends JpaRepository<Security, Long> {
 
-    @Query(value = "SELECT sec FROM Security sec ORDER BY sec.id")
+    @Query("""
+    SELECT sec FROM Security sec 
+    ORDER BY sec.id
+    """)
     List<Security> getAllSecurityOrderById();
 
-    @Query(value = "SELECT sec FROM Security sec " +
-            "WHERE sec.currencies.id = ?1")
-    List<Security> getSecurityByCurrencyId(Long currencyId);
+    @Query("""
+    SELECT sec FROM Security sec
+    WHERE sec.currencies.id = :currencyId
+""")
+    List<Security> getSecurityByCurrencyId(
+            @Param("currencyId") Long currencyId
+    );
 
     @Query("""
 SELECT new map(
@@ -66,26 +74,6 @@ ORDER BY cou.countryEn, sec.denomination
             @Param("excludedStatusSell") String excludedStatusSell,
             @Param("countryId") Long countryId
     );
-
-//    @Query(value = "SELECT new map(sec.qualities AS qualities, sec.makings AS makings, sec.id AS securityId, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-//            "cur.currencySeries AS currencySeries, cur.patterns AS patterns, bou.name AS bought, sec.denomination AS denomination, sec.nameCurrency AS nameCurrency, sec.itemDate AS itemDate, " +
-//            "sec.priceBuy AS priceBuy, sec.priceSell AS priceSell, sec.quantity AS quantity, sec.unitQuantity AS unitQuantity, " +
-//            "sec.width AS width, sec.height AS height, sec.visible AS visible, sec.description AS description, " +
-//            "sec.aversPath AS aversPath, sec.reversePath AS reversePath ) " +
-//            "  FROM Security sec" +
-//            "  LEFT JOIN Status stat" +
-//            "    ON stat.status = ?1" +
-//            "  LEFT JOIN Bought bou" +
-//            "    ON bou = sec.boughts" +
-//            "  LEFT JOIN Currency cur" +
-//            "    ON cur = sec.currencies" +
-//            "  LEFT JOIN Country cou" +
-//            "    ON cou = cur.countries" +
-//            " WHERE stat = sec.statuses" +
-//            " GROUP BY sec.qualities, sec.makings, sec.id, cou.id, cou.countryEn, cou.countryPl, cur.id, cur.currencySeries, cur.patterns, bou.name, sec.denomination, sec.nameCurrency, sec.itemDate, " +
-//            "          sec.priceBuy, sec.priceSell, sec.quantity, sec.unitQuantity, sec.width, sec.height, sec.visible, sec.description, sec.aversPath, sec.reversePath " +
-//            " ORDER BY cou.countryEn, sec.denomination")
-//    List<Object[]> getSecuritiesByStatus(String status);
 
     /**
      * Zwraca statystyki krajów dla danego statusu papierów wartościowych.
@@ -172,20 +160,39 @@ ORDER BY cou.countryEn, sec.denomination
             @Param("visible") Boolean visible
     );
 
-
-    @Query(value = "SELECT security FROM Security security " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE security.currencies.id = ?1 AND stat = security.statuses " +
-            "ORDER BY security.denomination")
-    Page<Security> securityPageable(Long currencyId, String status, final Pageable pageable);
-
-    @Query(value = "SELECT security FROM Security security " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE security.currencies.id = ?1 AND stat = security.statuses  AND security.visible = ?3 " +
-            "ORDER BY security.denomination")
-    Page<Security> securityPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
+    /**
+     * Returns paginated securities filtered by:
+     * <ul>
+     *   <li>currency ID</li>
+     *   <li>note status (e.g. NEW, USED)</li>
+     *   <li>optional visibility flag</li>
+     * </ul>
+     *
+     * <p>If {@code visible} is {@code null}, notes are returned regardless of visibility.</p>
+     *
+     * <p>Results are ordered by note denomination in ascending order.</p>
+     *
+     * @param currencyId required currency identifier
+     * @param status     required note status
+     * @param visible    optional visibility filter (true / false / null)
+     * @param pageable   pagination and sorting information
+     * @return paginated list of {@link Security}
+     */
+    @Query("""
+    SELECT sec
+    FROM Security sec
+        JOIN sec.statuses stat
+    WHERE sec.currencies.id = :currencyId
+      AND stat.status = :status
+      AND (:visible IS NULL OR sec.visible = :visible)
+    ORDER BY sec.denomination
+""")
+    Page<Security> securityPageable(
+            @Param("currencyId") Long currencyId,
+            @Param("status") String status,
+            @Param("visible") Boolean visible,
+            Pageable pageable
+    );
 
     //    *************************
     //    ****SECURITIES UPDATE****
