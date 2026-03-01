@@ -2,6 +2,7 @@ package pecunia_22.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -438,6 +439,67 @@ public class NoteRepositoryIT {
         TRUE    -> {}
         FALSE   -> {}
         """,
+                sumAll,
+                sumTrue,
+                sumFalse
+        );
+    }
+
+    @Test
+    void shouldRespectVisibleAndCountryFiltersInCurrencyByStatus() {
+
+        // given
+        String status = "KOLEKCJA";
+
+        // znajdź kraj, dla którego są jakieś wyniki
+        List<CurrencyByStatus> any =
+                noteRepository.currencyByStatus(status, 172L, null);
+
+        if (any.isEmpty()) {
+            // jeśli brak danych dla tego kraju – test pomijamy
+            return;
+        }
+
+        Long countryId = any.get(0).countryId();
+
+        // when
+        List<CurrencyByStatus> all =
+                noteRepository.currencyByStatus(status, countryId, null);
+
+        List<CurrencyByStatus> visibleTrue =
+                noteRepository.currencyByStatus(status, countryId, true);
+
+        List<CurrencyByStatus> visibleFalse =
+                noteRepository.currencyByStatus(status, countryId, false);
+
+        // then
+        long sumAll = all.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumTrue = visibleTrue.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        long sumFalse = visibleFalse.stream()
+                .mapToLong(CurrencyByStatus::total)
+                .sum();
+
+        // ADMIN widzi wszystko
+        AssertionsForClassTypes.assertThat(sumAll).isGreaterThanOrEqualTo(sumTrue);
+        AssertionsForClassTypes.assertThat(sumAll).isGreaterThanOrEqualTo(sumFalse);
+
+        // suma widocznych i niewidocznych = wszystkie
+        AssertionsForClassTypes.assertThat(sumTrue + sumFalse).isEqualTo(sumAll);
+
+        log.info("""
+        🟢 [IT][MEDAL] currencyByStatus logic verification
+        COUNTRY -> {}
+        ALL     -> {}
+        TRUE    -> {}
+        FALSE   -> {}
+        """,
+                countryId,
                 sumAll,
                 sumTrue,
                 sumFalse
