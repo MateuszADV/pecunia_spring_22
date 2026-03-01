@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Medal;
+import pecunia_22.models.sqlClass.CountryByStatus;
+import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.sql.Date;
 import java.util.List;
@@ -35,63 +38,102 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
                     String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
                     Long medalId);
 
-    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
-            "  FROM Medal medal" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = medal.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = medal.statuses" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
-            " ORDER BY cou.countryEn")
-    List<Object[]> countryByStatus(String status);
+    /**
+     * Zwraca listę krajów wraz z liczbą not
+     * o określonym statusie.
+     * ------
+     * Zapytanie wykorzystywane do statystyk / zestawień (np. dashboard).
+     *
+     * @param status     status noty (np. COLLECTION, FOR_SALE, SOLD)
+     * @param visible    opcjonalny filtr widoczności:
+     *                   - null  → wszystkie rekordy
+     *                   - true  → tylko widoczne
+     *                   - false → tylko niewidoczne
+     * -------
+     * @return lista krajów posortowana alfabetycznie według nazwy kraju (EN),
+     *         zawierająca liczbę not dla każdego kraju
+     */
+    @Query("""
+    SELECT new pecunia_22.models.sqlClass.CountryByStatus(
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl,
+        COUNT(medal.id)
+    )
+    FROM Medal medal
+            JOIN medal.statuses stat
+            JOIN medal.currencies cur
+            JOIN cur.countries cou
+            JOIN cou.continents con
+    WHERE stat.status = :status
+      AND (:visible IS NULL OR medal.visible = :visible)
+    GROUP BY
+        con.continentEn,
+        con.continentCode,
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    ORDER BY cou.countryEn
+    """)
+        List<CountryByStatus> countryByStatus(
+                @Param("status") String status,
+                @Param("visible") Boolean visible
+        );
 
-    @Query(value = "SELECT new map(con.continentEn AS continent, con.continentCode AS continentCode, cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, COUNT(cou.countryEn) AS total) " +
-            "  FROM Medal medal" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = medal.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            "  LEFT JOIN Continent con" +
-            "    ON con = cou.continents" +
-            " WHERE stat = medal.statuses AND medal.visible = ?2" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, con.continentEn, con.continentCode" +
-            " ORDER BY cou.countryEn")
-    List<Object[]> countryByStatus(String status, Boolean visible);
-
-    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
-            "  FROM Medal medal" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = medal.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            " WHERE stat = medal.statuses AND cou.id = ?2" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
-            " ORDER BY cur.currencySeries")
-    List<Object[]> currencyByStatus(String status, Long countryId);
-
-    @Query(value = "SELECT new map(cou.id AS countryId, cou.countryEn AS countryEn, cou.countryPl AS countryPl, cur.id AS currencyId, " +
-            "cur.currencySeries AS currencySeries, COUNT(cur.currencySeries) AS total) " +
-            "  FROM Medal medal" +
-            "  LEFT JOIN Status stat" +
-            "    ON stat.status = ?1" +
-            "  LEFT JOIN Currency cur" +
-            "    ON cur = medal.currencies" +
-            "  LEFT JOIN Country cou" +
-            "    ON cou = cur.countries" +
-            " WHERE stat = medal.statuses AND cou.id = ?2 AND medal.visible = ?3" +
-            " GROUP BY cou.countryEn, cou.countryPl, cou.id, cur.currencySeries, cur.id" +
-            " ORDER BY cur.currencySeries")
-    List<Object[]> currencyByStatus(String status, Long countryId, Boolean visible);
+    /**
+     * Zwraca statystyki medali pogrupowane według waluty
+     * dla zadanego statusu i kraju.
+     *
+     * Zapytanie:
+     *  - filtruje medale po wymaganym statusie,
+     *  - ogranicza wyniki do wybranego kraju,
+     *  - opcjonalnie filtruje po widoczności.
+     *
+     * Jeśli parametr {@code visible} ma wartość {@code null},
+     * zwracane są wszystkie medale (widok administratora).
+     *
+     * Wyniki są grupowane według waluty w obrębie danego kraju
+     * i sortowane rosnąco po serii waluty.
+     *
+     * @param status wymagany status medalu (np. KOLEKCJA, NA_SPRZEDAZ)
+     * @param countryId identyfikator kraju
+     * @param visible opcjonalny filtr widoczności (true / false / null)
+     * @return lista statystyk walut z liczbą medali
+     */
+    @Query("""
+    SELECT new pecunia_22.models.sqlClass.CurrencyByStatus(
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries,
+        COUNT(medal.id)
+    )
+    FROM Medal medal
+            JOIN medal.statuses stat
+            JOIN medal.currencies cur
+            JOIN cur.countries cou
+            JOIN cou.continents con
+    WHERE stat.status = :status
+      AND cou.id = :countryId
+      AND (:visible IS NULL OR medal.visible = :visible)
+    GROUP BY
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries
+    ORDER BY cur.currencySeries
+    """)
+        List<CurrencyByStatus> currencyByStatus(
+                @Param("status") String status,
+                @Param("countryId") Long countryId,
+                @Param("visible") Boolean visible
+        );
 
     @Query(value = "SELECT medal FROM Medal medal " +
             "  LEFT JOIN Status stat " +

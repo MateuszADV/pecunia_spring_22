@@ -1,6 +1,5 @@
 package pecunia_22.services.medalService;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -67,38 +66,42 @@ public class MedalServiceImpl implements MedalService {
 
     @Override
     public List<CountryByStatus> getCountryByStatus(String status, String role) {
-        List<Object[]> objects = new ArrayList<>();
+//        List<Object[]> objects = new ArrayList<>();
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = medalRepository.countryByStatus(status);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = medalRepository.countryByStatus(status, null);
+//            objects = medalRepository.countryByStatus(status);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         } else {
-            objects = medalRepository.countryByStatus(status, true);
-            for (Object[] object : objects) {
-                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-            }
+            countryByStatusList = medalRepository.countryByStatus(status, true);
+//            objects = medalRepository.countryByStatus(status, true);
+//            for (Object[] object : objects) {
+//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
+//            }
         }
         return countryByStatusList;
     }
 
     @Override
     public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role) {
-        List<Object[]> objects = new ArrayList<>();
+//        List<Object[]> objects = new ArrayList<>();
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
         if (role == "ADMIN") {
-            objects = medalRepository.currencyByStatus(status, countryId);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = medalRepository.currencyByStatus(status, countryId, null);
+//            objects = medalRepository.currencyByStatus(status, countryId);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         } else {
-            objects = medalRepository.currencyByStatus(status, countryId, true);
-            for (Object[] object : objects) {
-                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-            }
+            currencyByStatusList = medalRepository.currencyByStatus(status, countryId, true);
+//            objects = medalRepository.currencyByStatus(status, countryId, true);
+//            for (Object[] object : objects) {
+//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
+//            }
         }
         return currencyByStatusList;
     }
