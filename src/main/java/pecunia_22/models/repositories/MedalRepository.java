@@ -144,7 +144,7 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
 
     @Query(value = "SELECT medal FROM Medal medal " +
             "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2" +
+            "    ON stat.status = ?2 " +
             "WHERE medal.currencies.id = ?1 AND stat = medal.statuses  AND medal.visible = ?3 " +
             "ORDER BY medal.denomination")
     Page<Medal> medalPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
