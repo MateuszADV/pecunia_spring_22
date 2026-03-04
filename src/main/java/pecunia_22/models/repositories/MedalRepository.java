@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pecunia_22.models.Coin;
 import pecunia_22.models.Medal;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
@@ -25,18 +26,55 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
             " WHERE medal.currencies.id = ?1 AND medal.visible = ?2")
     List<Medal> getMedalByCurrencyId(Long currencyId, Boolean visible);
 
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
-    @Modifying
-    @Query(value = "update Medal medal set     medal.currencies.id = ?1, medal.denomination = ?2, medal.dateBuy = ?3,      medal.nameCurrency = ?4, medal.series = ?5, " +
-            "medal.boughts.id = ?6,    medal.itemDate = ?7,      medal.quantity = ?8,     medal.unitQuantity = ?9, medal.actives.id = ?10,  medal.priceBuy = ?11, medal.priceSell = ?12, " +
-            "medal.qualities.id = ?13, medal.diameter = ?14,     medal.thickness = ?15,   medal.weight = ?16,      medal.statuses.id = ?17, medal.imageTypes.id = ?18, " +
-            "medal.statusSell = ?19,   medal.visible = ?20,      medal.composition = ?21, medal.description = ?22, medal.aversPath = ?23,   medal.reversePath = ?24 "+
-            "where medal.id = ?25")
-    void updateMedal(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
-                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
-                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
-                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
-                    Long medalId);
+    @Query("""
+    UPDATE Medal m
+    SET
+        m.currencies.id = :#{#medal.currencies.id},
+        m.denomination  = :#{#medal.denomination},
+        m.dateBuy       = :#{#medal.dateBuy},
+        m.nameCurrency  = :#{#medal.nameCurrency},
+        m.series        = :#{#medal.series},
+
+        m.boughts.id    = :#{#medal.boughts.id},
+        m.itemDate      = :#{#medal.itemDate},
+        m.quantity      = :#{#medal.quantity},
+        m.unitQuantity  = :#{#medal.unitQuantity},
+        m.actives.id    = :#{#medal.actives.id},
+        m.priceBuy      = :#{#medal.priceBuy},
+        m.priceSell     = :#{#medal.priceSell},
+
+        m.qualities.id  = :#{#medal.qualities.id},
+        m.diameter      = :#{#medal.diameter},
+        m.thickness     = :#{#medal.thickness},
+        m.weight        = :#{#medal.weight},
+        m.statuses.id   = :#{#medal.statuses.id},
+        m.imageTypes.id = :#{#medal.imageTypes.id},
+
+        m.statusSell    = :#{#medal.statusSell},
+        m.visible       = :#{#medal.visible},
+        m.composition   = :#{#medal.composition},
+        m.description   = :#{#medal.description},
+        m.aversPath     = :#{#medal.aversPath},
+        m.reversePath   = :#{#medal.reversePath}
+    WHERE m.id = :#{#medal.id}
+""")
+    void updateMedal(@Param("medal") Medal medal);
+
+//    @Transactional
+//    @Modifying
+//    @Query(value = "update Medal medal set     medal.currencies.id = ?1, medal.denomination = ?2, medal.dateBuy = ?3,      medal.nameCurrency = ?4, medal.series = ?5, " +
+//            "medal.boughts.id = ?6,    medal.itemDate = ?7,      medal.quantity = ?8,     medal.unitQuantity = ?9, medal.actives.id = ?10,  medal.priceBuy = ?11, medal.priceSell = ?12, " +
+//            "medal.qualities.id = ?13, medal.diameter = ?14,     medal.thickness = ?15,   medal.weight = ?16,      medal.statuses.id = ?17, medal.imageTypes.id = ?18, " +
+//            "medal.statusSell = ?19,   medal.visible = ?20,      medal.composition = ?21, medal.description = ?22, medal.aversPath = ?23,   medal.reversePath = ?24 "+
+//            "where medal.id = ?25")
+//    void updateMedal(Long currencyId, Double denomination, Date dateBuy, String nameCurrency, String series,
+//                    Long boughtsId, String itemDate, Integer quantity, String unitQuantity, Long activesId, Double priceBuy, Double priceSell,
+//                    Long quality, Double diameter, Double thickness, Double weight, Long status, Long imageType,
+//                    String statusSell, Boolean visible, String composition, String  description, String aversePath, String ReversePath,
+//                    Long medalId);
 
     /**
      * Zwraca listę krajów wraz z liczbą not
@@ -135,17 +173,33 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
                 @Param("visible") Boolean visible
         );
 
-    @Query(value = "SELECT medal FROM Medal medal " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE medal.currencies.id = ?1 AND stat = medal.statuses " +
-            "ORDER BY medal.denomination")
-    Page<Medal> medalPageable(Long currencyId, String status, final Pageable pageable);
+    @Query("""
+    SELECT medal
+    FROM Medal medal
+        JOIN medal.statuses stat
+    WHERE medal.currencies.id = :currencyId
+      AND stat.status = :status
+      AND (:visible IS NULL OR medal.visible = :visible)
+    ORDER BY medal.denomination
+""")
+    Page<Medal> medalPageable(
+            @Param("currencyId") Long currencyId,
+            @Param("status") String status,
+            @Param("visible") Boolean visible,
+            Pageable pageable
+    );
 
-    @Query(value = "SELECT medal FROM Medal medal " +
-            "  LEFT JOIN Status stat " +
-            "    ON stat.status = ?2 " +
-            "WHERE medal.currencies.id = ?1 AND stat = medal.statuses  AND medal.visible = ?3 " +
-            "ORDER BY medal.denomination")
-    Page<Medal> medalPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
+//    @Query(value = "SELECT medal FROM Medal medal " +
+//            "  LEFT JOIN Status stat " +
+//            "    ON stat.status = ?2 " +
+//            "WHERE medal.currencies.id = ?1 AND stat = medal.statuses " +
+//            "ORDER BY medal.denomination")
+//    Page<Medal> medalPageable(Long currencyId, String status, final Pageable pageable);
+//
+//    @Query(value = "SELECT medal FROM Medal medal " +
+//            "  LEFT JOIN Status stat " +
+//            "    ON stat.status = ?2 " +
+//            "WHERE medal.currencies.id = ?1 AND stat = medal.statuses  AND medal.visible = ?3 " +
+//            "ORDER BY medal.denomination")
+//    Page<Medal> medalPageable(Long currencyId, String status, Boolean visible, final Pageable pageable);
 }

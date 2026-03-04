@@ -331,6 +331,39 @@ public class NoteRepositoryIT {
     }
 
     @Test
+    void shouldReturnOnlyVisibleMedalsWithGivenStatusAndPaginateLog() {
+
+        Long currencyId = 226L;
+        String status = "KOLEKCJA";
+        Pageable pageable = PageRequest.of(0, 5);
+
+        log.info("Testing notePageable with currencyId={}, status={}, visible=true",
+                currencyId, status);
+
+        Page<Note> page = noteRepository
+                .notePageable(currencyId, status, true, pageable);
+
+        log.info("Total elements: {}", page.getTotalElements());
+        log.info("Total pages: {}", page.getTotalPages());
+        log.info("Current page size: {}", page.getContent().size());
+
+        page.getContent().forEach(n ->
+                log.info("Note id={}, denomination={}, visible={}, status={}",
+                        n.getId(),
+                        n.getDenomination(),
+                        n.getVisible(),
+                        n.getStatuses().getStatus()
+                )
+        );
+
+        assertThat(page.getContent())
+                .allMatch(n -> Boolean.TRUE.equals(n.getVisible()));
+
+        assertThat(page.getContent())
+                .allMatch(n -> status.equals(n.getStatuses().getStatus()));
+    }
+
+    @Test
     void shouldUpdateNote_successfully() {
 
         // given

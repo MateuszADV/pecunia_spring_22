@@ -1,14 +1,17 @@
 package pecunia_22.services.medalService;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pecunia_22.models.Coin;
 import pecunia_22.models.Medal;
 import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.timing.annotation.MeasureTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +58,22 @@ public class MedalServiceImpl implements MedalService {
         return medals;
     }
 
+    @MeasureTime(value = "Update medal in DB",
+            color = MeasureTime.ConsoleColor.GREEN)
     @Override
+    @Transactional
     public void updateMedal(Medal medal) {
-        medalRepository.updateMedal(medal.getCurrencies().getId(), medal.getDenomination(), medal.getDateBuy(), medal.getNameCurrency(), medal.getSeries(),
-                medal.getBoughts().getId(), medal.getItemDate(), medal.getQuantity(), medal.getUnitQuantity(), medal.getActives().getId(), medal.getPriceBuy(), medal.getPriceSell(),
-                medal.getQualities().getId(), medal.getDiameter(), medal.getThickness(), medal.getWeight(), medal.getStatuses().getId(), medal.getImageTypes().getId(),
-                medal.getStatusSell(), medal.getVisible(), medal.getComposition(), medal.getDescription(), medal.getAversPath(), medal.getReversePath(),
-                medal.getId());
+        medalRepository.updateMedal(medal);
     }
+
+//    @Override
+//    public void updateMedal(Medal medal) {
+//        medalRepository.updateMedal(medal.getCurrencies().getId(), medal.getDenomination(), medal.getDateBuy(), medal.getNameCurrency(), medal.getSeries(),
+//                medal.getBoughts().getId(), medal.getItemDate(), medal.getQuantity(), medal.getUnitQuantity(), medal.getActives().getId(), medal.getPriceBuy(), medal.getPriceSell(),
+//                medal.getQualities().getId(), medal.getDiameter(), medal.getThickness(), medal.getWeight(), medal.getStatuses().getId(), medal.getImageTypes().getId(),
+//                medal.getStatusSell(), medal.getVisible(), medal.getComposition(), medal.getDescription(), medal.getAversPath(), medal.getReversePath(),
+//                medal.getId());
+//    }
 
     @Override
     public List<CountryByStatus> getCountryByStatus(String status, String role) {
@@ -111,7 +122,7 @@ public class MedalServiceImpl implements MedalService {
         List<Medal> medals = new ArrayList<>();
         if (role == "ADMIN") {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-            return this.medalRepository.medalPageable(currencyId, status, pageable);
+            return this.medalRepository.medalPageable(currencyId, status, null, pageable);
         } else {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.medalRepository.medalPageable(currencyId, status, true, pageable);
