@@ -33,4 +33,7 @@ public class CurrentUserServiceImpl implements CurrentUserService {
     public Boolean visibleFilter() {
         return isAdmin() ? null : true;
     }
+
+
+
 }

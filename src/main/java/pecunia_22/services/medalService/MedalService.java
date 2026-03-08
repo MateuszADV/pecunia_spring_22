@@ -20,7 +20,7 @@ public interface MedalService {
     void updateMedal(Medal medal);
 
     List<CountryByStatus> getCountryByStatus(String status, String role);
-    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role);
+    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status);
     Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
 
 }

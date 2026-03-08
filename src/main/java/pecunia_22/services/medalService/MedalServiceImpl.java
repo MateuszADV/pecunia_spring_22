@@ -1,13 +1,11 @@
 package pecunia_22.services.medalService;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.Medal;
 import pecunia_22.models.repositories.MedalRepository;
@@ -19,11 +17,12 @@ import pecunia_22.timing.annotation.MeasureTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MedalServiceImpl implements MedalService {
 
-    private MedalRepository medalRepository;
-    private CurrentUserServiceImpl currentUserService;
+    private final MedalRepository medalRepository;
+    private final CurrentUserServiceImpl currentUserService;
 
     @Autowired
     public MedalServiceImpl(MedalRepository medalRepository, CurrentUserServiceImpl currentUserService) {
@@ -46,11 +45,17 @@ public class MedalServiceImpl implements MedalService {
 
         if (currentUserService.isAdmin()) {
             return medalRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Medal not found"));
+                    .orElseThrow(() -> {
+                        log.warn("Medal with id {} not found", id);
+                        return new RuntimeException("Medal not found");
+                    });
         }
 
         return medalRepository.findByIdAndVisibleTrue(id)
-                .orElseThrow(() -> new RuntimeException("Medal not found"));
+                .orElseThrow(() -> {
+                    log.warn("User tried to access hidden or non-existing medal id {}", id);
+                    return new RuntimeException("Medal not found");
+                });
 //        Optional<Medal> optional = medalRepository.findById(id);
 //        if (optional.isPresent()) {
 //            return optional.get();
@@ -78,15 +83,6 @@ public class MedalServiceImpl implements MedalService {
         medalRepository.updateMedal(medal);
     }
 
-//    @Override
-//    public void updateMedal(Medal medal) {
-//        medalRepository.updateMedal(medal.getCurrencies().getId(), medal.getDenomination(), medal.getDateBuy(), medal.getNameCurrency(), medal.getSeries(),
-//                medal.getBoughts().getId(), medal.getItemDate(), medal.getQuantity(), medal.getUnitQuantity(), medal.getActives().getId(), medal.getPriceBuy(), medal.getPriceSell(),
-//                medal.getQualities().getId(), medal.getDiameter(), medal.getThickness(), medal.getWeight(), medal.getStatuses().getId(), medal.getImageTypes().getId(),
-//                medal.getStatusSell(), medal.getVisible(), medal.getComposition(), medal.getDescription(), medal.getAversPath(), medal.getReversePath(),
-//                medal.getId());
-//    }
-
     @Override
     public List<CountryByStatus> getCountryByStatus(String status, String role) {
 //        List<Object[]> objects = new ArrayList<>();
@@ -109,11 +105,11 @@ public class MedalServiceImpl implements MedalService {
     }
 
     @Override
-    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role) {
+    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status) {
 //        List<Object[]> objects = new ArrayList<>();
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             currencyByStatusList = medalRepository.currencyByStatus(status, countryId, null);
 //            objects = medalRepository.currencyByStatus(status, countryId);
 //            for (Object[] object : objects) {
