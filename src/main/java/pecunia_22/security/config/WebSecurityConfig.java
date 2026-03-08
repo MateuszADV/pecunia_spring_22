@@ -80,6 +80,9 @@ public class WebSecurityConfig  {
 
 //                ********************Security COLLECTOIN*****************************************
                 .requestMatchers("/security/collection/**").hasAnyAuthority("ADMIN", "USER")
+//                ********************COIN COLLECTOIN*****************************************
+                .requestMatchers("/medal/collection/**").hasAnyAuthority("ADMIN", "USER")
+
 
 //                ********************CONTINENT*****************************************
                 .requestMatchers("/continent/**").hasAnyAuthority("ADMIN", "USER")
