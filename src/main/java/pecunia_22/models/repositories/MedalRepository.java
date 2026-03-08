@@ -8,13 +8,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pecunia_22.models.Coin;
 import pecunia_22.models.Medal;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MedalRepository extends JpaRepository<Medal, Long> {
@@ -25,6 +24,9 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
     @Query(value = "SELECT medal FROM Medal medal " +
             " WHERE medal.currencies.id = ?1 AND medal.visible = ?2")
     List<Medal> getMedalByCurrencyId(Long currencyId, Boolean visible);
+
+    Optional<Medal> findByIdAndVisibleTrue(Long id);
+
 
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)

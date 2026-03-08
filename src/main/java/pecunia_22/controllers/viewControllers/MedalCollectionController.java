@@ -1,5 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class MedalCollectionController {
 
@@ -108,6 +110,17 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
+
+        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+        log.info("""
+                🟢 Role -> {}
+                """,
+                role);
+
+        System.out.println("----------------------");
+//        System.out.println(medalService.CurrentUserService());
+        System.out.println(medalService.getMedalByCurrencyId(145L));
+        System.out.println("----------------------");
 
         Medal medal = medalService.getMedalById(medalId);
         MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);

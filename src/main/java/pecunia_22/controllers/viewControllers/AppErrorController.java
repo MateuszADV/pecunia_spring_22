@@ -65,7 +65,8 @@ public class AppErrorController implements ErrorController {
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        return "access-denied"; // szablon access-denied.html w templates/
+        return "error";
+//        return "access-denied"; // szablon access-denied.html w templates/
     }
 
 //    @RequestMapping("/error")

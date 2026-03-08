@@ -2,7 +2,6 @@ package pecunia_22.services.medalService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import pecunia_22.models.Coin;
 import pecunia_22.models.Medal;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;

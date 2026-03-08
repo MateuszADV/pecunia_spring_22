@@ -1,30 +1,34 @@
 package pecunia_22.services.medalService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pecunia_22.models.Coin;
 import pecunia_22.models.Medal;
 import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.services.userService.CurrentUserServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MedalServiceImpl implements MedalService {
 
     private MedalRepository medalRepository;
+    private CurrentUserServiceImpl currentUserService;
 
     @Autowired
-    public MedalServiceImpl(MedalRepository medalRepository) {
+    public MedalServiceImpl(MedalRepository medalRepository, CurrentUserServiceImpl currentUserService) {
         this.medalRepository = medalRepository;
+        this.currentUserService = currentUserService;
     }
 
     @Override
@@ -39,12 +43,20 @@ public class MedalServiceImpl implements MedalService {
 
     @Override
     public Medal getMedalById(Long id) {
-        Optional<Medal> optional = medalRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        } else {
-            throw new RuntimeException("Medal Not Found For Id :: " + id);
+
+        if (currentUserService.isAdmin()) {
+            return medalRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Medal not found"));
         }
+
+        return medalRepository.findByIdAndVisibleTrue(id)
+                .orElseThrow(() -> new RuntimeException("Medal not found"));
+//        Optional<Medal> optional = medalRepository.findById(id);
+//        if (optional.isPresent()) {
+//            return optional.get();
+//        } else {
+//            throw new RuntimeException("Medal Not Found For Id :: " + id);
+//        }
     }
 
     @Override
