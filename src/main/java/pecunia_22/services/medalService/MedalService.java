@@ -8,7 +8,6 @@ import pecunia_22.models.sqlClass.CurrencyByStatus;
 
 import java.util.List;
 
-@Service
 public interface MedalService {
     List<Medal> getAllMedal();
     void saveMedal(Medal medal);
@@ -19,8 +18,8 @@ public interface MedalService {
 
     void updateMedal(Medal medal);
 
-    List<CountryByStatus> getCountryByStatus(String status, String role);
+    List<CountryByStatus> getCountryByStatus(String status);
     List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status);
-    Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
+    Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status);
 
 }

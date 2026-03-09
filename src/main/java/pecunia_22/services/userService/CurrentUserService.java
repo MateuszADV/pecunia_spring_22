@@ -3,12 +3,17 @@ package pecunia_22.services.userService;
 
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.Set;
+
 public interface CurrentUserService {
+
+    String getUsername();
+
+    Set<String> getRoles();
 
     boolean isAdmin();
 
     boolean isUser();
 
-    Boolean visibleFilter();
+    boolean isLoggedIn();
 }

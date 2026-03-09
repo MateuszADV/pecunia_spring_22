@@ -7,11 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Medal;
 import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.services.userService.CurrentUserServiceImpl;
+import pecunia_22.services.validate.ValidationServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 
 import java.util.ArrayList;
@@ -23,11 +25,13 @@ public class MedalServiceImpl implements MedalService {
 
     private final MedalRepository medalRepository;
     private final CurrentUserServiceImpl currentUserService;
+    private final ValidationServiceImpl validationService;
 
     @Autowired
-    public MedalServiceImpl(MedalRepository medalRepository, CurrentUserServiceImpl currentUserService) {
+    public MedalServiceImpl(MedalRepository medalRepository, CurrentUserServiceImpl currentUserService, ValidationServiceImpl validationService) {
         this.medalRepository = medalRepository;
         this.currentUserService = currentUserService;
+        this.validationService = validationService;
     }
 
     @Override
@@ -84,51 +88,42 @@ public class MedalServiceImpl implements MedalService {
     }
 
     @Override
-    public List<CountryByStatus> getCountryByStatus(String status, String role) {
-//        List<Object[]> objects = new ArrayList<>();
-        List<CountryByStatus> countryByStatusList = new ArrayList<>();
+    public List<CountryByStatus> getCountryByStatus(String status) {
+//        List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
-        if (role == "ADMIN") {
-            countryByStatusList = medalRepository.countryByStatus(status, null);
-//            objects = medalRepository.countryByStatus(status);
-//            for (Object[] object : objects) {
-//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-//            }
+        if (currentUserService.isAdmin()) {
+            return medalRepository.countryByStatus(status, null);
         } else {
-            countryByStatusList = medalRepository.countryByStatus(status, true);
-//            objects = medalRepository.countryByStatus(status, true);
-//            for (Object[] object : objects) {
-//                countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
-//            }
+           return medalRepository.countryByStatus(status, true);
         }
-        return countryByStatusList;
     }
 
     @Override
     public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status) {
-//        List<Object[]> objects = new ArrayList<>();
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
+        validationService.validateCountry(countryId);
+
+        List<CurrencyByStatus> result;
 
         if (currentUserService.isAdmin()) {
-            currencyByStatusList = medalRepository.currencyByStatus(status, countryId, null);
-//            objects = medalRepository.currencyByStatus(status, countryId);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
+
+            result = medalRepository.currencyByStatus(status, countryId, null);
+
         } else {
-            currencyByStatusList = medalRepository.currencyByStatus(status, countryId, true);
-//            objects = medalRepository.currencyByStatus(status, countryId, true);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
+
+            result = medalRepository.currencyByStatus(status, countryId, true);
+
+            if (result.isEmpty()) {
+                throw new ResourceNotFoundException("No visible data for this country");
+            }
         }
-        return currencyByStatusList;
+
+        return result;
     }
 
     @Override
-    public Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role) {
+    public Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status) {
         List<Medal> medals = new ArrayList<>();
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.medalRepository.medalPageable(currencyId, status, null, pageable);
         } else {
