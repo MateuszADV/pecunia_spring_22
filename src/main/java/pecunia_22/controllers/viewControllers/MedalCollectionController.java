@@ -53,18 +53,34 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        try {
-            System.out.println(countryId);
-            List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
 
-            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-            System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+        List<CurrencyByStatus> currencyByStatusList =
+                medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
+
+        if (currencyByStatusList.isEmpty()) {
+
+            modelMap.addAttribute("message",
+                    "No currencies available for this country Id -> " + countryId);
+
             return "medal/collection/currency";
-        } catch (Exception e) {
-            log.info("Country Id {} not Exist", countryId);
-            return "error";
         }
+
+        modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+
+        return "medal/collection/currency";
+
+//        try {
+//            System.out.println(countryId);
+//            List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
+//            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
+//
+//            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+//            System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+//            return "medal/collection/currency";
+//        } catch (Exception e) {
+//            log.info("Country Id {} not Exist", countryId);
+//            return "error";
+//        }
 
     }
 

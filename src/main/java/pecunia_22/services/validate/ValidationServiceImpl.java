@@ -1,6 +1,7 @@
 package pecunia_22.services.validate;
 
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.CountryNotFoundException;
 import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.models.repositories.CurrencyRepository;
@@ -29,7 +30,8 @@ public class ValidationServiceImpl implements ValidationService {
     @Override
     public void validateCountry(Long countryId) {
         if (!countryRepository.existsById(countryId)) {
-            throw new RuntimeException("Country not found");
+//            throw new RuntimeException("Country not found");
+            throw new CountryNotFoundException(countryId);
         }
     }
 
@@ -54,7 +56,7 @@ public class ValidationServiceImpl implements ValidationService {
                 medalRepository.currencyByStatus(status, countryId, true);
 
         if(result.isEmpty()){
-            throw new ResourceNotFoundException("No visible data for this country");
+            throw new ResourceNotFoundException(countryId);
         }
     }
 }

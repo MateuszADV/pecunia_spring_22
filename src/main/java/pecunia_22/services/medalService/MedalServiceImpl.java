@@ -113,7 +113,7 @@ public class MedalServiceImpl implements MedalService {
             result = medalRepository.currencyByStatus(status, countryId, true);
 
             if (result.isEmpty()) {
-                throw new ResourceNotFoundException("No visible data for this country");
+                throw new ResourceNotFoundException(countryId);
             }
         }
 

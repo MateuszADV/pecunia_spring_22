@@ -1,8 +1,7 @@
 package pecunia_22.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException {
-
-    public ResourceNotFoundException(Long id) {
+public class CountryNotFoundException extends RuntimeException {
+    public CountryNotFoundException(Long id) {
         super("Country not found: " + id);
     }
 
