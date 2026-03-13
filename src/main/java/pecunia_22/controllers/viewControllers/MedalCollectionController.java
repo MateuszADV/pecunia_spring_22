@@ -1,5 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class MedalCollectionController {
 
@@ -36,32 +38,50 @@ public class MedalCollectionController {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            countryByStatusList = medalService.getCountryByStatus("KOLEKCJA", role);
-        } else {
-            countryByStatusList = medalService.getCountryByStatus("KOLEKCJA", role);
-            System.out.println("Brak uprawnień to tu");
-            modelMap.addAttribute("error", "Brak Uprawnień");
-//            return "error";
+        try {
+            countryByStatusList = medalService.getCountryByStatus("KOLEKCJA");
+            modelMap.addAttribute("countryByStatusList", countryByStatusList);
+            return "medal/collection/index";
+        } catch (Exception e) {
+            log.info("""
+                    Error -> {}
+                    """,
+                    e.getMessage());
+            return "error";
         }
-        modelMap.addAttribute("countryByStatusList", countryByStatusList);
-        return "medal/collection/index";
     }
 
     @GetMapping("/medal/collection/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
-        System.out.println(countryId);
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
-        } else {
-            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+        List<CurrencyByStatus> currencyByStatusList =
+                medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
+
+        if (currencyByStatusList.isEmpty()) {
+
+            modelMap.addAttribute("message",
+                    "No currencies available for this country Id -> " + countryId);
+
+            return "medal/collection/currency";
         }
+
         modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+
         return "medal/collection/currency";
+
+//        try {
+//            System.out.println(countryId);
+//            List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
+//            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
+//
+//            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+//            System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+//            return "medal/collection/currency";
+//        } catch (Exception e) {
+//            log.info("Country Id {} not Exist", countryId);
+//            return "error";
+//        }
+
     }
 
     @GetMapping("/medal/collection/medals/")
@@ -77,7 +97,7 @@ public class MedalCollectionController {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =10;
 
-        Page<Medal> page = medalService.findMedalPaginated(pageNo, pageSize, currencyId, status, role);
+        Page<Medal> page = medalService.findMedalPaginated(pageNo, pageSize, currencyId, status);
         List<MedalDto> medalDtoList = new ArrayList<>();
 
         if (page.getTotalPages() >= pageNo) {
@@ -109,10 +129,20 @@ public class MedalCollectionController {
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
 
-        Medal medal = medalService.getMedalById(medalId);
-        MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
-        modelMap.addAttribute("medal", medalDto);
-        System.out.println(medalDto.getCurrencies().getId());
+//        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+//        log.info("""
+//                🟢 Role -> {}
+//                """,
+//                role);
+        try {
+            Medal medal = medalService.getMedalById(medalId);
+            MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
+            modelMap.addAttribute("medal", medalDto);
+            System.out.println(medalDto.getCurrencies().getId());
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return "error";
+        }
 
         return "medal/collection/show";
     }

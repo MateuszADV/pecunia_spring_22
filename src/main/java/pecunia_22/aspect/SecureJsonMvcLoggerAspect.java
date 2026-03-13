@@ -77,7 +77,22 @@ public class SecureJsonMvcLoggerAspect {
         Object result;
         try {
             result = joinPoint.proceed();
+        } catch (pecunia_22.exceptions.ResourceNotFoundException e) {
+
+            log.warn(toJson(Map.of(
+                    "event", "ControllerBusinessError",
+                    "controller", className,
+                    "method", methodName,
+                    "user", username,
+                    "ip", clientIp,
+                    "uri", uri,
+                    "error", e.getMessage()
+            )));
+
+            throw e;
+
         } catch (Exception e) {
+
             log.error(toJson(Map.of(
                     "event", "ControllerError",
                     "controller", className,
@@ -86,9 +101,22 @@ public class SecureJsonMvcLoggerAspect {
                     "ip", clientIp,
                     "uri", uri,
                     "error", e.getMessage()
-            )), e);
+            )), e); // stacktrace tylko dla prawdziwych błędów
+
             throw e;
         }
+//        } catch (Exception e) {
+//            log.error(toJson(Map.of(
+//                    "event", "ControllerError",
+//                    "controller", className,
+//                    "method", methodName,
+//                    "user", username,
+//                    "ip", clientIp,
+//                    "uri", uri,
+//                    "error", e.getMessage()
+//            )), e);
+//            throw e;
+//        }
 
         long duration = System.currentTimeMillis() - start;
         String viewName = (result instanceof String) ? (String) result : "unknown";
