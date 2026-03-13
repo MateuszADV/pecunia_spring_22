@@ -68,20 +68,6 @@ public class MedalCollectionController {
         modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
 
         return "medal/collection/currency";
-
-//        try {
-//            System.out.println(countryId);
-//            List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-//            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
-//
-//            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-//            System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
-//            return "medal/collection/currency";
-//        } catch (Exception e) {
-//            log.info("Country Id {} not Exist", countryId);
-//            return "error";
-//        }
-
     }
 
     @GetMapping("/medal/collection/medals/")
@@ -128,20 +114,16 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
+        System.out.println("___________________MEDAL_____________________");
+        System.out.println(medalId);
+        System.out.println("___________________MEDAL_____________________");
 
-//        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
-//        log.info("""
-//                🟢 Role -> {}
-//                """,
-//                role);
-        try {
-            Medal medal = medalService.getMedalById(medalId);
-            MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
-            modelMap.addAttribute("medal", medalDto);
-            System.out.println(medalDto.getCurrencies().getId());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return "error";
+        MedalDto medal = medalService.getMedalDtoById(medalId);
+
+        modelMap.addAttribute("medal", medal);
+
+        if (medal == null) {
+            modelMap.addAttribute("message", "Medal not found");
         }
 
         return "medal/collection/show";
