@@ -114,17 +114,19 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
+        MedalDto medal = medalService.getMedalDtoById(medalId);
         System.out.println("___________________MEDAL_____________________");
         System.out.println(medalId);
+        System.out.println(medal);
         System.out.println("___________________MEDAL_____________________");
 
-        MedalDto medal = medalService.getMedalDtoById(medalId);
 
-        modelMap.addAttribute("medal", medal);
 
         if (medal == null) {
             modelMap.addAttribute("message", "Medal not found");
+            return "medal/collection/show";
         }
+        modelMap.addAttribute("medal", medal);
 
         return "medal/collection/show";
     }

@@ -56,10 +56,17 @@ public class MedalServiceImpl implements MedalService {
     @Override
     public MedalDto getMedalDtoById(Long id) {
 
-        Medal medal = medalRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+        if (currentUserService.isAdmin()) {
+            Medal medal = medalRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException(id));
 
-        return medalMapper.toDto(medal);
+            return medalMapper.toDto(medal);
+        } else {
+            Medal medal = medalRepository.findByIdAndVisibleTrue(id)
+                    .orElseThrow(() -> new ResourceNotFoundException(id));
+
+            return medalMapper.toDto(medal);
+        }
     }
 
     @Override
@@ -71,8 +78,15 @@ public class MedalServiceImpl implements MedalService {
 
         if (currentUserService.isAdmin()) {
             medal = medalRepository.findById(id);
+            System.out.println("***********************************************8888888888888");
+            System.out.println("ADMIN");
+            System.out.println("***********************************************8888888888888");
+
         } else {
             medal = medalRepository.findByIdAndVisibleTrue(id);
+            System.out.println("***********************************************8888888888888");
+            System.out.println("USER");
+            System.out.println("***********************************************8888888888888");
         }
 
         return medal.orElseThrow(() -> new ResourceNotFoundException(id));
