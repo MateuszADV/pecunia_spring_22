@@ -1,5 +1,6 @@
 package pecunia_22.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.services.medalService.MedalServiceImpl;
 import pecunia_22.services.userService.CurrentUserService;
 
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class MedalServiceTest {
 
@@ -57,6 +59,10 @@ class MedalServiceTest {
         MedalDto result = medalService.getMedalDtoById(1L);
 
         assertNotNull(result);
+        log.info("""
+                result -> {}
+                """,result.getId()
+                );
         verify(medalRepository).findById(1L);
     }
 
@@ -77,10 +83,10 @@ class MedalServiceTest {
     void shouldThrowExceptionWhenMedalNotFound() {
 
         when(currentUserService.isAdmin()).thenReturn(true);
-        when(medalRepository.findById(4L)).thenReturn(Optional.empty());
+        when(medalRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> medalService.getMedalDtoById(4L));
+                () -> medalService.getMedalDtoById(1L));
     }
 
     @Test
