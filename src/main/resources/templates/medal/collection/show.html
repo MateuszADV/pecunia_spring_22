@@ -12,8 +12,8 @@
             <div class="container">
                 <h1 style="text-align: center">MEDAL SHOW</h1>
             </div>
-            <div th:if="${medal == null}">
-                <p th:text="${message}"></p>
+            <div th:if="${message}" class="alert alert-warning">
+                <span th:text="${message}"></span>
             </div>
             <div th:if="${medal}">
                 <div th:replace="~{medal/fragments/_medal-show :: medal-show}"></div>

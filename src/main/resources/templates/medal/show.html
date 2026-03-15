@@ -11,16 +11,17 @@
 
         <div class="jumbotron">
             <h1 class="display-4" style="text-align: center">MEDAL SHOW</h1>
-<!--            <hr class="my-2">-->
-<!--            <div style="text-align: center">-->
-<!--                <h3 th:text="${coin.currencies.currencySeries}"></h3>-->
-<!--            </div>-->
-            <hr class="my-2">
-            <div class="container" style="display: inline-block">
-                <a th:replace="~{fragments/button/_button-back :: back(back = '/medal/medal_list/?currencySeries=' + ${medal.currencies.currencySeries} + '&curId=' + ${medal.currencies.id})}"></a>
-                <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/medal/edit/' + ${medal.id})}"></a>
+            <div th:if="${message}" class="alert alert-warning">
+                <span th:text="${message}"></span>
             </div>
-            <div th:replace="~{medal/fragments/_medal-show :: medal-show}"></div>
+            <div th:if="${medal}">
+                <hr class="my-2">
+                <div class="container" style="display: inline-block">
+                    <a th:replace="~{fragments/button/_button-back :: back(back = '/medal/medal_list/?currencySeries=' + ${medal.currencies.currencySeries} + '&curId=' + ${medal.currencies.id})}"></a>
+                    <a th:replace="~{fragments/button/_button-edit :: edit(edit = '/medal/edit/' + ${medal.id})}"></a>
+                </div>
+                <div th:replace="~{medal/fragments/_medal-show :: medal-show}"></div>
+            </div>
         </div>
     </div>
 </body>

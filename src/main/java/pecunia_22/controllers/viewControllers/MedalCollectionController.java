@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Medal;
 import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
@@ -114,19 +115,17 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
-        MedalDto medal = medalService.getMedalDtoById(medalId);
-        System.out.println("___________________MEDAL_____________________");
-        System.out.println(medalId);
-        System.out.println(medal);
-        System.out.println("___________________MEDAL_____________________");
+        log.info("Medal id: {}", medalId);
 
+        try {
 
+            MedalDto medal = medalService.getMedalDtoById(medalId);
+            modelMap.addAttribute("medal", medal);
 
-        if (medal == null) {
-            modelMap.addAttribute("message", "Medal not found");
-            return "medal/collection/show";
+        } catch (ResourceNotFoundException e) {
+            modelMap.addAttribute("message",
+                    "Medal with id " + medalId + " does not exist");
         }
-        modelMap.addAttribute("medal", medal);
 
         return "medal/collection/show";
     }

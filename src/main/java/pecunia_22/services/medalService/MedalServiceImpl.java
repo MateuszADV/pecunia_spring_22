@@ -2,7 +2,6 @@ package pecunia_22.services.medalService;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +15,7 @@ import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.services.userService.CurrentUserService;
 import pecunia_22.services.userService.CurrentUserServiceImpl;
 import pecunia_22.services.validate.ValidationServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
@@ -29,12 +29,12 @@ import java.util.Optional;
 public class MedalServiceImpl implements MedalService {
 
     private final MedalRepository medalRepository;
-    private final CurrentUserServiceImpl currentUserService;
+    private final CurrentUserService currentUserService;
     private final ValidationServiceImpl validationService;
     private final MedalMapper medalMapper;
 
     @Autowired
-    public MedalServiceImpl(MedalRepository medalRepository, CurrentUserServiceImpl currentUserService, ValidationServiceImpl validationService, MedalMapper medalMapper) {
+    public MedalServiceImpl(MedalRepository medalRepository, CurrentUserService currentUserService, ValidationServiceImpl validationService, MedalMapper medalMapper) {
         this.medalRepository = medalRepository;
         this.currentUserService = currentUserService;
         this.validationService = validationService;
@@ -56,17 +56,17 @@ public class MedalServiceImpl implements MedalService {
     @Override
     public MedalDto getMedalDtoById(Long id) {
 
+        Medal medal;
+
         if (currentUserService.isAdmin()) {
-            Medal medal = medalRepository.findById(id)
+            medal = medalRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException(id));
-
-            return medalMapper.toDto(medal);
         } else {
-            Medal medal = medalRepository.findByIdAndVisibleTrue(id)
+            medal = medalRepository.findByIdAndVisibleTrue(id)
                     .orElseThrow(() -> new ResourceNotFoundException(id));
-
-            return medalMapper.toDto(medal);
         }
+
+        return medalMapper.toDto(medal);
     }
 
     @Override
@@ -90,43 +90,6 @@ public class MedalServiceImpl implements MedalService {
         }
 
         return medal.orElseThrow(() -> new ResourceNotFoundException(id));
-
-
-//        validationService.validateMedal(id);
-//        Optional<Medal> result;
-//
-//        if (currentUserService.isAdmin()) {
-//            result = medalRepository.findById(id);
-//        } else {
-//            result = medalRepository.findById(id);
-//            if (result.isEmpty()) {
-//                throw new ResourceNotFoundException(id);
-//            }
-//        }
-//
-//        return result.get();
-
-//        if (currentUserService.isAdmin()) {
-//            return medalRepository.findById(id)
-//                    .orElseThrow(() -> {
-//                        log.warn("Medal with id {} not found", id);
-//                        return new RuntimeException("Medal not found");
-//                    });
-//        }
-//
-//        return medalRepository.findByIdAndVisibleTrue(id)
-//                .orElseThrow(() -> {
-//                    log.warn("User tried to access hidden or non-existing medal id {}", id);
-//                    return new RuntimeException("Medal not found");
-//                });
-
-
-//        Optional<Medal> optional = medalRepository.findById(id);
-//        if (optional.isPresent()) {
-//            return optional.get();
-//        } else {
-//            throw new RuntimeException("Medal Not Found For Id :: " + id);
-//        }
     }
 
     @Override
