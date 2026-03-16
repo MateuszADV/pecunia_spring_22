@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.*;
 import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class MedalController {
@@ -222,13 +225,17 @@ public class MedalController {
 
     @GetMapping("/medal/show/{medalId}")
     public String getShowMedal(@PathVariable Long medalId, ModelMap modelMap) {
-        System.out.println(medalId);
-        Medal medal = medalService.getMedalById(medalId);
-        MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
-        System.out.println(JsonUtils.gsonPretty(medalDto));
+        log.info("Medal id: {}", medalId);
 
-        modelMap.addAttribute("medal", medalDto);
-        modelMap.addAttribute("json", JsonUtils.gsonPretty(medalDto));
+        try {
+
+            MedalDto medal = medalService.getMedalDtoById(medalId);
+            modelMap.addAttribute("medal", medal);
+
+        } catch (ResourceNotFoundException e) {
+            modelMap.addAttribute("message",
+                    "Medal with id " + medalId + " does not exist");
+        }
         return "medal/show";
     }
 

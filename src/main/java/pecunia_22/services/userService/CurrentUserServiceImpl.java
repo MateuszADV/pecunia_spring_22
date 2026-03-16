@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 @Service
 public class CurrentUserServiceImpl implements CurrentUserService {
 
+    public CurrentUserServiceImpl() {
+    }
+
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }

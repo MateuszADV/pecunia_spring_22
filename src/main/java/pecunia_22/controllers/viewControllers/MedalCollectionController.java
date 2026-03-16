@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Medal;
 import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
@@ -68,20 +69,6 @@ public class MedalCollectionController {
         modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
 
         return "medal/collection/currency";
-
-//        try {
-//            System.out.println(countryId);
-//            List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-//            currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
-//
-//            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-//            System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
-//            return "medal/collection/currency";
-//        } catch (Exception e) {
-//            log.info("Country Id {} not Exist", countryId);
-//            return "error";
-//        }
-
     }
 
     @GetMapping("/medal/collection/medals/")
@@ -128,20 +115,16 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection/show/{medalId}")
     public String getShow(@PathVariable Long medalId, ModelMap modelMap) {
+        log.info("Medal id: {}", medalId);
 
-//        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
-//        log.info("""
-//                🟢 Role -> {}
-//                """,
-//                role);
         try {
-            Medal medal = medalService.getMedalById(medalId);
-            MedalDto medalDto = new ModelMapper().map(medal, MedalDto.class);
-            modelMap.addAttribute("medal", medalDto);
-            System.out.println(medalDto.getCurrencies().getId());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return "error";
+
+            MedalDto medal = medalService.getMedalDtoById(medalId);
+            modelMap.addAttribute("medal", medal);
+
+        } catch (ResourceNotFoundException e) {
+            modelMap.addAttribute("message",
+                    "Medal with id " + medalId + " does not exist");
         }
 
         return "medal/collection/show";
