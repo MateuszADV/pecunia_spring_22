@@ -167,8 +167,12 @@
                         <span th:text = "${#authentication.getAuthorities()[0].getAuthority()}">Roles</span>
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
-                        <span class="nav-link" sec:authentication="principal.email" data-toggle="modal" data-target="#exampleModal">Email</span>
+<!--                        <span class="nav-link" sec:authentication="principal.email" data-toggle="modal" data-target="#exampleModal">Email</span>-->
 <!--                        <span class="nav-link" sec:authentication="name" data-toggle="modal" data-target="#exampleModal">Email</span>-->
+                        <span class="nav-link"
+                              sec:authorize="isAuthenticated()"
+                              th:text="${#authentication.name}">
+                        </span>
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a class="nav-link btn btn-sm btn-outline-secondary" th:href="@{/logout}">Logout</a>
@@ -199,7 +203,8 @@
                 </div>
                 <div class="modal-body">
                     <div sec:authorize="isAuthenticated()">
-                        <span>ROLE - </span><span sec:authentication="principal.authorities[0]">Roles</span><br>
+<!--                        <span>ROLE - </span><span sec:authentication="principal.authorities[0]">Roles</span><br>-->
+                        <span>ROLE - </span><span sec:authentication="authorities">Roles</span><br>
                         <span>First Name - </span><span sec:authentication="principal.firstName">Firstname</span><br>
                         <span>Last Name - </span><span sec:authentication="principal.lastName">Lastname</span><br>
                         <span>Mail - </span><span sec:authentication="principal.email">email</span><br>
