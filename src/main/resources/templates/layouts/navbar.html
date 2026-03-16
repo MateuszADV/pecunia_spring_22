@@ -168,6 +168,7 @@
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <span class="nav-link" sec:authentication="principal.email" data-toggle="modal" data-target="#exampleModal">Email</span>
+<!--                        <span class="nav-link" sec:authentication="name" data-toggle="modal" data-target="#exampleModal">Email</span>-->
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a class="nav-link btn btn-sm btn-outline-secondary" th:href="@{/logout}">Logout</a>
