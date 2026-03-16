@@ -22,7 +22,7 @@ public class MedalSecurityTest {
     MedalService medalService;
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(authorities = "USER")
     void userShouldNotSeeInvisibleMedal() {
 
         assertThatThrownBy(() -> medalService.getMedalDtoById(5L))
@@ -30,7 +30,7 @@ public class MedalSecurityTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(authorities = "ADMIN")
     void adminShouldAccessMedal() {
 
         MedalDto result = medalService.getMedalDtoById(2L);
