@@ -11,6 +11,7 @@ import pecunia_22.appUser.AppUserRole;
 import pecunia_22.security.WithMockAppUser;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
@@ -75,4 +76,13 @@ public class MedalControllerIT {
         mockMvc.perform(get("/medal/collection/show/2"))
                 .andExpect(status().isOk());
     }
+
+//    @Test
+//    @WithMockAppUser
+//    void adminShouldAccessMedalBis() throws Exception {
+//
+//        mockMvc.perform(get("/medal/collection/show/2"))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
 }

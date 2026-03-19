@@ -51,29 +51,4 @@ public class WithMockAppUserSecurityContextFactory
 
         return context;
     }
-
-//    @Override
-//    public SecurityContext createSecurityContext(WithMockAppUser annotation) {
-//
-//        SecurityContext context = SecurityContextHolder.createEmptyContext();
-//
-//        AppUser user = new AppUser(
-//                annotation.firstName(),
-//                annotation.lastName(),
-//                annotation.email(),
-//                "password",
-//                annotation.role()
-//        );
-//
-//        Authentication auth =
-//                new UsernamePasswordAuthenticationToken(
-//                        user,
-//                        user.getPassword(),
-//                        user.getAuthorities()
-//                );
-//
-//        context.setAuthentication(auth);
-//
-//        return context;
-//    }
 }
