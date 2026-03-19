@@ -16,11 +16,9 @@ import pecunia_22.models.repositories.MedalRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.services.userService.CurrentUserService;
-import pecunia_22.services.userService.CurrentUserServiceImpl;
 import pecunia_22.services.validate.ValidationServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,17 +76,9 @@ public class MedalServiceImpl implements MedalService {
 
         if (currentUserService.isAdmin()) {
             medal = medalRepository.findById(id);
-            System.out.println("***********************************************8888888888888");
-            System.out.println("ADMIN");
-            System.out.println("***********************************************8888888888888");
-
         } else {
             medal = medalRepository.findByIdAndVisibleTrue(id);
-            System.out.println("***********************************************8888888888888");
-            System.out.println("USER");
-            System.out.println("***********************************************8888888888888");
         }
-
         return medal.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
@@ -99,8 +89,8 @@ public class MedalServiceImpl implements MedalService {
 
     @Override
     public List<Medal> getMedalByCurrencyId(Long currencyId) {
-        List<Medal> medals = medalRepository.getMedalByCurrencyId(currencyId);
-        return medals;
+//        List<Medal> medals = medalRepository.getMedalByCurrencyId(currencyId);
+        return medalRepository.getMedalByCurrencyId(currencyId);
     }
 
     @MeasureTime(value = "Update medal in DB",
@@ -141,7 +131,6 @@ public class MedalServiceImpl implements MedalService {
 
     @Override
     public Page<Medal> findMedalPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status) {
-        List<Medal> medals = new ArrayList<>();
         if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.medalRepository.medalPageable(currencyId, status, null, pageable);
