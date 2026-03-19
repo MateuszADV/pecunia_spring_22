@@ -25,8 +25,8 @@ import java.util.List;
 @Controller
 public class MedalCollectionController {
 
-    private MedalServiceImpl medalService;
-    private UserCheckLoged userCheckLoged;
+    private final MedalServiceImpl medalService;
+    private final UserCheckLoged userCheckLoged;
 
     @Autowired
     public MedalCollectionController(MedalServiceImpl medalService, UserCheckLoged userCheckLoged) {
@@ -36,7 +36,6 @@ public class MedalCollectionController {
 
     @GetMapping("/medal/collection")
     public String getIndex(ModelMap modelMap) {
-        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
         try {
