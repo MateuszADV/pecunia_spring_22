@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
+
     @Query(value = "SELECT cur FROM Currency cur " +
             "WHERE cur.countries.id = ?1 " +
             "AND cur.patterns.pattern = ?2 " +
