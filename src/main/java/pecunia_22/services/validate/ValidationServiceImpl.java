@@ -56,7 +56,7 @@ public class ValidationServiceImpl implements ValidationService {
                 medalRepository.currencyByStatus(status, countryId, true);
 
         if(result.isEmpty()){
-            throw new ResourceNotFoundException(countryId);
+            throw ResourceNotFoundException.forId("Country", countryId);
         }
     }
 }

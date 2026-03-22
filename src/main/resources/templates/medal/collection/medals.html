@@ -11,8 +11,10 @@
     <div layout:fragment="content" class="container">
         <div class="jumbotron">
             <h2 class="display-4" style="text-align: center" >MEDALS COLECTION</H2>
-            <hr class="my-2">
-            <H4 th:text="${medals[0].currencies.currencySeries}" style="text-align: center; background: cornflowerblue" ></H4>
+            <div th:if="${not #lists.isEmpty(medals)}">
+                <hr class="my-2">
+                <H4 th:text="${medals[0].currencies.currencySeries}" style="text-align: center; background: cornflowerblue" ></H4>
+            </div>
             <hr class="my-2">
             <div th:replace="~{fragments/_flag :: flag(country = ${medals[0].currencies.countries.countryEn})}"></div>
             <hr class="my-2">

@@ -58,10 +58,10 @@ public class MedalServiceImpl implements MedalService {
 
         if (currentUserService.isAdmin()) {
             medal = medalRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException(id));
+                    .orElseThrow(() -> ResourceNotFoundException.forId("Medal", id));
         } else {
             medal = medalRepository.findByIdAndVisibleTrue(id)
-                    .orElseThrow(() -> new ResourceNotFoundException(id));
+                    .orElseThrow(() ->  ResourceNotFoundException.forId("Medal", id));
         }
 
         return medalMapper.toDto(medal);
@@ -79,7 +79,7 @@ public class MedalServiceImpl implements MedalService {
         } else {
             medal = medalRepository.findByIdAndVisibleTrue(id);
         }
-        return medal.orElseThrow(() -> new ResourceNotFoundException(id));
+        return medal.orElseThrow(() -> ResourceNotFoundException.forId("Medal", id));
     }
 
     @Override

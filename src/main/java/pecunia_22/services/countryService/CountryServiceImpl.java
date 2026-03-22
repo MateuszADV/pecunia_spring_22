@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Continent;
 import pecunia_22.models.Country;
 import pecunia_22.models.repositories.ContinentRepository;
@@ -84,12 +85,20 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountyByCountryEn(String countryEn) {
-        Country country = countryRepository.findByCountryEn(countryEn);
-        if (country != null){
-            return country;
-        }
-        return null;
+        return Optional.ofNullable(countryRepository.findByCountryEn(countryEn))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Country not found: " + countryEn
+                ));
     }
+
+//    @Override
+//    public Country getCountyByCountryEn(String countryEn) {
+//        Country country = countryRepository.findByCountryEn(countryEn);
+//        if (country != null){
+//            return country;
+//        }
+//        return null;
+//    }
 
 
 //    *****************************************

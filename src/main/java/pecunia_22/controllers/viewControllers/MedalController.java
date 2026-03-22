@@ -57,6 +57,7 @@ public class MedalController {
     private QualityServiceImpl qualityService;
     private StatusServiceImpl statusService;
     private ImageTypeServiceImpl imageTypeService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/medal")
     public String getIndex(ModelMap modelMap) {
@@ -66,18 +67,43 @@ public class MedalController {
         return getSearch("", modelMap);
     }
 
+
     @GetMapping("/medal/currency/{countryEn}")
     public String getMedalCurrency(@PathVariable String countryEn, ModelMap modelMap) {
+
         Country country = countryService.getCountyByCountryEn(countryEn);
-        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "MEDAL");
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-        for (Currency currency : currencies) {
-            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-        }
+
+        List<CurrencyDtoByPattern> currencyDtoByPatterns =
+                currencyService.getCurrencyByCountryByPattern(country.getId(), "MEDAL")
+                        .stream()
+                        .map(currency -> modelMapper.map(currency, CurrencyDtoByPattern.class))
+                        .toList();
+
+        log.info("""
+
+                Country -> {}
+                Currencies -> {}
+                """,
+                countryEn,
+                currencyDtoByPatterns);
+
         modelMap.addAttribute("currencies", currencyDtoByPatterns);
+
         return "medal/currency";
     }
+
+//    @GetMapping("/medal/currency/{countryEn}")
+//    public String getMedalCurrency(@PathVariable String countryEn, ModelMap modelMap) {
+//        Country country = countryService.getCountyByCountryEn(countryEn);
+//        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
+//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "MEDAL");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
+//        for (Currency currency : currencies) {
+//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
+//        }
+//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+//        return "medal/currency";
+//    }
 
     @PostMapping("/medal/search")
     public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
