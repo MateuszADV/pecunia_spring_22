@@ -12,8 +12,14 @@
             <div class="container">
                 <h1 class="display-4" style="text-align: center">Medal Currency</h1>
                 <hr class="my-2">
-                <div th:if="${currencies.size} > 0">
+
+                <div th:if="${not #lists.isEmpty(currencies)}">
                     <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+                </div>
+                <div>
+<!--                </div>-->
+<!--                <div th:if="${currencies.size} > 0">-->
+<!--                    <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>-->
                     <hr class="my-2">
                     <div class="container" style="display: inline-block">
                         <a th:replace="~{fragments/button/_button-back :: back(back = '/medal')}"></a>

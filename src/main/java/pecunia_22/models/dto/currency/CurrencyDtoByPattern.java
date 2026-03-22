@@ -40,4 +40,8 @@ public class CurrencyDtoByPattern {
     private List<CoinDtoByCurrency> coins;
     private List<SecurityDtoByCurrency> securities;
     private List<MedalDtoByCurrency> medals;
+
+    public CountryDto getCountry() {
+        return countries;
+    }
 }
