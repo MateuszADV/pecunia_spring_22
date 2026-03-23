@@ -85,7 +85,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountyByCountryEn(String countryEn) {
-        return Optional.ofNullable(countryRepository.findByCountryEn(countryEn))
+        return countryRepository.findByCountryEn(countryEn)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Country not found: " + countryEn
                 ));

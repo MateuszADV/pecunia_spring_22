@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Currency;
 
@@ -13,11 +14,39 @@ import java.util.List;
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
 
-    @Query(value = "SELECT cur FROM Currency cur " +
-            "WHERE cur.countries.id = ?1 " +
-            "AND cur.patterns.pattern = ?2 " +
-            "ORDER BY cur.currencySeries ASC ")
-    List<Currency> getCurrencyByCountryByPattern(Long countryId, String pattern);
+    @Query("""
+        SELECT cur FROM Currency cur
+        JOIN cur.countries c
+        JOIN cur.patterns p
+        WHERE c.id = :countryId
+        AND p.pattern = :pattern
+        ORDER BY cur.currencySeries ASC
+    """)
+    List<Currency> getCurrencyByCountryByPattern(
+            @Param("countryId") Long countryId,
+            @Param("pattern") String pattern
+    );
+
+//    @Query(value = "SELECT cur FROM Currency cur " +
+//            "WHERE cur.countries.id = ?1 " +
+//            "AND cur.patterns.pattern = ?2 " +
+//            "ORDER BY cur.currencySeries ASC ")
+//    List<Currency> getCurrencyByCountryByPattern(Long countryId, String pattern);
+
+
+
+    @Query("""
+        SELECT cur FROM Currency cur
+        JOIN cur.countries c
+        JOIN cur.patterns p
+        WHERE c.id = :countryId
+        AND p.pattern = :pattern
+        ORDER BY cur.currencySeries ASC
+    """)
+    List<Currency> findByCountryAndPattern(
+            @Param("countryId") Long countryId,
+            @Param("pattern") String pattern
+    );
 
     /*
     WERSJA POPRAWIONA
