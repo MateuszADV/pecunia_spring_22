@@ -13,7 +13,8 @@
                 <h1 class="display-4" style="text-align: center">Security Currency</h1>
                 <hr class="my-2">
 
-                <div th:if="${currencies.size > 0}">
+<!--                <div th:if="${currencies.size > 0}">-->
+                <div th:if="${!currencies.isEmpty()}">
 
                     <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
                     <hr class="my-2">
