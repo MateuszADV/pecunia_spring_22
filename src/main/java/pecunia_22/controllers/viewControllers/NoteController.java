@@ -260,7 +260,10 @@ public class NoteController {
         for (Currency currency1 : currenciesList) {
             currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
         }
+        System.out.println("+++++++++++++++++CURRENCYDTO+++++++++++++++++++++++++++++++++++");
         System.out.println(JsonUtils.gsonPretty(currencyDtos));
+        System.out.println("+++++++++++++++++CURRENCYDTO+++++++++++++++++++++++++++++++++++");
+
 
         List<Bought> boughts = boughtServices.getAllBought();
         List<BoughtDto> boughtDtos = new ArrayList<>();

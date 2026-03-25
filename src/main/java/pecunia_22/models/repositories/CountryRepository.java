@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Country;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -22,7 +23,8 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
             "OR    LOWER(cou.countryPl) LIKE LOWER(CONCAT('%', ?1, '%'))")
     List<Country> searchCountry(String keyWord);
 
-    Country findByCountryEn(String countryEn);
+//    Country findByCountryEn(String countryEn);
+    Optional<Country> findByCountryEn(String countryEn);
 
 
 //    *****************************************

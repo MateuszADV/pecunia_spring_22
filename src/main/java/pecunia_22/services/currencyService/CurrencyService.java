@@ -2,6 +2,8 @@ package pecunia_22.services.currencyService;
 
 import org.springframework.stereotype.Service;
 import pecunia_22.models.Currency;
+import pecunia_22.models.dto.currency.CurrencyDto;
+import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 
 import java.util.List;
 
@@ -13,4 +15,10 @@ public interface CurrencyService {
     void deleteCurrencyById(Long id);
     List<Currency> getCurrencyByCountryByPattern(Long countryId, String pattern);
     List<Currency> getCurrencyByCountryByPattern(String countryEn, String pattern);
+
+    // --- NOWE metody DTO ---
+    List<CurrencyDtoByPattern> getCurrencyByCountryAndPatternDto(Long countryId, String pattern);
+    List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternDto(String countryEn, String pattern);
+    CurrencyDto getCurrencyDtoById(Long id);
+    List<CurrencyDto> getAllCurrencyDto();
 }

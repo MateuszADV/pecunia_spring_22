@@ -66,15 +66,20 @@ public class SecurityController {
 
     @GetMapping("/security/currency/{countryEn}")
     public String getSecurityCurrency(@PathVariable String countryEn, ModelMap modelMap) {
-        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryEn, "SECURITY");
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-        for (Currency currency : currencies) {
-            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-        }
-        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
-            System.out.println(currencyDtoByPattern.getCurrencySeries());
-        }
-        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+
+        List<CurrencyDtoByPattern> currencies =
+                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+
+        modelMap.addAttribute("currencies", currencies);
+//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryEn, "SECURITY");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
+//        for (Currency currency : currencies) {
+//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
+//        }
+//        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
+//            System.out.println(currencyDtoByPattern.getCurrencySeries());
+//        }
+//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
         return "security/currency";
     }
 
