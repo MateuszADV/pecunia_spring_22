@@ -1,7 +1,9 @@
 package pecunia_22.services.pattern;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Pattern;
 import pecunia_22.models.repositories.PatternRepository;
 
@@ -47,4 +49,22 @@ public class PatternServiceImpl implements PatternService {
         this.patternRepository.deleteById(id);
     }
 
+
+    @Override
+    public Pattern getByPattern(String pattern) {
+        return patternRepository.findByPattern(pattern)
+                .orElseThrow(() -> ResourceNotFoundException.forName("Pattern", pattern));
+    }
+
+    @Override
+    @Cacheable(value = "patterns", key = "#pattern")
+    public Pattern getByPatternCached(String pattern) {
+        return patternRepository.findByPattern(pattern)
+                .orElseThrow(() -> ResourceNotFoundException.forName("Pattern", pattern));
+    }
+
+    @Override
+    public Long getIdByPattern(String pattern) {
+        return getByPatternCached(pattern).getId();
+    }
 }

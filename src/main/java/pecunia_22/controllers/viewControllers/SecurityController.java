@@ -27,6 +27,7 @@ import pecunia_22.services.countryService.CountryServiceImpl;
 import pecunia_22.services.currencyService.CurrencyServiceImpl;
 import pecunia_22.services.imageTypeService.ImageTypeServiceImpl;
 import pecunia_22.services.makingService.MakingServiceImpl;
+import pecunia_22.services.pattern.PatternServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.securityService.SecurityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
@@ -43,15 +44,16 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SecurityController {
 
-    private CountryServiceImpl countryService;
-    private CurrencyServiceImpl currencyService;
-    private SecurityServiceImpl securityService;
-    private BoughtServiceImpl boughtServices;
-    private ActiveServiceImpl activeService;
-    private MakingServiceImpl makingService;
-    private QualityServiceImpl qualityService;
-    private StatusServiceImpl statusService;
-    private ImageTypeServiceImpl imageTypeSevice;
+    private final CountryServiceImpl countryService;
+    private final CurrencyServiceImpl currencyService;
+    private final SecurityServiceImpl securityService;
+    private final BoughtServiceImpl boughtServices;
+    private final ActiveServiceImpl activeService;
+    private final MakingServiceImpl makingService;
+    private final QualityServiceImpl qualityService;
+    private final StatusServiceImpl statusService;
+    private final ImageTypeServiceImpl imageTypeSevice;
+    private final PatternServiceImpl patternService;
 
     @GetMapping("/security")
     public String getIndex(ModelMap modelMap) {
@@ -67,10 +69,24 @@ public class SecurityController {
     @GetMapping("/security/currency/{countryEn}")
     public String getSecurityCurrency(@PathVariable String countryEn, ModelMap modelMap) {
 
+        Long patternId = patternService.getIdByPattern("SECURITY");
+        System.out.println("_______________PATTERN_________________________");
+        System.out.println(patternId);
+        System.out.println("_______________PATTERN_________________________");
+
         List<CurrencyDtoByPattern> currencies =
-                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+                currencyService.getCurrencyByCountryEnAndPatternIdDto(countryEn, patternId);
 
         modelMap.addAttribute("currencies", currencies);
+
+
+
+//        List<CurrencyDtoByPattern> currencies =
+//                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+//
+//        modelMap.addAttribute("currencies", currencies);
+
+
 //        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryEn, "SECURITY");
 //        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
 //        for (Currency currency : currencies) {

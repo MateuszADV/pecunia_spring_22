@@ -27,6 +27,7 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
             @Param("pattern") String pattern
     );
 
+
 //    @Query(value = "SELECT cur FROM Currency cur " +
 //            "WHERE cur.countries.id = ?1 " +
 //            "AND cur.patterns.pattern = ?2 " +
@@ -52,13 +53,41 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
     WERSJA POPRAWIONA
      */
 
-    @Query(value = "SELECT cur FROM Currency cur " +
-            "  LEFT JOIN Country cou " +
-            "    ON cou.countryEn = ?1 " +
-            "  LEFT JOIN Pattern pat " +
-            "    ON pat.pattern = ?2 " +
-            " WHERE cur.countries.id = cou.id AND cur.patterns.id = pat.id")
-    List<Currency> getCurrencyByCountryByPattern(String countryEn, String pattern);
+
+    @Query("""
+    SELECT cur FROM Currency cur
+    JOIN cur.countries c
+    JOIN cur.patterns p
+    WHERE c.countryEn = :countryEn
+      AND p.pattern = :pattern
+    ORDER BY cur.currencySeries ASC
+""")
+    List<Currency> getCurrencyByCountryByPattern(
+            @Param("countryEn") String countryEn,
+            @Param("pattern") String pattern
+    );
+
+
+    @Query("""
+    SELECT cur FROM Currency cur
+    JOIN cur.countries c
+    JOIN cur.patterns p
+    WHERE c.countryEn = :countryEn
+      AND p.id = :patternId
+    ORDER BY cur.currencySeries ASC
+""")
+    List<Currency> getCurrencyByCountryByPatternId(
+            @Param("countryEn") String countryEn,
+            @Param("patternId") Long patternId
+    );
+
+//    @Query(value = "SELECT cur FROM Currency cur " +
+//            "  LEFT JOIN Country cou " +
+//            "    ON cou.countryEn = ?1 " +
+//            "  LEFT JOIN Pattern pat " +
+//            "    ON pat.pattern = ?2 " +
+//            " WHERE cur.countries.id = cou.id AND cur.patterns.id = pat.id")
+//    List<Currency> getCurrencyByCountryByPattern(String countryEn, String pattern);
 
     //    ***********************
     //    ****CURRENCY UPDATE****
