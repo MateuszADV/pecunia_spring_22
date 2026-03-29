@@ -20,6 +20,7 @@ public interface CurrencyService {
     List<CurrencyDtoByPattern> getCurrencyByCountryAndPatternDto(Long countryId, String pattern);
     List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternDto(String countryEn, String pattern);
     List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternIdDto(String countryEn, Long patternId);
+    List<CurrencyDto> getCurrencyByCountryAndPattern(Long countryId, String pattern);
     CurrencyDto getCurrencyDtoById(Long id);
     List<CurrencyDto> getAllCurrencyDto();
 }

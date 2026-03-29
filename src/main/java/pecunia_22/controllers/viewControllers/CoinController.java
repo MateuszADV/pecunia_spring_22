@@ -66,11 +66,13 @@ public class CoinController {
     public String getCoinCurrency(@PathVariable String countryEn, ModelMap modelMap) {
         Country country = countryService.getCountyByCountryEn(countryEn);
         CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "COIN");
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-        for (Currency currency : currencies) {
-            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-        }
+//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "COIN");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
+//        for (Currency currency : currencies) {
+//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
+//        }
+
+        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(countryDto.getId(), "COIN");
         modelMap.addAttribute("currencies", currencyDtoByPatterns);
         return "coin/currency";
     }
