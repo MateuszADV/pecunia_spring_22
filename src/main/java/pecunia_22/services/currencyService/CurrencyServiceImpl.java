@@ -126,6 +126,14 @@ public class CurrencyServiceImpl implements CurrencyService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<CurrencyDto> getCurrencyByCountryEnAndPattern(String countryEn, String pattern) {
+        return currencyRepository.getCurrencyByCountryByPattern(countryEn, pattern)
+                .stream()
+                .map(c -> modelMapper.map(c, CurrencyDto.class))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Zwraca CurrencyDto dla podanego ID
      */

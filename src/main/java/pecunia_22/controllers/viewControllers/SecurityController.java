@@ -3,6 +3,7 @@ package pecunia_22.controllers.viewControllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class SecurityController {
@@ -160,11 +162,14 @@ public class SecurityController {
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getCountryEn(), "SECURITY");
-        List<CurrencyDto> currencyDtos = new ArrayList<>();
-        for (Currency currency1 : currenciesList) {
-            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
-        }
+
+        List<CurrencyDto> currencyDtos = currencyService.getCurrencyByCountryEnAndPattern(currency.getCountries().getCountryEn(), "SECURITY");
+
+//        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getCountryEn(), "SECURITY");
+//        List<CurrencyDto> currencyDtos = new ArrayList<>();
+//        for (Currency currency1 : currenciesList) {
+//            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+//        }
 
         List<Bought> boughts = boughtServices.getAllBought();
         List<BoughtDto> boughtDtos = new ArrayList<>();
@@ -201,6 +206,13 @@ public class SecurityController {
         for (ImageType imageType : imageTypes) {
             imageTypeDtoSelects.add(new ModelMapper().map(imageType, ImageTypeDtoSelect.class));
         }
+
+        log.info("""
+                
+                Model Map Size -> {}
+                """,
+                modelMap.size()
+                );
 
         VariableForm.variableToSelect(modelMap, currencyDtos, boughtDtos, activeDtoSelects, makingDtoSelects, qualityDtoSelects, statusDtoSelects, imageTypeDtoSelects);
     }
