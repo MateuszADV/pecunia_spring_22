@@ -1,22 +1,18 @@
 package pecunia_22.repository;
 
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pecunia_22.models.Country;
 import pecunia_22.models.Currency;
-import pecunia_22.models.Pattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.repositories.CurrencyRepository;
 
 import java.util.List;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 //@Transactional
@@ -25,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class CurrencyRepositoryIT {
 
     private final CurrencyRepository currencyRepository;
+
+    private static final List<String> PATTERNS = List.of("MEDAL", "COIN", "NOTE", "SECURITY");
+
 
     @Autowired
     public CurrencyRepositoryIT(CurrencyRepository currencyRepository) {
@@ -63,4 +62,62 @@ class CurrencyRepositoryIT {
         // then
         assertNotNull(result);
     }
+
+    @Test
+    void testGetCurrencyWithDynamicCount() {
+        Long countryId = 103L;
+        String pattern = "MEDAL";
+
+        List<CurrencyDtoWithCount> results = currencyRepository.getCurrencyWithDynamicCount(countryId, pattern);
+
+        assertThat(results).isNotEmpty();
+
+        // Wypiszemy wyniki w konsoli, żeby zweryfikować COUNT
+        for (CurrencyDtoWithCount dto : results) {
+            log.info("""
+                    ID -> {}
+                    Series -> {}
+                    Pattern -> {}
+                    Country -> {}
+                    Count -> {}
+                    """,
+                    dto.getId(),
+                    dto.getCurrencySeries(),
+                    dto.getPattern(),
+                    dto.getCountryEn(),
+                    dto.getElementsCount()
+            );
+        }
+    }
+
+    @Test
+    void testGetCurrencyWithDynamicCountForAllPatterns() {
+        Long countryId = 172L; // przykładowy ID kraju
+
+        for (String pattern : PATTERNS) {
+            log.info("==== Testing pattern: {} ====", pattern);
+
+            List<CurrencyDtoWithCount> results = currencyRepository.getCurrencyWithDynamicCount(countryId, pattern);
+
+            if (results.isEmpty()) {
+                log.info("No currencies found for pattern {}", pattern);
+            } else {
+                results.forEach(dto -> log.info("""
+                        
+                        ID -> {}
+                        Series -> {}
+                        Pattern -> {}
+                        Country -> {}
+                        Count -> {}
+                        """,
+                        dto.getId(),
+                        dto.getCurrencySeries(),
+                        dto.getPattern(),
+                        dto.getCountryEn(),
+                        dto.getElementsCount()
+                ));
+            }
+        }
+    }
+
 }

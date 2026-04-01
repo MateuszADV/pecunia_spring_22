@@ -1,14 +1,13 @@
 package pecunia_22.models.repositories;
 
-import jakarta.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pecunia_22.models.Currency;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 
-import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -80,6 +79,38 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
             @Param("countryEn") String countryEn,
             @Param("patternId") Long patternId
     );
+
+
+    /** Pobiera waluty dla kraju i pattern wraz z liczbą powiązanych elementów (MEDAL/COIN/NOTE/SECURITY);
+     * czerwone podkreślenie w IDE wynika z ostrzeżeń JPQL przy JOIN z warunkiem ON. */
+    @Query("""
+        SELECT new pecunia_22.models.dto.currency.CurrencyDtoWithCount(
+            cur.id,
+            cur.currencySeries,
+            pat.pattern,
+            cur.countries.countryEn,
+            CASE 
+                WHEN pat.pattern = 'MEDAL' THEN 
+                    (SELECT COUNT(m) FROM Medal m WHERE m.currencies.id = cur.id)
+                WHEN pat.pattern = 'COIN' THEN 
+                    (SELECT COUNT(c) FROM Coin c WHERE c.currencies.id = cur.id)
+                WHEN pat.pattern = 'NOTE' THEN 
+                    (SELECT COUNT(n) FROM Note n WHERE n.currencies.id = cur.id)
+                WHEN pat.pattern = 'SECURITY' THEN 
+                    (SELECT COUNT(s) FROM Security s WHERE s.currencies.id = cur.id)
+                ELSE 0L
+            END
+        )
+        FROM Currency cur
+        JOIN cur.patterns pat
+        WHERE cur.countries.id = :countryId
+        AND pat.pattern = :pattern
+        ORDER BY cur.currencySeries ASC
+    """)
+    List<CurrencyDtoWithCount> getCurrencyWithDynamicCount(@Param("countryId") Long countryId,
+                                                           @Param("pattern") String pattern);
+
+
 
 //    @Query(value = "SELECT cur FROM Currency cur " +
 //            "  LEFT JOIN Country cou " +
