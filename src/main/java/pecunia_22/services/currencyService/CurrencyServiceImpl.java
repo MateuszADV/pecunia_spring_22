@@ -107,6 +107,34 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     /**
+     * Zwraca CurrencyDtoByPatternId dla danego countryEn i pattern
+     */
+    @Override
+    @Transactional(readOnly = true)  // utrzymuje sesję otwartą
+    public List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternIdDto(String countryEn, Long patternId) {
+        return currencyRepository.getCurrencyByCountryByPatternId(countryEn, patternId)
+                .stream()
+                .map(c -> modelMapper.map(c, CurrencyDtoByPattern.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CurrencyDto> getCurrencyByCountryAndPattern(Long countryId, String pattern) {
+        return currencyRepository.getCurrencyByCountryByPattern(countryId, pattern)
+                .stream()
+                .map(c -> modelMapper.map(c, CurrencyDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CurrencyDto> getCurrencyByCountryEnAndPattern(String countryEn, String pattern) {
+        return currencyRepository.getCurrencyByCountryByPattern(countryEn, pattern)
+                .stream()
+                .map(c -> modelMapper.map(c, CurrencyDto.class))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Zwraca CurrencyDto dla podanego ID
      */
     @Override

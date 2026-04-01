@@ -66,11 +66,13 @@ public class CoinController {
     public String getCoinCurrency(@PathVariable String countryEn, ModelMap modelMap) {
         Country country = countryService.getCountyByCountryEn(countryEn);
         CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "COIN");
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-        for (Currency currency : currencies) {
-            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-        }
+//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "COIN");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
+//        for (Currency currency : currencies) {
+//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
+//        }
+
+        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(countryDto.getId(), "COIN");
         modelMap.addAttribute("currencies", currencyDtoByPatterns);
         return "coin/currency";
     }
@@ -235,11 +237,14 @@ public class CoinController {
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
-        List<CurrencyDto> currencyDtos = new ArrayList<>();
-        for (Currency currency1 : currenciesList) {
-            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
-        }
+
+        List<CurrencyDto> currencyDtos = currencyService.getCurrencyByCountryAndPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+
+//        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+//        List<CurrencyDto> currencyDtos = new ArrayList<>();
+//        for (Currency currency1 : currenciesList) {
+//            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+//        }
 
         List<Bought> boughts = boughtServices.getAllBought();
         List<BoughtDto> boughtDtos = new ArrayList<>();

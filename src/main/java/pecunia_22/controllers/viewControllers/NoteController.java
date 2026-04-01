@@ -3,6 +3,7 @@ package pecunia_22.controllers.viewControllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class NoteController {
@@ -67,16 +69,19 @@ public class NoteController {
     @GetMapping("/note/currency/{countryEn}")
     public String getNoteCurrency(@PathVariable String countryEn, ModelMap modelMap) {
         Country country = countryService.getCountyByCountryEn(countryEn);
-        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "NOTE");
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-        for (Currency currency : currencies) {
-            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-        }
+
+        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "NOTE");
+
+//        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
+//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "NOTE");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
+//        for (Currency currency : currencies) {
+//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
+//        }
 
         System.out.println("=======================START===========================");
         System.out.println(countryEn);
-        System.out.println(JsonUtils.gsonPretty(countryDto));
+//        System.out.println(JsonUtils.gsonPretty(countryDto));
         System.out.println("---------------------------------------------------------");
         System.out.println(currencyDtoByPatterns.size());
         for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
@@ -85,6 +90,14 @@ public class NoteController {
         System.out.println(JsonUtils.gsonPretty(currencyDtoByPatterns));
         System.out.println("=======================STOP===========================");
         modelMap.addAttribute("currencies", currencyDtoByPatterns);
+
+        log.info("""
+                
+                Country -> {}
+                Currency Size -> {} 
+                """,
+                countryEn,
+                currencyDtoByPatterns.size());
         return "note/currency";
     }
 
@@ -255,11 +268,14 @@ public class NoteController {
     }
 
     private void noteFormVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
-        List<CurrencyDto> currencyDtos = new ArrayList<>();
-        for (Currency currency1 : currenciesList) {
-            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
-        }
+
+        List<CurrencyDto> currencyDtos = currencyService.getCurrencyByCountryAndPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+
+//        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+//        List<CurrencyDto> currencyDtos = new ArrayList<>();
+//        for (Currency currency1 : currenciesList) {
+//            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+//        }
         System.out.println("+++++++++++++++++CURRENCYDTO+++++++++++++++++++++++++++++++++++");
         System.out.println(JsonUtils.gsonPretty(currencyDtos));
         System.out.println("+++++++++++++++++CURRENCYDTO+++++++++++++++++++++++++++++++++++");

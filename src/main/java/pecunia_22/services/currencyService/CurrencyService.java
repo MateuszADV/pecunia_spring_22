@@ -19,6 +19,9 @@ public interface CurrencyService {
     // --- NOWE metody DTO ---
     List<CurrencyDtoByPattern> getCurrencyByCountryAndPatternDto(Long countryId, String pattern);
     List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternDto(String countryEn, String pattern);
+    List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternIdDto(String countryEn, Long patternId);
+    List<CurrencyDto> getCurrencyByCountryAndPattern(Long countryId, String pattern);
+    List<CurrencyDto> getCurrencyByCountryEnAndPattern(String countryEn, String pattern);
     CurrencyDto getCurrencyDtoById(Long id);
     List<CurrencyDto> getAllCurrencyDto();
 }

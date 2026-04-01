@@ -3,6 +3,7 @@ package pecunia_22.controllers.viewControllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +28,7 @@ import pecunia_22.services.countryService.CountryServiceImpl;
 import pecunia_22.services.currencyService.CurrencyServiceImpl;
 import pecunia_22.services.imageTypeService.ImageTypeServiceImpl;
 import pecunia_22.services.makingService.MakingServiceImpl;
+import pecunia_22.services.pattern.PatternServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.securityService.SecurityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
@@ -39,19 +41,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class SecurityController {
 
-    private CountryServiceImpl countryService;
-    private CurrencyServiceImpl currencyService;
-    private SecurityServiceImpl securityService;
-    private BoughtServiceImpl boughtServices;
-    private ActiveServiceImpl activeService;
-    private MakingServiceImpl makingService;
-    private QualityServiceImpl qualityService;
-    private StatusServiceImpl statusService;
-    private ImageTypeServiceImpl imageTypeSevice;
+    private final CountryServiceImpl countryService;
+    private final CurrencyServiceImpl currencyService;
+    private final SecurityServiceImpl securityService;
+    private final BoughtServiceImpl boughtServices;
+    private final ActiveServiceImpl activeService;
+    private final MakingServiceImpl makingService;
+    private final QualityServiceImpl qualityService;
+    private final StatusServiceImpl statusService;
+    private final ImageTypeServiceImpl imageTypeSevice;
+    private final PatternServiceImpl patternService;
 
     @GetMapping("/security")
     public String getIndex(ModelMap modelMap) {
@@ -67,10 +71,24 @@ public class SecurityController {
     @GetMapping("/security/currency/{countryEn}")
     public String getSecurityCurrency(@PathVariable String countryEn, ModelMap modelMap) {
 
+        Long patternId = patternService.getIdByPattern("SECURITY");
+        System.out.println("_______________PATTERN_________________________");
+        System.out.println(patternId);
+        System.out.println("_______________PATTERN_________________________");
+
         List<CurrencyDtoByPattern> currencies =
-                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+                currencyService.getCurrencyByCountryEnAndPatternIdDto(countryEn, patternId);
 
         modelMap.addAttribute("currencies", currencies);
+
+
+
+//        List<CurrencyDtoByPattern> currencies =
+//                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+//
+//        modelMap.addAttribute("currencies", currencies);
+
+
 //        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryEn, "SECURITY");
 //        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
 //        for (Currency currency : currencies) {
@@ -144,11 +162,14 @@ public class SecurityController {
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getCountryEn(), "SECURITY");
-        List<CurrencyDto> currencyDtos = new ArrayList<>();
-        for (Currency currency1 : currenciesList) {
-            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
-        }
+
+        List<CurrencyDto> currencyDtos = currencyService.getCurrencyByCountryEnAndPattern(currency.getCountries().getCountryEn(), "SECURITY");
+
+//        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getCountryEn(), "SECURITY");
+//        List<CurrencyDto> currencyDtos = new ArrayList<>();
+//        for (Currency currency1 : currenciesList) {
+//            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+//        }
 
         List<Bought> boughts = boughtServices.getAllBought();
         List<BoughtDto> boughtDtos = new ArrayList<>();
@@ -185,6 +206,13 @@ public class SecurityController {
         for (ImageType imageType : imageTypes) {
             imageTypeDtoSelects.add(new ModelMapper().map(imageType, ImageTypeDtoSelect.class));
         }
+
+        log.info("""
+                
+                Model Map Size -> {}
+                """,
+                modelMap.size()
+                );
 
         VariableForm.variableToSelect(modelMap, currencyDtos, boughtDtos, activeDtoSelects, makingDtoSelects, qualityDtoSelects, statusDtoSelects, imageTypeDtoSelects);
     }

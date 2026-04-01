@@ -15,6 +15,10 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(resource + " not found with " + field + ": " + value);
     }
 
+    public static ResourceNotFoundException forName(String name, String value) {
+        return new ResourceNotFoundException(name + " not found with : " + value);
+    }
+
     @Override
     public synchronized Throwable fillInStackTrace() {
         return this;

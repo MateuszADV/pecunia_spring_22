@@ -13,4 +13,9 @@ public interface PatternService {
     Pattern savePatternGet(Pattern pattern);
     Pattern getPatternById(Long id);
     void deletePatternById(Long id);
+
+
+    Pattern getByPattern(String pattern);
+    Pattern getByPatternCached(String pattern);
+    Long getIdByPattern(String pattern);
 }

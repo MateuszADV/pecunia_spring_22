@@ -73,11 +73,13 @@ public class MedalController {
 
         Country country = countryService.getCountyByCountryEn(countryEn);
 
-        List<CurrencyDtoByPattern> currencyDtoByPatterns =
-                currencyService.getCurrencyByCountryByPattern(country.getId(), "MEDAL")
-                        .stream()
-                        .map(currency -> modelMapper.map(currency, CurrencyDtoByPattern.class))
-                        .toList();
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns =
+//                currencyService.getCurrencyByCountryByPattern(country.getId(), "MEDAL")
+//                        .stream()
+//                        .map(currency -> modelMapper.map(currency, CurrencyDtoByPattern.class))
+//                        .toList();
+
+        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(country.getId(), "MEDAL");
 
         log.info("""
 
@@ -86,6 +88,7 @@ public class MedalController {
                 """,
                 countryEn,
                 currencyDtoByPatterns);
+//                JsonUtils.gsonPretty(currencyDtoByPatterns));
 
         modelMap.addAttribute("currencies", currencyDtoByPatterns);
 
@@ -266,11 +269,13 @@ public class MedalController {
     }
 
     private void formVariable(ModelMap modelMap, Currency currency) {
-        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
-        List<CurrencyDto> currencyDtos = new ArrayList<>();
-        for (Currency currency1 : currenciesList) {
-            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
-        }
+//        List<Currency> currenciesList = currencyService.getCurrencyByCountryByPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
+//        List<CurrencyDto> currencyDtos = new ArrayList<>();
+//        for (Currency currency1 : currenciesList) {
+//            currencyDtos.add(new ModelMapper().map(currency1, CurrencyDto.class));
+//        }
+
+        List<CurrencyDto> currencyDtos = currencyService.getCurrencyByCountryAndPattern(currency.getCountries().getId(), currency.getPatterns().getPattern());
 
         List<Bought> boughts = boughtServices.getAllBought();
         List<BoughtDto> boughtDtos = new ArrayList<>();
