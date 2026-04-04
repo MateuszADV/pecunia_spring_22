@@ -76,19 +76,15 @@ public class MedalController {
 
         List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "MEDAL");
 
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(country.getId(), "MEDAL");
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(country.getId(), "MEDAL");
 
         log.info("""
 
                 Country -> {}
-                Currencies -> {}
                 """,
-                countryEn,
-                currencyDtoByPatterns
+                countryEn
         );
-//                JsonUtils.gsonPretty(currencyDtoByPatterns));
 
-//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
         modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
         return "medal/currency";
