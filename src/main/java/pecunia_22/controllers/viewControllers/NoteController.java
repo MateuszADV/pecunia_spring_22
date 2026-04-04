@@ -72,12 +72,6 @@ public class NoteController {
 
         List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "NOTE");
 
-//        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "NOTE");
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-//        for (Currency currency : currencies) {
-//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-//        }
 
         System.out.println("=======================START===========================");
         System.out.println(countryEn);

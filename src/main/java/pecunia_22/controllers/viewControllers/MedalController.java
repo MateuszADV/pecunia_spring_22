@@ -18,6 +18,7 @@ import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.dto.making.MakingDtoSelect;
 import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.dto.medal.MedalDtoByCurrency;
@@ -73,11 +74,7 @@ public class MedalController {
 
         Country country = countryService.getCountyByCountryEn(countryEn);
 
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns =
-//                currencyService.getCurrencyByCountryByPattern(country.getId(), "MEDAL")
-//                        .stream()
-//                        .map(currency -> modelMapper.map(currency, CurrencyDtoByPattern.class))
-//                        .toList();
+        List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "MEDAL");
 
         List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(country.getId(), "MEDAL");
 
@@ -87,26 +84,16 @@ public class MedalController {
                 Currencies -> {}
                 """,
                 countryEn,
-                currencyDtoByPatterns);
+                currencyDtoByPatterns
+        );
 //                JsonUtils.gsonPretty(currencyDtoByPatterns));
 
-        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+        modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
         return "medal/currency";
     }
 
-//    @GetMapping("/medal/currency/{countryEn}")
-//    public String getMedalCurrency(@PathVariable String countryEn, ModelMap modelMap) {
-//        Country country = countryService.getCountyByCountryEn(countryEn);
-//        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "MEDAL");
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-//        for (Currency currency : currencies) {
-//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-//        }
-//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
-//        return "medal/currency";
-//    }
 
     @PostMapping("/medal/search")
     public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
