@@ -16,6 +16,7 @@ import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.dto.making.MakingDtoSelect;
 import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.dto.note.NoteDtoByCurrency;
@@ -71,27 +72,30 @@ public class NoteController {
         Country country = countryService.getCountyByCountryEn(countryEn);
 
         List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "NOTE");
+        List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "NOTE");
 
 
         System.out.println("=======================START===========================");
-        System.out.println(countryEn);
-//        System.out.println(JsonUtils.gsonPretty(countryDto));
-        System.out.println("---------------------------------------------------------");
-        System.out.println(currencyDtoByPatterns.size());
-        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
-            System.out.println(currencyDtoByPattern.getCurrencySeries());
-        }
-        System.out.println(JsonUtils.gsonPretty(currencyDtoByPatterns));
-        System.out.println("=======================STOP===========================");
-        modelMap.addAttribute("currencies", currencyDtoByPatterns);
-
         log.info("""
                 
                 Country -> {}
                 Currency Size -> {} 
                 """,
                 countryEn,
-                currencyDtoByPatterns.size());
+                currencyDtoWithCounts.size());
+//        System.out.println(countryEn);
+////        System.out.println(JsonUtils.gsonPretty(countryDto));
+//        System.out.println("---------------------------------------------------------");
+//        System.out.println(currencyDtoByPatterns.size());
+//        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
+//            System.out.println(currencyDtoByPattern.getCurrencySeries());
+//        }
+//        System.out.println(JsonUtils.gsonPretty(currencyDtoByPatterns));
+        System.out.println("=======================STOP===========================");
+//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+        modelMap.addAttribute("currencies", currencyDtoWithCounts);
+
+
         return "note/currency";
     }
 

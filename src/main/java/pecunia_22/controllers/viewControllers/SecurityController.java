@@ -15,6 +15,7 @@ import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.dto.making.MakingDtoSelect;
 import pecunia_22.models.dto.note.NoteDtoForm;
 import pecunia_22.models.dto.quality.QualityDtoSelect;
@@ -71,33 +72,28 @@ public class SecurityController {
     @GetMapping("/security/currency/{countryEn}")
     public String getSecurityCurrency(@PathVariable String countryEn, ModelMap modelMap) {
 
-        Long patternId = patternService.getIdByPattern("SECURITY");
-        System.out.println("_______________PATTERN_________________________");
-        System.out.println(patternId);
-        System.out.println("_______________PATTERN_________________________");
+        Country country = countryService.getCountyByCountryEn(countryEn);
+        List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "SECURITY");
 
-        List<CurrencyDtoByPattern> currencies =
-                currencyService.getCurrencyByCountryEnAndPatternIdDto(countryEn, patternId);
+        System.out.println("=======================START===========================");
+        log.info("""
+                
+                Country -> {}
+                Currency Size -> {} 
+                """,
+                countryEn,
+                currencyDtoWithCounts.size());
 
-        modelMap.addAttribute("currencies", currencies);
-
-
-
-//        List<CurrencyDtoByPattern> currencies =
-//                currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "SECURITY");
+//        Long patternId = patternService.getIdByPattern("SECURITY");
+//        System.out.println("_______________PATTERN_________________________");
+//        System.out.println(patternId);
+//        System.out.println("_______________PATTERN_________________________");
 //
-//        modelMap.addAttribute("currencies", currencies);
+//        List<CurrencyDtoByPattern> currencies =
+//                currencyService.getCurrencyByCountryEnAndPatternIdDto(countryEn, patternId);
 
+        modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
-//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryEn, "SECURITY");
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-//        for (Currency currency : currencies) {
-//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-//        }
-//        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
-//            System.out.println(currencyDtoByPattern.getCurrencySeries());
-//        }
-//        modelMap.addAttribute("currencies", currencyDtoByPatterns);
         return "security/currency";
     }
 
