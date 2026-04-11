@@ -9,11 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDto;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.services.currencyService.CurrencyService;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Slf4j
 @SpringBootTest
@@ -71,5 +73,31 @@ public class CurrencyServiceDtoIT {
 
         log.info("=== TOTAL CURRENCIES: {}", dtos.size());
         assertThat(dtos).isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnCurrencyWithCount() {
+        Long countryId = 103L;
+        String pattern = "NOTE";
+
+        List<CurrencyDtoWithCount> results = currencyService.getCurrencyWithCount(countryId, pattern);
+
+        assertFalse(results.isEmpty());
+        results.forEach(dto ->
+                log.info("""
+                    
+                    ID -> {}
+                    Series -> {}
+                    Pattern -> {}
+                    Country -> {}
+                    Count -> {}
+                    """,
+                        dto.getId(),
+                        dto.getCurrencySeries(),
+                        dto.getPattern(),
+                        dto.getCountryEn(),
+                        dto.getElementsCount()
+                )
+        );
     }
 }

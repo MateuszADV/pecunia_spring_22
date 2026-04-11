@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +20,7 @@ import pecunia_22.models.dto.coin.CoinDtoForm;
 import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.dto.making.MakingDtoSelect;
 import pecunia_22.models.dto.quality.QualityDtoSelect;
 import pecunia_22.models.dto.status.StatusDtoSelect;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class CoinController {
@@ -65,15 +68,19 @@ public class CoinController {
     @GetMapping("/coin/currency/{countryEn}")
     public String getCoinCurrency(@PathVariable String countryEn, ModelMap modelMap) {
         Country country = countryService.getCountyByCountryEn(countryEn);
-        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
-//        List<Currency> currencies = currencyService.getCurrencyByCountryByPattern(countryDto.getId(), "COIN");
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns = new ArrayList<>();
-//        for (Currency currency : currencies) {
-//            currencyDtoByPatterns.add(new ModelMapper().map(currency, CurrencyDtoByPattern.class));
-//        }
+        List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "COIN");
 
-        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(countryDto.getId(), "COIN");
-        modelMap.addAttribute("currencies", currencyDtoByPatterns);
+        log.info("""
+                
+                Country -> {}
+                Currency Size -> {} 
+                """,
+                countryEn,
+                currencyDtoWithCounts.size());
+
+//        CountryDtoForm countryDto = new ModelMapper().map(country, CountryDtoForm.class);
+//        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(countryDto.getId(), "COIN");
+        modelMap.addAttribute("currencies", currencyDtoWithCounts);
         return "coin/currency";
     }
 

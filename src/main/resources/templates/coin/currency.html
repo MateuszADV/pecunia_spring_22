@@ -13,8 +13,14 @@
             <div class="container">
                 <h1 class="display-4" style="text-align: center">Coin Currency</h1>
                 <hr class="my-2">
-                <div th:if="${currencies.size} > 0">
-                    <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countries.countryEn})}"></div>
+                <div th:if="${#lists.isEmpty(currencies)}">
+                    <div class="container" style="display: inline-block">
+                        <a th:replace="~{fragments/button/_button-back :: back(back = '/coin')}"></a>
+                    </div>
+                    <hr class="my-2">
+                </div>
+                <div th:if="${not #lists.isEmpty(currencies)}">
+                    <div th:replace="~{fragments/_flag :: flag(country = ${currencies[0].countryEn})}"></div>
                     <hr class="my-2">
                     <div class="container" style="display: inline-block">
                         <a th:replace="~{fragments/button/_button-back :: back(back = '/coin')}"></a>
@@ -43,7 +49,7 @@
                                                 [[${currency.currencySeries}]]
                                             </a>
                                         </td>
-                                        <td th:text="${currency.coins.size}"></td>
+                                        <td th:text="${currency.getElementsCount()}"></td>
                                     </tr>
                                 </Block>
                             </tbody>

@@ -10,6 +10,7 @@ import pecunia_22.mapper.MedalMapper;
 import pecunia_22.models.Currency;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.models.repositories.CurrencyRepository;
 
@@ -153,5 +154,13 @@ public class CurrencyServiceImpl implements CurrencyService {
                 .stream()
                 .map(c -> modelMapper.map(c, CurrencyDto.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Pobiera waluty dla danego kraju i patternu wraz z dynamicznym licznikiem powiązanych encji
+     */
+    @Transactional(readOnly = true)
+    public List<CurrencyDtoWithCount> getCurrencyWithCount(Long countryId, String pattern) {
+        return currencyRepository.getCurrencyWithDynamicCount(countryId, pattern);
     }
 }

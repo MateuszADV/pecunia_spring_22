@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pecunia_22.models.Currency;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
+import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ public interface CurrencyService {
     List<CurrencyDtoByPattern> getCurrencyByCountryEnAndPatternIdDto(String countryEn, Long patternId);
     List<CurrencyDto> getCurrencyByCountryAndPattern(Long countryId, String pattern);
     List<CurrencyDto> getCurrencyByCountryEnAndPattern(String countryEn, String pattern);
+
+    List<CurrencyDtoWithCount> getCurrencyWithCount(Long countryId, String pattern);
+
     CurrencyDto getCurrencyDtoById(Long id);
     List<CurrencyDto> getAllCurrencyDto();
 }
