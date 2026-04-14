@@ -73,10 +73,8 @@ public class MedalController {
     public String getMedalCurrency(@PathVariable String countryEn, ModelMap modelMap) {
 
         Country country = countryService.getCountyByCountryEn(countryEn);
-
         List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "MEDAL");
-
-//        List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryAndPatternDto(country.getId(), "MEDAL");
+        modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
         log.info("""
 
@@ -85,7 +83,6 @@ public class MedalController {
                 countryEn
         );
 
-        modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
         return "medal/currency";
     }

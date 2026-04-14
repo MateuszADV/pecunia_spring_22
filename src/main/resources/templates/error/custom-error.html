@@ -7,23 +7,38 @@
     <link rel="stylesheet" th:href="@{/css/style_error.css}">
     <link rel="icon" type="image/png" href="/images/pecunia-logo.png"/>
 </head>
+
 <body>
+
 <div class="error-card">
+
     <div class="logo">
-        <img th:src="@{/images/logo.jpg}"  alt="Pecunia Logo">
+        <img th:src="@{/images/logo.jpg}" alt="Pecunia Logo">
     </div>
+
     <h1>💥 Ups! Coś poszło nie tak...</h1>
-    <h2 th:text="'Kod błędu: ' + ${status}"></h2>
-    <p>
+
+    <h2 th:if="${status}" th:text="'Kod błędu: ' + ${status}"></h2>
+
+    <!-- 🔥 KLUCZOWE -->
+    <p th:if="${message}" th:text="${message}"></p>
+    <p th:unless="${message}">
         Wystąpił nieoczekiwany błąd w systemie.<br>
-        Spróbuj odświeżyć stronę lub wróć do strony głównej.
+        Spróbuj ponownie później.
     </p>
+
     <a href="/" class="button">🏠 Wróć na stronę główną</a>
-    <div class="code">Error reference ID: <span th:text="${T(java.util.UUID).randomUUID()}"></span></div>
+
+    <!-- 🔥 backend generuje -->
+    <div class="code" th:if="${errorId}">
+        Error ID: <span th:text="${errorId}"></span>
+    </div>
+
 </div>
 
 <footer>
-    Pecunia © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> | System bezpieczeństwa aktywny 🔒
+    Pecunia © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
 </footer>
+
 </body>
 </html>
