@@ -50,16 +50,20 @@ public class SecurityCollectionController {
 
     @GetMapping("/security/collection/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        String role = Role.role();
+//        String role = Role.role();
 
-        System.out.println(countryId);
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            currencyByStatusList = securityService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+//        System.out.println(countryId);
+//        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
+
+
+        List<CurrencyByStatus> currencyByStatusList = securityService.getCurrencyByStatus(countryId, "KOLEKCJA");
+        if (currencyByStatusList.isEmpty()) {
+            currencyByStatusList = securityService.getCurrencyByStatus(countryId, "KOLEKCJA");
         } else {
-            currencyByStatusList = securityService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+            currencyByStatusList = securityService.getCurrencyByStatus(countryId, "KOLEKCJA");
+            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
         }
-        modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+
         System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
         return "security/collection/currency";
     }
