@@ -1,0 +1,101 @@
+:root {
+    --primary: #00bcd4;
+    --secondary: #007bff;
+    --danger: #ff5252;
+    --text: #cfd8dc;
+    --bg: #0a0f1e;
+    --glass: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg) 0%, #000 100%);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 1rem;
+}
+
+.error-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 0 40px rgba(0, 188, 212, 0.2);
+    animation: floatIn 1s ease-in-out;
+    max-width: 550px;
+    width: 100%;
+}
+
+.logo img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.6));
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin: 0.5rem 0;
+    color: var(--danger);
+    text-shadow: 0 0 10px rgba(255, 82, 82, 0.7);
+}
+
+h2 {
+    font-weight: normal;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+
+p {
+    color: #9ea7b3;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+a.button {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    border-radius: 40px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+}
+
+a.button:hover {
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 188, 212, 0.5);
+}
+
+.code {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #ffab91;
+    margin-top: 1.5rem;
+}
+
+footer {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: #607d8b;
+}
+
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    .error-card { padding: 2rem 1.2rem; }
+}

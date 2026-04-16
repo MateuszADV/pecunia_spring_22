@@ -1,8 +1,12 @@
 package pecunia_22.exceptions;
 
 public class CountryNotFoundException extends RuntimeException {
+
     public CountryNotFoundException(Long id) {
-        super("Country not found: " + id);
+        super("Country not found Id: " + id);
+
+    }public CountryNotFoundException(String country) {
+        super("Country not found: " + country);
     }
 
     @Override
