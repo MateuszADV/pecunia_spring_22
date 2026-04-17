@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Security;
 import pecunia_22.models.dto.security.SecurityDto;
@@ -19,6 +20,7 @@ import utils.Role;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/security/collection")
 @Controller
 public class SecurityCollectionController {
 
@@ -29,7 +31,7 @@ public class SecurityCollectionController {
         this.securityService = securityService;
     }
 
-    @GetMapping("/security/collection")
+    @GetMapping()
     public String getIndex(ModelMap modelMap) {
         String role = Role.role();
 
@@ -48,7 +50,7 @@ public class SecurityCollectionController {
         return "security/collection/index";
     }
 
-    @GetMapping("/security/collection/currency/")
+    @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
 //        String role = Role.role();
 
@@ -68,13 +70,13 @@ public class SecurityCollectionController {
         return "security/collection/currency";
     }
 
-    @GetMapping("/security/collection/securities/")
+    @GetMapping("/securities/")
     public String getSecurity(@RequestParam("selectCurrencyId") Long currencyId, ModelMap modelMap) {
 
         return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
     }
 
-    @GetMapping("/security/collection/securities/page/{pageNo}")
+    @GetMapping("/securities/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status, ModelMap modelMap) {
@@ -110,7 +112,7 @@ public class SecurityCollectionController {
         }
     }
 
-    @GetMapping("/security/collection/show/{securityId}")
+    @GetMapping("/show/{securityId}")
     public String getShow(@PathVariable Long securityId, ModelMap modelMap) {
         Security security = securityService.getSecurityById(securityId);
         SecurityDto securityDto = new ModelMapper().map(security, SecurityDto.class);
