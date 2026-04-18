@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.CountryNotFoundException;
 import pecunia_22.models.Coin;
 import pecunia_22.models.repositories.CoinRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetCoinsByStatus;
+import pecunia_22.services.userService.CurrentUserService;
+import pecunia_22.services.validate.ValidationServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
@@ -21,10 +24,15 @@ import java.util.Optional;
 
 @Service
 public class CoinServiceImpl implements CoinService {
+
+    private final CurrentUserService currentUserService;
+    private final ValidationServiceImpl validationService;
     private CoinRepository coinRepository;
 
     @Autowired
-    public CoinServiceImpl(CoinRepository coinRepository) {
+    public CoinServiceImpl(CurrentUserService currentUserService, ValidationServiceImpl validationService, CoinRepository coinRepository) {
+        this.currentUserService = currentUserService;
+        this.validationService = validationService;
         this.coinRepository = coinRepository;
     }
 
@@ -102,22 +110,17 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role) {
-        List<Object[]> objects = new ArrayList<>();
+    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status) {
+//        List<Object[]> objects = new ArrayList<>();
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             currencyByStatusList = coinRepository.currencyByStatus(status, countryId, null);
-//            objects = coinRepository.currencyByStatus(status, countryId, null);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
         } else {
             currencyByStatusList = coinRepository.currencyByStatus(status, countryId, true);
-//            objects = coinRepository.currencyByStatus(status, countryId, true);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
+            if (currencyByStatusList.isEmpty()) {
+                throw new CountryNotFoundException(countryId);
+                }
         }
         return currencyByStatusList;
     }

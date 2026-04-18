@@ -55,20 +55,17 @@ public class CoinCollectionController {
 
     @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+//        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
-        System.out.println("==================================================");
-        System.out.println("Coin Country");
-        System.out.println("==================================================");
+        List<CurrencyByStatus> currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA");
 
-        System.out.println(countryId);
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+//        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
+        if (currencyByStatusList.isEmpty()) {
+            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA");
         } else {
-            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+
         }
-        modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
         System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
         return "coin/collection/currency";
     }

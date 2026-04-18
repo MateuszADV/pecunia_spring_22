@@ -67,6 +67,12 @@ public class MedalCollectionController {
     @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
 
+        log.info("""
+                
+                Country ID -> {}
+                """,
+                countryId);
+
         List<CurrencyByStatus> currencyByStatusList = medalService.getCurrencyByStatus(countryId, "KOLEKCJA");
         if (currencyByStatusList.isEmpty()) {
             modelMap.addAttribute("message", "No currencies available for country Id: " + countryId);
