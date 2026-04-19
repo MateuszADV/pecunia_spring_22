@@ -1,6 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Note;
 import pecunia_22.models.dto.note.NoteDto;
@@ -23,6 +24,8 @@ import utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
+@RequestMapping("/note/collection")
 @Controller
 public class NoteCollectionController {
 
@@ -42,7 +45,7 @@ public class NoteCollectionController {
     }
 
 
-    @GetMapping("/note/collection")
+    @GetMapping()
     public String getIndex(ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         System.out.println(JsonUtils.gsonPretty(userCheckLoged.UserCheckLoged()));
@@ -52,7 +55,7 @@ public class NoteCollectionController {
         return "note/collection/index";
     }
 
-    @GetMapping("/note/collection/country/")
+    @GetMapping("/country/")
     public String getCountry(@RequestParam("selectContinent") String continentEn,
                              ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
@@ -78,24 +81,25 @@ public class NoteCollectionController {
         return "note/collection/country";
     }
 
-    @GetMapping("/note/collection/currency/")
+    @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+        log.info("""
+                
+                ---------- Coin Controller -----------
+                Country Id -> {}
+                """,
+                countryId);
 
-        System.out.println(countryId);
-//        List<Object[]> objects = noteRepository.currencyByStatus("KOLEKCJA", countryId);
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            currencyByStatusList = noteService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+        List<CurrencyByStatus> currencyByStatusList = noteService.getCurrencyByStatus(countryId, "KOLEKCJA");
+        if (currencyByStatusList.isEmpty()) {
+            modelMap.addAttribute("message", "No currencies available for country Id: " + countryId);
         } else {
-            currencyByStatusList = noteService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
         }
-        modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
         return "note/collection/currency";
     }
 
-    @GetMapping("/note/collection/notes/")
+    @GetMapping("/notes/")
     public String getNote(@RequestParam("selectCurrencyId") Long currencyId, ModelMap modelMap) {
 //        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 //        List<Note> notes = new ArrayList<>();
@@ -126,7 +130,7 @@ public class NoteCollectionController {
         return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
     }
 
-    @GetMapping("/note/collection/notes/page/{pageNo}")
+    @GetMapping("/notes/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status,
@@ -169,7 +173,7 @@ public class NoteCollectionController {
         }
     }
 
-    @GetMapping("/note/collection/show/{noteId}")
+    @GetMapping("/show/{noteId}")
     public String getShow(@PathVariable Long noteId, ModelMap modelMap) {
         System.out.println("pppppppppppppppppppppppppppppppppppppppppppp");
         System.out.println(noteId);

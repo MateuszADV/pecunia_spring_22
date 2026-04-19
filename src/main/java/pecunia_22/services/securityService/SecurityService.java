@@ -25,7 +25,7 @@ public interface SecurityService {
 
     //    List<CountryByStatus> getCountryByStatus(String status);
     List<CountryByStatus> getCountryByStatus(String status, String role);
-    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role);
+    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status);
     Page<Security> findSecurityPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
 
     void updateSecurity(Security security);

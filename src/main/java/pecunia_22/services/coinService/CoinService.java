@@ -21,7 +21,7 @@ public interface CoinService {
     List<Coin> getCoinByCurrencyId(Long currencyId, String role);
     List<CountryByStatus> getCountryByStatus(String status);
     List<CountryByStatus> getCountryByStatus(String status, String role);
-    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role);
+    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status);
 
     List<GetCoinsByStatus> getCoinsByStatus(String status, Long countryId);
     List<GetCoinsByStatus> getCoinsByStatus(String status);

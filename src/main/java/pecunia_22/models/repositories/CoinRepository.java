@@ -159,31 +159,31 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
      */
     @Query("""
 SELECT new pecunia_22.models.sqlClass.CurrencyByStatus(
-    cou.id,
-    con.continentEn,
-    cou.countryEn,
-    cou.countryPl,
-    cur.id,
-    cur.currencySeries,
-    COUNT(coin.id)
-)
-FROM Coin coin
-    JOIN coin.statuses stat
-    JOIN coin.currencies cur
-    JOIN cur.countries cou
-    JOIN cou.continents con
-WHERE stat.status = :status
-  AND cou.id = :countryId
-  AND (:visible IS NULL OR coin.visible = :visible)
-GROUP BY
-    cou.id,
-    con.continentEn,
-    cou.countryEn,
-    cou.countryPl,
-    cur.id,
-    cur.currencySeries
-ORDER BY cur.currencySeries
-""")
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries,
+        COUNT(coin.id)
+    )
+    FROM Coin coin
+        JOIN coin.statuses stat
+        JOIN coin.currencies cur
+        JOIN cur.countries cou
+        JOIN cou.continents con
+    WHERE stat.status = :status
+      AND cou.id = :countryId
+      AND (:visible IS NULL OR coin.visible = :visible)
+    GROUP BY
+        cou.id,
+        con.continentEn,
+        cou.countryEn,
+        cou.countryPl,
+        cur.id,
+        cur.currencySeries
+    ORDER BY cur.currencySeries
+    """)
     List<CurrencyByStatus> currencyByStatus(
             @Param("status") String status,
             @Param("countryId") Long countryId,

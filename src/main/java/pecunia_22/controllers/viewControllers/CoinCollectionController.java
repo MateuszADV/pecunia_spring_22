@@ -1,5 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Coin;
 import pecunia_22.models.dto.coin.CoinDto;
@@ -19,6 +21,8 @@ import utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
+@RequestMapping("/coin/collection")
 @Controller
 public class CoinCollectionController {
 
@@ -31,7 +35,7 @@ public class CoinCollectionController {
         this.userCheckLoged = userCheckLoged;
     }
 
-    @GetMapping("/coin/collection")
+    @GetMapping()
     public String getIndex(ModelMap modelMap) {
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         System.out.println("+++++++++++++++++++++++++++++++ROLE+++++++++++++++++++++++++++++++++++");
@@ -51,33 +55,35 @@ public class CoinCollectionController {
         return "coin/collection/index";
     }
 
-    @GetMapping("/coin/collection/currency/")
+    @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
 
-        System.out.println("==================================================");
-        System.out.println("Coin Country");
-        System.out.println("==================================================");
+        log.info("""
+                
+                ---------- Coin Controller -----------
+                Country Id -> {}
+                """,
+                countryId);
 
-        System.out.println(countryId);
-        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
-        if (role == "ADMIN") {
-            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+        List<CurrencyByStatus> currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA");
+
+        if (currencyByStatusList.isEmpty()) {
+            modelMap.addAttribute("message", "No currencies available for country Id: " + countryId);
         } else {
-            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA", role);
+            modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
+
         }
-        modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
-        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+//        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
         return "coin/collection/currency";
     }
 
-    @GetMapping("/coin/collection/coins/")
+    @GetMapping("/coins/")
     public String getCoin(@RequestParam("selectCurrencyId") Long currencyId, ModelMap modelMap) {
 
         return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
     }
 
-    @GetMapping("/coin/collection/coins/page/{pageNo}")
+    @GetMapping("/coins/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status, ModelMap modelMap) {
@@ -114,7 +120,7 @@ public class CoinCollectionController {
 
     }
 
-    @GetMapping("/coin/collection/show/{coinId}")
+    @GetMapping("/show/{coinId}")
     public String getShow(@PathVariable Long coinId, ModelMap modelMap) {
 
         Coin coin = coinService.getCoinById(coinId);
