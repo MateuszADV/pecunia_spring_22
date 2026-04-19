@@ -1,5 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequestMapping("/coin/collection")
 @Controller
 public class CoinCollectionController {
@@ -55,18 +57,23 @@ public class CoinCollectionController {
 
     @GetMapping("/currency/")
     public String getCurrency(@RequestParam("selectCountryId") Long countryId, ModelMap modelMap) {
-//        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
+
+        log.info("""
+                
+                ---------- Coin Controller -----------
+                Country Id -> {}
+                """,
+                countryId);
 
         List<CurrencyByStatus> currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA");
 
-//        List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
         if (currencyByStatusList.isEmpty()) {
-            currencyByStatusList = coinService.getCurrencyByStatus(countryId, "KOLEKCJA");
+            modelMap.addAttribute("message", "No currencies available for country Id: " + countryId);
         } else {
             modelMap.addAttribute("currencyByStatusList", currencyByStatusList);
 
         }
-        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
+//        System.out.println(JsonUtils.gsonPretty(currencyByStatusList));
         return "coin/collection/currency";
     }
 

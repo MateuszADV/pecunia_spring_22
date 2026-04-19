@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pecunia_22.exceptions.CountryNotFoundException;
 import pecunia_22.models.Note;
 import pecunia_22.models.repositories.NoteRepository;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.models.sqlClass.GetNotesByStatus;
+import pecunia_22.services.userService.CurrentUserService;
+import pecunia_22.services.validate.ValidationServiceImpl;
 import pecunia_22.timing.annotation.MeasureTime;
 import utils.JsonUtils;
 
@@ -23,6 +26,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class NoteServiceImpl implements NoteService {
 
+    private final CurrentUserService currentUserService;
+    private final ValidationServiceImpl validationService;
     private NoteRepository noteRepository;
 
     @Override
@@ -87,24 +92,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role) {
-        List<Object[]> objects = new ArrayList<>();
+    public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status) {
+        validationService.validateCountry(countryId);    //Wyświetla strone błędu
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
-        System.out.println("=========================================================");
-        System.out.println(status);
-        System.out.println("=========================================================");
-
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             currencyByStatusList = noteRepository.currencyByStatus(status, countryId, null);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
         } else {
             currencyByStatusList = noteRepository.currencyByStatus(status, countryId, true);
-//            for (Object[] object : objects) {
-//                currencyByStatusList.add(new ModelMapper().map(object[0], CurrencyByStatus.class));
-//            }
+            if (currencyByStatusList.isEmpty()) {
+                throw new CountryNotFoundException(countryId);
+            }
         }
         return currencyByStatusList;
     }

@@ -111,7 +111,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status) {
-//        List<Object[]> objects = new ArrayList<>();
+        validationService.validateCountry(countryId);    //Wyświetla strone błędu
         List<CurrencyByStatus> currencyByStatusList = new ArrayList<>();
 
         if (currentUserService.isAdmin()) {
@@ -120,7 +120,7 @@ public class CoinServiceImpl implements CoinService {
             currencyByStatusList = coinRepository.currencyByStatus(status, countryId, true);
             if (currencyByStatusList.isEmpty()) {
                 throw new CountryNotFoundException(countryId);
-                }
+            }
         }
         return currencyByStatusList;
     }

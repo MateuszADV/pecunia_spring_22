@@ -22,7 +22,7 @@ public interface NoteService {
 
     List<CountryByStatus> getCountryByStatus(String continent, String status, String role);
 
-    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status, String role);
+    List<CurrencyByStatus> getCurrencyByStatus(Long countryId, String status);
 
     Page<Note> findNotePaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role);
 
