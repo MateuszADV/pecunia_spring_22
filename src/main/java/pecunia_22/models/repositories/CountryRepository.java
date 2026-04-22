@@ -2,6 +2,7 @@ package pecunia_22.models.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Country;
@@ -18,10 +19,19 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     @Query(value = "SELECT cou FROM Country cou WHERE cou.continent = ?1")
     List<Country> countries(String continentEn);
 
-    @Query(value = "SELECT cou FROM Country cou " +
-            "WHERE LOWER(cou.countryEn) LIKE LOWER(CONCAT('%', ?1, '%'))" +
-            "OR    LOWER(cou.countryPl) LIKE LOWER(CONCAT('%', ?1, '%'))")
-    List<Country> searchCountry(String keyWord);
+//    @Query(value = "SELECT cou FROM Country cou " +
+//            "WHERE LOWER(cou.countryEn) LIKE LOWER(CONCAT('%', ?1, '%'))" +
+//            "OR    LOWER(cou.countryPl) LIKE LOWER(CONCAT('%', ?1, '%'))")
+//    List<Country> searchCountry(String keyWord);
+
+    @Query( """
+        SELECT cou FROM Country cou
+        WHERE cou.countryEn ILIKE CONCAT('%', :keyword, '%')
+           OR cou.countryPl ILIKE CONCAT('%', :keyword, '%')
+    """)
+    List<Country> searchCountry(
+            @Param("keyword") String keyword
+    );
 
 //    Country findByCountryEn(String countryEn);
     Optional<Country> findByCountryEn(String countryEn);
