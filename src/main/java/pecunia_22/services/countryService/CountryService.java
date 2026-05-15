@@ -3,6 +3,8 @@ package pecunia_22.services.countryService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pecunia_22.models.Country;
+import pecunia_22.models.dto.country.CountryGetDto;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.sqlClass.Continent;
 import pecunia_22.models.sqlClass.CountryCount;
 
@@ -17,8 +19,11 @@ public interface CountryService {
     Page<Country> findPaginated(Integer pageNo, Integer pageSize, String sortField, String sortDirection);
     List<Country> getCountriesWithContinent(String continentEn);
     List<Country> getCountryByCountryEnAsc();
+    @Deprecated
     List<Country> searchCountry(String keyWord);
     Country getCountyByCountryEn(String countryEn);
+
+    List<CountrySearchDto> searchCountryDto(String keyword);
 
     //    *****************************************
 //    ******Query związane z countries*********

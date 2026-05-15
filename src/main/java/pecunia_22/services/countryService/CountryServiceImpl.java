@@ -12,6 +12,8 @@ import pecunia_22.exceptions.CountryNotFoundException;
 import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Continent;
 import pecunia_22.models.Country;
+import pecunia_22.models.dto.country.CountryGetDto;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.repositories.ContinentRepository;
 import pecunia_22.models.repositories.CountryRepository;
 import pecunia_22.models.sqlClass.CountryCount;
@@ -126,4 +128,15 @@ public class CountryServiceImpl implements CountryService {
         System.out.println(JsonUtils.gsonPretty(continents));
         return continents;
     }
+
+    @Override
+    public List<CountrySearchDto> searchCountryDto(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return countryRepository.countriesOrderByCountryEnAscSearch();
+        }
+
+        return countryRepository.searchCountryDto(keyword);
+    }
+
+
 }
