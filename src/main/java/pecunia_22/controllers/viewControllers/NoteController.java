@@ -14,6 +14,7 @@ import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountryDtoForm;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
@@ -61,10 +62,30 @@ public class NoteController {
     private StatusServiceImpl statusService;
     private ImageTypeServiceImpl imageTypeSevice;
 
-    @GetMapping("/note")
-    public String getIndex(ModelMap modelMap) {
 
-        return getSearch("", modelMap);
+    @GetMapping("/note")
+    public String searchCountry(
+            @RequestParam(required = false) String keyword,
+            ModelMap modelMap
+    ) {
+
+        List<CountrySearchDto> countries =
+                countryService.searchCountryDto(keyword);
+
+        modelMap.addAttribute("countries", countries);
+        modelMap.addAttribute("keyword", keyword);
+
+        log.info("""
+            
+            [COUNTRY SEARCH]
+            keyword -> {}
+            results -> {}
+            """,
+                keyword,
+                countries.size()
+        );
+
+        return "note/index";
     }
 
     @GetMapping("/note/currency/{countryEn}")
@@ -74,7 +95,6 @@ public class NoteController {
         List<CurrencyDtoByPattern> currencyDtoByPatterns = currencyService.getCurrencyByCountryEnAndPatternDto(countryEn, "NOTE");
         List<CurrencyDtoWithCount> currencyDtoWithCounts = currencyService.getCurrencyWithCount(country.getId(), "NOTE");
 
-
         System.out.println("=======================START===========================");
         log.info("""
                 
@@ -83,27 +103,12 @@ public class NoteController {
                 """,
                 countryEn,
                 currencyDtoWithCounts.size());
-//        System.out.println(countryEn);
-////        System.out.println(JsonUtils.gsonPretty(countryDto));
-//        System.out.println("---------------------------------------------------------");
-//        System.out.println(currencyDtoByPatterns.size());
-//        for (CurrencyDtoByPattern currencyDtoByPattern : currencyDtoByPatterns) {
-//            System.out.println(currencyDtoByPattern.getCurrencySeries());
-//        }
-//        System.out.println(JsonUtils.gsonPretty(currencyDtoByPatterns));
         System.out.println("=======================STOP===========================");
 //        modelMap.addAttribute("currencies", currencyDtoByPatterns);
         modelMap.addAttribute("currencies", currencyDtoWithCounts);
 
 
         return "note/currency";
-    }
-
-    @PostMapping("/note/search")
-    public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
-        Search.searchCountry(keyword, modelMap, countryService);
-//        System.out.println(JsonUtils.gsonPretty(countryGetDtos));
-        return "note/index";
     }
 
     @GetMapping("/note/note_list/")

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.exceptions.CountryNotFoundException;
 import pecunia_22.exceptions.ResourceNotFoundException;
 import pecunia_22.models.Continent;
@@ -130,8 +131,9 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CountrySearchDto> searchCountryDto(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
+        if (keyword == null || keyword.isEmpty()) {
             return countryRepository.countriesOrderByCountryEnAscSearch();
         }
 

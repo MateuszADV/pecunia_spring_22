@@ -197,4 +197,20 @@ public class CountryRepositoryIT {
 
         results.forEach(CountryRepositoryIT::accept);
     }
+
+    @Test
+    void shouldSearchCountryDtoIgnoreCaseNull() {
+
+        // given
+        String keyword = null;
+
+        // when
+        List<CountrySearchDto> results =
+                countryRepository.searchCountryDto(keyword);
+
+        // then
+        assertTrue(results.isEmpty());
+
+        results.forEach(CountryRepositoryIT::accept);
+    }
 }

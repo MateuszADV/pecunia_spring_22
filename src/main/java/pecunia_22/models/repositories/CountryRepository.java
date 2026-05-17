@@ -18,8 +18,20 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     @Query(value = "SELECT cou FROM Country cou ORDER BY cou.countryEn ASC ")
     List<Country> countriesOrderByCountryEnAsc();
 
-    @Query(value = "SELECT cou FROM Country cou ORDER BY cou.countryEn ASC ")
+//    @Query(value = "SELECT cou FROM Country cou ORDER BY cou.countryEn ASC ")
+//    List<CountrySearchDto> countriesOrderByCountryEnAscSearch();
+
+    @Query("""
+    SELECT new pecunia_22.models.dto.country.CountrySearchDto(
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    )
+    FROM Country cou
+    ORDER BY cou.countryEn ASC
+""")
     List<CountrySearchDto> countriesOrderByCountryEnAscSearch();
+
 
     @Query(value = "SELECT cou FROM Country cou WHERE cou.continent = ?1")
     List<Country> countries(String continentEn);

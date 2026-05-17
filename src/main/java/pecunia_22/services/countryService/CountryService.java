@@ -19,7 +19,8 @@ public interface CountryService {
     Page<Country> findPaginated(Integer pageNo, Integer pageSize, String sortField, String sortDirection);
     List<Country> getCountriesWithContinent(String continentEn);
     List<Country> getCountryByCountryEnAsc();
-    @Deprecated(since = "0.2", forRemoval = true)
+//    @Deprecated(since = "0.2", forRemoval = true)
+    @Deprecated
     List<Country> searchCountry(String keyWord);
     Country getCountyByCountryEn(String countryEn);
 
