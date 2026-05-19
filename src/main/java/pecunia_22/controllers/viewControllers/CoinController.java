@@ -18,6 +18,7 @@ import pecunia_22.models.dto.coin.CoinDto;
 import pecunia_22.models.dto.coin.CoinDtoByCurrency;
 import pecunia_22.models.dto.coin.CoinDtoForm;
 import pecunia_22.models.dto.country.CountryDtoForm;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
@@ -61,8 +62,28 @@ public class CoinController {
     Optional<Coin> coinTmp;
 
     @GetMapping("/coin")
-    public String getIndex(ModelMap modelMap) {
-        return getSearch("", modelMap);
+    public String getIndex(
+            @RequestParam(required = false) String keyword,
+                            ModelMap modelMap) {
+
+        List<CountrySearchDto> countries =
+                countryService.searchCountryDto(keyword);
+
+        modelMap.addAttribute("countries", countries);
+        modelMap.addAttribute("keyword", keyword);
+
+        log.info("""
+            
+            [COUNTRY SEARCH]
+            keyword -> {}
+            results -> {}
+            """,
+                keyword,
+                countries.size()
+        );
+
+        return "coin/index";
+//        return getSearch("", modelMap);
     }
 
     @GetMapping("/coin/currency/{countryEn}")
