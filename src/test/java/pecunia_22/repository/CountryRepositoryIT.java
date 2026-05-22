@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pecunia_22.models.Country;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.repositories.CountryRepository;
 
 import java.util.List;
@@ -20,6 +21,19 @@ public class CountryRepositoryIT {
 
     @Autowired
     private CountryRepository countryRepository;
+
+    private static void accept(CountrySearchDto dto) {
+        log.info("""
+                                        
+                        ID -> {}
+                        Country EN -> {}
+                        Country PL -> {}
+                        """,
+                dto.getId(),
+                dto.getCountryEn(),
+                dto.getCountryPl()
+        );
+    }
 
     @Test
     void shouldFindByCountryEn() {
@@ -120,5 +134,83 @@ public class CountryRepositoryIT {
                 """,
                 c.getCountryEn(),
                 c.getCountryPl());
+    }
+
+    @Test
+    void shouldSearchCountryDto() {
+
+        // given
+        String keyword = "pol";
+
+        // when
+        List<CountrySearchDto> results =
+                countryRepository.searchCountryDto(keyword);
+
+        // then
+        assertNotNull(results);
+        assertFalse(results.isEmpty());
+
+        results.forEach(dto -> {
+
+            assertNotNull(dto.getId());
+            assertNotNull(dto.getCountryEn());
+            assertNotNull(dto.getCountryPl());
+
+            boolean match =
+                    dto.getCountryEn().toLowerCase().contains(keyword)
+                            || dto.getCountryPl().toLowerCase().contains(keyword);
+
+            assertTrue(match);
+        });
+
+        results.forEach(CountryRepositoryIT::accept
+        );
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenCountryNotFound() {
+
+        // given
+        String keyword = "xxxxxxxx";
+
+        // when
+        List<CountrySearchDto> results =
+                countryRepository.searchCountryDto(keyword);
+
+        // then
+        assertNotNull(results);
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    void shouldSearchCountryDtoIgnoreCase() {
+
+        // given
+        String keyword = "PoL";
+
+        // when
+        List<CountrySearchDto> results =
+                countryRepository.searchCountryDto(keyword);
+
+        // then
+        assertFalse(results.isEmpty());
+
+        results.forEach(CountryRepositoryIT::accept);
+    }
+
+    @Test
+    void shouldSearchCountryDtoIgnoreCaseNull() {
+
+        // given
+        String keyword = null;
+
+        // when
+        List<CountrySearchDto> results =
+                countryRepository.searchCountryDto(keyword);
+
+        // then
+        assertTrue(results.isEmpty());
+
+        results.forEach(CountryRepositoryIT::accept);
     }
 }

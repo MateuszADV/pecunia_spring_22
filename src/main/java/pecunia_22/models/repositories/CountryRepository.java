@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pecunia_22.models.Country;
+import pecunia_22.models.dto.country.CountryGetDto;
+import pecunia_22.models.dto.country.CountrySearchDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,21 @@ import java.util.Optional;
 public interface CountryRepository extends JpaRepository<Country, Long> {
     @Query(value = "SELECT cou FROM Country cou ORDER BY cou.countryEn ASC ")
     List<Country> countriesOrderByCountryEnAsc();
+
+//    @Query(value = "SELECT cou FROM Country cou ORDER BY cou.countryEn ASC ")
+//    List<CountrySearchDto> countriesOrderByCountryEnAscSearch();
+
+    @Query("""
+    SELECT new pecunia_22.models.dto.country.CountrySearchDto(
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    )
+    FROM Country cou
+    ORDER BY cou.countryEn ASC
+""")
+    List<CountrySearchDto> countriesOrderByCountryEnAscSearch();
+
 
     @Query(value = "SELECT cou FROM Country cou WHERE cou.continent = ?1")
     List<Country> countries(String continentEn);
@@ -30,6 +47,21 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
            OR cou.countryPl ILIKE CONCAT('%', :keyword, '%')
     """)
     List<Country> searchCountry(
+            @Param("keyword") String keyword
+    );
+
+    @Query("""
+    SELECT new pecunia_22.models.dto.country.CountrySearchDto(
+        cou.id,
+        cou.countryEn,
+        cou.countryPl
+    )
+    FROM Country cou
+    WHERE LOWER(cou.countryEn) LIKE LOWER(CONCAT('%', :keyword, '%'))
+       OR LOWER(cou.countryPl) LIKE LOWER(CONCAT('%', :keyword, '%'))
+    ORDER BY cou.countryEn ASC
+""")
+    List<CountrySearchDto> searchCountryDto(
             @Param("keyword") String keyword
     );
 
