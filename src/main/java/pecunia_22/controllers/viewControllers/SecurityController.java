@@ -13,6 +13,7 @@ import pecunia_22.models.*;
 import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
@@ -59,8 +60,27 @@ public class SecurityController {
     private final PatternServiceImpl patternService;
 
     @GetMapping("/security")
-    public String getIndex(ModelMap modelMap) {
-        return getSearch("", modelMap);
+    public String getIndex (
+            @RequestParam(required = false) String keyword,
+            ModelMap modelMap
+    ) {
+        List<CountrySearchDto> countries =
+                countryService.searchCountryDto(keyword);
+
+        modelMap.addAttribute("countries", countries);
+        modelMap.addAttribute("keyword", keyword);
+
+        log.info("""
+            
+            [COUNTRY SEARCH]
+            keyword -> {}
+            results -> {}
+            """,
+                keyword,
+                countries.size()
+        );
+        return "security/index";
+        //        return getSearch("", modelMap);
     }
 
     @PostMapping("/security/search")

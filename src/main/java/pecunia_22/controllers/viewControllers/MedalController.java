@@ -16,6 +16,7 @@ import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountryDtoForm;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
@@ -61,11 +62,27 @@ public class MedalController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/medal")
-    public String getIndex(ModelMap modelMap) {
-        System.out.println("-----------------------------------------------------------------------------");
-        System.out.println("---------------------MEDAL-----------------------------------------------");
-        System.out.println("-----------------------------------------------------------------------------");
-        return getSearch("", modelMap);
+    public String getIndex(
+            @RequestParam(required = false) String keyword,
+            ModelMap modelMap
+    ) {
+        List<CountrySearchDto> countries =
+                countryService.searchCountryDto(keyword);
+
+        modelMap.addAttribute("countries", countries);
+        modelMap.addAttribute("keyword", keyword);
+
+        log.info("""
+            
+            [COUNTRY SEARCH]
+            keyword -> {}
+            results -> {}
+            """,
+                keyword,
+                countries.size()
+        );
+
+        return "medal/index";
     }
 
 
