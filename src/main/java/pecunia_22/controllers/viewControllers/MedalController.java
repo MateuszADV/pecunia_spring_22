@@ -15,7 +15,6 @@ import pecunia_22.models.*;
 import pecunia_22.models.dto.ImageType.ImageTypeDtoSelect;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
-import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
@@ -37,7 +36,6 @@ import pecunia_22.services.medalService.MedalServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
 import utils.JsonUtils;
-import utils.Search;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -85,7 +83,6 @@ public class MedalController {
         return "medal/index";
     }
 
-
     @GetMapping("/medal/currency/{countryEn}")
     public String getMedalCurrency(@PathVariable String countryEn, ModelMap modelMap) {
 
@@ -100,21 +97,12 @@ public class MedalController {
                 countryEn
         );
 
-
         return "medal/currency";
-    }
-
-
-    @PostMapping("/medal/search")
-    public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
-        Search.searchCountry(keyword, modelMap, countryService);
-        return "medal/index";
     }
 
     @GetMapping("/medal/medal_list/")
     public String getMedalList(@RequestParam(value = "currencySeries") String currencySeries,
                               @RequestParam(value = "curId") Long  currencyId,
-                              HttpServletRequest request,
                               ModelMap modelMap) {
 
         Currency currency = currencyService.getCurrencyById(currencyId);
@@ -154,12 +142,11 @@ public class MedalController {
 
     @PostMapping("/medal/new")
     public String postNew(@ModelAttribute("medalForm")@Valid MedalDtoForm medalForm, BindingResult result,
-                          HttpServletRequest request,
                           ModelMap modelMap) {
 
         if (result.hasErrors()) {
             System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&ERROR&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-            System.out.println(result.toString());
+            System.out.println(result);
             System.out.println(result.hasFieldErrors("dateBuy"));
             System.out.println(result.resolveMessageCodes("test błedu", "dateBuy").toString());
 

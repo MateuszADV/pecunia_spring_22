@@ -17,7 +17,6 @@ import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.coin.CoinDto;
 import pecunia_22.models.dto.coin.CoinDtoByCurrency;
 import pecunia_22.models.dto.coin.CoinDtoForm;
-import pecunia_22.models.dto.country.CountryDtoForm;
 import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
@@ -36,7 +35,6 @@ import pecunia_22.services.makingService.MakingServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
 import utils.JsonUtils;
-import utils.Search;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -83,7 +81,6 @@ public class CoinController {
         );
 
         return "coin/index";
-//        return getSearch("", modelMap);
     }
 
     @GetMapping("/coin/currency/{countryEn}")
@@ -94,7 +91,7 @@ public class CoinController {
         log.info("""
                 
                 Country -> {}
-                Currency Size -> {} 
+                Currency Size -> {}
                 """,
                 countryEn,
                 currencyDtoWithCounts.size());
@@ -105,16 +102,9 @@ public class CoinController {
         return "coin/currency";
     }
 
-    @PostMapping("/coin/search")
-    public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
-        Search.searchCountry(keyword, modelMap, countryService);
-        return "coin/index";
-    }
-
     @GetMapping("/coin/coin_list/")
     public String getCoinList(@RequestParam(value = "currencySeries") String currencySeries,
                               @RequestParam(value = "curId") Long  currencyId,
-                              HttpServletRequest request,
                               ModelMap modelMap) {
 
         Currency currency = currencyService.getCurrencyById(currencyId);
