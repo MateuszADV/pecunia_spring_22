@@ -2,6 +2,7 @@ package pecunia_22.controllers.viewControllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +15,7 @@ import pecunia_22.models.Pattern;
 import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.country.CountryGetCurrencyDto;
 import pecunia_22.models.dto.country.CountryGetDto;
+import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
 import pecunia_22.models.dto.currency.CurrencyDtoForm;
 import pecunia_22.models.dto.pattern.PatternDtoCurrency;
@@ -23,12 +25,12 @@ import pecunia_22.services.countryService.CountryServiceImpl;
 import pecunia_22.services.currencyService.CurrencyServiceImpl;
 import pecunia_22.services.pattern.PatternServiceImpl;
 import utils.JsonUtils;
-import utils.Search;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class CurrencyController {
@@ -39,11 +41,27 @@ public class CurrencyController {
     private PatternServiceImpl patternService;
 
     @GetMapping("/currency")
-    public String getIndex(ModelMap modelMap) {
+    public String getIndex( @RequestParam(required = false) String keyword,
+                            ModelMap modelMap)
+    {
 
+        List<CountrySearchDto> countries =
+                countryService.searchCountryDto(keyword);
 
-//        return "currency/index";
-        return getSearch("", modelMap);
+        modelMap.addAttribute("countries", countries);
+        modelMap.addAttribute("keyword", keyword);
+
+        log.info("""
+            
+            [COUNTRY SEARCH]
+            keyword -> {}
+            results -> {}
+            """,
+                keyword,
+                countries.size()
+        );
+
+        return "currency/index";
     }
 
     @GetMapping("/currency/list/{countryId}")
@@ -56,25 +74,14 @@ public class CurrencyController {
         for (Currency currency : country.getCurrencies()) {
             currencyDtos.add(new ModelMapper().map(currency, CurrencyDto.class));
         }
-//        System.out.println(JsonUtils.gsonPretty(currencyDtos));
-//        System.out.println(country.getCurrencies().size());
 
         //TODO Do sprawdzenia to mapowanie
         CountryGetCurrencyDto countryGetCurrencyDto = new ModelMapper().map(country, CountryGetCurrencyDto.class);
 
         countryGetCurrencyDto.setCurrencyDtos(currencyDtos);
-//        System.out.println(countryGetCurrencyDto.getCurrencyDtos().size());
-//        System.out.println(JsonUtils.gsonPretty(countryGetCurrencyDto));
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         modelMap.addAttribute("country", countryGetCurrencyDto);
         return "currency/list";
-    }
-
-    @PostMapping("/currency/search")
-    public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
-        Search.searchCountry(keyword, modelMap, countryService);
-//        System.out.println(JsonUtils.gsonPretty(countryGetDtos));
-        return "currency/index";
     }
 
     @GetMapping("/currency/new/")
@@ -96,7 +103,7 @@ public class CurrencyController {
                           BindingResult result,
                           ModelMap modelMap) {
         if (result.hasErrors()) {
-            System.out.println(result.toString());
+            System.out.println(result);
             System.out.println(JsonUtils.gsonPretty(currencyForm));
             currencyParameters(currencyForm, modelMap);
             return "currency/new";
@@ -187,9 +194,6 @@ public class CurrencyController {
 
             return "currency/edit";
         }
-
-//        currencyForm.setId(currencyTemp.get().getId());
-//        currencyForm.setCreated_at(currencyTemp.get().getCreated_at());
 
         Currency currency = new ModelMapper().map(currencyForm, Currency.class);
 

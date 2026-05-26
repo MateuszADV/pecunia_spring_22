@@ -15,10 +15,8 @@ import pecunia_22.models.dto.active.ActiveDtoSelect;
 import pecunia_22.models.dto.bought.BoughtDto;
 import pecunia_22.models.dto.country.CountrySearchDto;
 import pecunia_22.models.dto.currency.CurrencyDto;
-import pecunia_22.models.dto.currency.CurrencyDtoByPattern;
 import pecunia_22.models.dto.currency.CurrencyDtoWithCount;
 import pecunia_22.models.dto.making.MakingDtoSelect;
-import pecunia_22.models.dto.note.NoteDtoForm;
 import pecunia_22.models.dto.quality.QualityDtoSelect;
 import pecunia_22.models.dto.security.SecurityDto;
 import pecunia_22.models.dto.security.SecurityDtoForm;
@@ -30,12 +28,10 @@ import pecunia_22.services.countryService.CountryServiceImpl;
 import pecunia_22.services.currencyService.CurrencyServiceImpl;
 import pecunia_22.services.imageTypeService.ImageTypeServiceImpl;
 import pecunia_22.services.makingService.MakingServiceImpl;
-import pecunia_22.services.pattern.PatternServiceImpl;
 import pecunia_22.services.qualityService.QualityServiceImpl;
 import pecunia_22.services.securityService.SecurityServiceImpl;
 import pecunia_22.services.status.StatusServiceImpl;
 import utils.JsonUtils;
-import utils.Search;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -57,7 +53,6 @@ public class SecurityController {
     private final QualityServiceImpl qualityService;
     private final StatusServiceImpl statusService;
     private final ImageTypeServiceImpl imageTypeSevice;
-    private final PatternServiceImpl patternService;
 
     @GetMapping("/security")
     public String getIndex (
@@ -80,13 +75,6 @@ public class SecurityController {
                 countries.size()
         );
         return "security/index";
-        //        return getSearch("", modelMap);
-    }
-
-    @PostMapping("/security/search")
-    public String getSearch(@RequestParam(value = "keyword") String keyword, ModelMap modelMap) {
-        Search.searchCountry(keyword, modelMap, countryService);
-        return "security/index";
     }
 
     @GetMapping("/security/currency/{countryEn}")
@@ -103,14 +91,6 @@ public class SecurityController {
                 """,
                 countryEn,
                 currencyDtoWithCounts.size());
-
-//        Long patternId = patternService.getIdByPattern("SECURITY");
-//        System.out.println("_______________PATTERN_________________________");
-//        System.out.println(patternId);
-//        System.out.println("_______________PATTERN_________________________");
-//
-//        List<CurrencyDtoByPattern> currencies =
-//                currencyService.getCurrencyByCountryEnAndPatternIdDto(countryEn, patternId);
 
         modelMap.addAttribute("currencies", currencyDtoWithCounts);
 

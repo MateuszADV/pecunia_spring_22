@@ -11,6 +11,7 @@ import pecunia_22.services.countryService.CountryServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Component
 public class Search {
     public static void searchCountry(@RequestParam("keyword") String keyword, ModelMap modelMap, CountryServiceImpl countryService) {
