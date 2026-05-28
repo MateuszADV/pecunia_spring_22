@@ -22,6 +22,7 @@ import pecunia_22.services.noteServices.NoteServiceImpl;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -136,17 +137,26 @@ public class NoteCollectionController {
                                 @RequestParam("status") String status,
                                 ModelMap modelMap) {
 
-        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
-        System.out.println(status);
-        System.out.println();
-        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
-
-
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =20;
 
         Page<Note> page = noteService.findNotePaginated(pageNo, pageSize, currencyId, status, role);
         List<NoteDto> noteDtoList = new ArrayList<>();
+
+        if (page.isEmpty()) {
+
+            log.warn(
+                    "No notes found for currencyId={}, status={}, role={}",
+                    currencyId,
+                    status,
+                    role
+            );
+
+            modelMap.addAttribute("notes", Collections.emptyList());
+
+            return "note/collection/notes";
+        }
+
         if (page.getTotalPages() >= pageNo) {
             for (Note note : page.getContent()) {
                 noteDtoList.add(new ModelMapper().map(note, NoteDto.class));
@@ -158,6 +168,18 @@ public class NoteCollectionController {
             modelMap.addAttribute("totalItems", page.getTotalElements());
             modelMap.addAttribute("pageSize", pageSize);
             modelMap.addAttribute("pathPage", pathPage);
+
+            log.info("""
+                    
+                    ROLE -> {}
+                    Page Elemants -> {}
+                    Page Total -> {}
+                    Page Size -> {}
+                    """,
+                    role,
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.getSize());
 
             System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
             System.out.println(page.getTotalElements());

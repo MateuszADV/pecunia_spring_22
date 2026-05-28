@@ -2,6 +2,7 @@ package pecunia_22.services.noteServices;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class NoteServiceImpl implements NoteService {
@@ -77,7 +79,7 @@ public class NoteServiceImpl implements NoteService {
         List<Object[]> objects = new ArrayList<>();
         List<CountryByStatus> countryByStatusList = new ArrayList<>();
 
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             countryByStatusList = noteRepository.countryByStatus(status, continent, null);
             for (Object[] object : objects) {
                 countryByStatusList.add(new ModelMapper().map(object[0], CountryByStatus.class));
@@ -109,8 +111,22 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Page<Note> findNotePaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role) {
+        log.info("""
+                
+                Role -> {}
+                Currency ID -> {}
+                Status -> {}
+                Page No -> {}
+                Page Size -> {}
+                """,
+                currentUserService.getRoles(),
+                currencyId,
+                status,
+                pageNo,
+                pageSize);
+
         List<Note> notes = new ArrayList<>();
-        if (role == "ADMIN") {
+        if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.noteRepository.notePageable(currencyId, status, null, pageable);
         } else {
