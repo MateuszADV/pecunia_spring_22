@@ -125,7 +125,6 @@ public class NoteServiceImpl implements NoteService {
                 pageNo,
                 pageSize);
 
-        List<Note> notes = new ArrayList<>();
         if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.noteRepository.notePageable(currencyId, status, null, pageable);

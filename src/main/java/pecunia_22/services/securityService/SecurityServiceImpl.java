@@ -122,8 +122,8 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public Page<Security> findSecurityPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role) {
-        List<Security> securities = new ArrayList<>();
-        if (role == "ADMIN") {
+
+        if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.securityRepository.securityPageable(currencyId, status, null, pageable);
         } else {

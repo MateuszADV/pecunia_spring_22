@@ -1,6 +1,7 @@
 package pecunia_22.services.coinService;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CoinServiceImpl implements CoinService {
 
@@ -127,8 +129,21 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public Page<Coin> findCoinPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role) {
-        List<Coin> coins = new ArrayList<>();
-        if (role == "ADMIN") {
+        log.info("""
+                
+                Role -> {}
+                Currency ID -> {}
+                Status -> {}
+                Page No -> {}
+                Page Size -> {}
+                """,
+                currentUserService.getRoles(),
+                currencyId,
+                status,
+                pageNo,
+                pageSize);
+
+        if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.coinRepository.coinPageable(currencyId, status, null, pageable);
         } else {

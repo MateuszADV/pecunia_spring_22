@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Note;
+import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.repositories.CurrencyRepository;
 import pecunia_22.models.repositories.NoteRepository;
@@ -30,21 +31,19 @@ import java.util.List;
 @Controller
 public class NoteCollectionController {
 
-    private NoteServiceImpl noteService;
-    private CountryServiceImpl countryService;
-    private UserCheckLoged userCheckLoged;
+    private final NoteServiceImpl noteService;
+    private final CountryServiceImpl countryService;
+    private final UserCheckLoged userCheckLoged;
+    private final ModelMapper modelMapper;
 
-    private NoteRepository noteRepository;
-    private CurrencyRepository currencyRepository;
 
     @Autowired
-    public NoteCollectionController(NoteServiceImpl noteService, CountryServiceImpl countryService, UserCheckLoged userCheckLoged, NoteRepository noteRepository) {
+    public NoteCollectionController(NoteServiceImpl noteService, CountryServiceImpl countryService, UserCheckLoged userCheckLoged, ModelMapper modelMapper) {
         this.noteService = noteService;
         this.countryService = countryService;
         this.userCheckLoged = userCheckLoged;
-        this.noteRepository = noteRepository;
+        this.modelMapper = modelMapper;
     }
-
 
     @GetMapping()
     public String getIndex(ModelMap modelMap) {
@@ -141,12 +140,14 @@ public class NoteCollectionController {
         Integer pageSize =20;
 
         Page<Note> page = noteService.findNotePaginated(pageNo, pageSize, currencyId, status, role);
-        List<NoteDto> noteDtoList = new ArrayList<>();
-
         if (page.isEmpty()) {
 
             log.warn(
-                    "No notes found for currencyId={}, status={}, role={}",
+                    """
+                            No notes found for currencyId={} 
+                            status={}
+                            role={}
+                            """,
                     currencyId,
                     status,
                     role
@@ -158,9 +159,10 @@ public class NoteCollectionController {
         }
 
         if (page.getTotalPages() >= pageNo) {
-            for (Note note : page.getContent()) {
-                noteDtoList.add(new ModelMapper().map(note, NoteDto.class));
-            }
+            List<NoteDto> noteDtoList = page.getContent()
+                    .stream()
+                    .map(m -> modelMapper.map(m, NoteDto.class))
+                    .toList();
 
             String pathPage = "/note/collection/notes/page/";
             modelMap.addAttribute("currentPage", pageNo);
@@ -181,14 +183,7 @@ public class NoteCollectionController {
                     page.getTotalPages(),
                     page.getSize());
 
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-            System.out.println(page.getTotalElements());
-            System.out.println(page.getTotalPages());
-            System.out.println(page.getSize());
-
             modelMap.addAttribute("notes", noteDtoList);
-            System.out.println(role);
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
             return "note/collection/notes";
         }else {
             return findPaginated(1, currencyId, "KOLEKCJA", modelMap);

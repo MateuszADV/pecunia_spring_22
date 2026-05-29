@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Coin;
 import pecunia_22.models.dto.coin.CoinDto;
+import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
 import pecunia_22.security.config.UserCheckLoged;
@@ -19,6 +20,7 @@ import pecunia_22.services.coinService.CoinServiceImpl;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -26,13 +28,15 @@ import java.util.List;
 @Controller
 public class CoinCollectionController {
 
-    private CoinServiceImpl coinService;
-    private UserCheckLoged userCheckLoged;
+    private final CoinServiceImpl coinService;
+    private final UserCheckLoged userCheckLoged;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CoinCollectionController(CoinServiceImpl coinService, UserCheckLoged userCheckLoged) {
+    public CoinCollectionController(CoinServiceImpl coinService, UserCheckLoged userCheckLoged, ModelMapper modelMapper) {
         this.coinService = coinService;
         this.userCheckLoged = userCheckLoged;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
@@ -91,12 +95,30 @@ public class CoinCollectionController {
         Integer pageSize =10;
 
         Page<Coin> page = coinService.findCoinPaginated(pageNo, pageSize, currencyId, status, role);
-        List<CoinDto> coinDtoList = new ArrayList<>();
+
+        if (page.isEmpty()) {
+            log.warn(
+                    """
+                            No coins found for currencyId={} 
+                            status={}
+                            role={}
+                            """,
+                    currencyId,
+                    status,
+                    role
+            );
+
+            modelMap.addAttribute("coins", Collections.emptyList());
+
+            return "coin/collection/coins";
+        }
 
         if (page.getTotalPages() >= pageNo) {
-            for (Coin coin : page.getContent()) {
-                coinDtoList.add(new ModelMapper().map(coin, CoinDto.class));
-            }
+
+            List<CoinDto> coinDtoList = page.getContent()
+                    .stream()
+                    .map(m -> modelMapper.map(m, CoinDto.class))
+                    .toList();
 
             String pathPage = "/coin/collection/coins/page/";
             modelMap.addAttribute("currentPage", pageNo);
@@ -105,14 +127,7 @@ public class CoinCollectionController {
             modelMap.addAttribute("pageSize", pageSize);
             modelMap.addAttribute("pathPage", pathPage);
 
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-            System.out.println(page.getTotalElements());
-            System.out.println(page.getTotalPages());
-            System.out.println(page.getSize());
-
             modelMap.addAttribute("coins", coinDtoList);
-            System.out.println(role);
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
             return "coin/collection/coins";
         }else {
             return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
