@@ -1,5 +1,6 @@
 package pecunia_22.controllers.viewControllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,25 +11,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Security;
+import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.dto.security.SecurityDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.securityService.SecurityServiceImpl;
 import utils.JsonUtils;
 import utils.Role;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RequestMapping("/security/collection")
 @Controller
 public class SecurityCollectionController {
 
-    private SecurityServiceImpl securityService;
+    private final UserCheckLoged userCheckLoged;
+    private final SecurityServiceImpl securityService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public SecurityCollectionController(SecurityServiceImpl securityService) {
+    public SecurityCollectionController(UserCheckLoged userCheckLoged, SecurityServiceImpl securityService, ModelMapper modelMapper) {
+        this.userCheckLoged = userCheckLoged;
         this.securityService = securityService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
@@ -80,16 +89,37 @@ public class SecurityCollectionController {
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status, ModelMap modelMap) {
-        String role = Role.role();
+        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =10;
 
         Page<Security> page = securityService.findSecurityPaginated(pageNo, pageSize, currencyId, status, role);
-        List<SecurityDto> securityDtoList = new ArrayList<>();
+
+        if (page.isEmpty()) {
+            log.warn(
+                    """
+                            No security found for currencyId={} 
+                            status={}
+                            role={}
+                            """,
+                    currencyId,
+                    status,
+                    role
+            );
+
+            modelMap.addAttribute("securities", Collections.emptyList());
+
+            return "security/collection/securities";
+        }
 
         if (page.getTotalPages() >= pageNo) {
-            for (Security security : page.getContent()) {
-                securityDtoList.add(new ModelMapper().map(security, SecurityDto.class));
-            }
+//            for (Security security : page.getContent()) {
+//                securityDtoList.add(new ModelMapper().map(security, SecurityDto.class));
+//            }
+
+            List<SecurityDto> securityDtoList = page.getContent()
+                    .stream()
+                    .map(m -> modelMapper.map(m, SecurityDto.class))
+                    .toList();
 
             String pathPage = "/security/collection/securities/page/";
             modelMap.addAttribute("currentPage", pageNo);
@@ -98,14 +128,19 @@ public class SecurityCollectionController {
             modelMap.addAttribute("pageSize", pageSize);
             modelMap.addAttribute("pathPage", pathPage);
 
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-            System.out.println(page.getTotalElements());
-            System.out.println(page.getTotalPages());
-            System.out.println(page.getSize());
+            log.info("""
+                    
+                    ROLE -> {}
+                    Page Elemants -> {}
+                    Page Total -> {}
+                    Page Size -> {}
+                    """,
+                    role,
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.getSize());
 
             modelMap.addAttribute("securities", securityDtoList);
-            System.out.println(role);
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
             return "security/collection/securities";
         }else {
             return findPaginated(1, currencyId, "KOLEKCJA", modelMap);

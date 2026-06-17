@@ -216,12 +216,31 @@
                 </div>
                 <div class="modal-body">
                     <div sec:authorize="isAuthenticated()">
-<!--                        <span>ROLE - </span><span sec:authentication="principal.authorities[0]">Roles</span><br>-->
-                        <span>ROLE - </span><span sec:authentication="authorities">Roles</span><br>
-                        <span>First Name - </span><span sec:authentication="principal.firstName">Firstname</span><br>
-                        <span>Last Name - </span><span sec:authentication="principal.lastName">Lastname</span><br>
-                        <span>Mail - </span><span sec:authentication="principal.email">email</span><br>
+
+                        <span>ROLE - </span>
+                        <span sec:authentication="authorities">Roles</span><br>
+
+                        <div th:if="${#authentication.principal instanceof T(pecunia_22.appUser.AppUser)}">
+
+                            <span>First Name - </span>
+                            <span th:text="${#authentication.principal.firstName}"></span><br>
+
+                            <span>Last Name - </span>
+                            <span th:text="${#authentication.principal.lastName}"></span><br>
+
+                            <span>Mail - </span>
+                            <span th:text="${#authentication.principal.email}"></span><br>
+
+                        </div>
+
                     </div>
+<!--                    <div sec:authorize="isAuthenticated()">-->
+<!--&lt;!&ndash;                        <span>ROLE - </span><span sec:authentication="principal.authorities[0]">Roles</span><br>&ndash;&gt;-->
+<!--                        <span>ROLE - </span><span sec:authentication="authorities">Roles</span><br>-->
+<!--                        <span>First Name - </span><span sec:authentication="principal.firstName">Firstname</span><br>-->
+<!--                        <span>Last Name - </span><span sec:authentication="principal.lastName">Lastname</span><br>-->
+<!--                        <span>Mail - </span><span sec:authentication="principal.email">email</span><br>-->
+<!--                    </div>-->
                 </div>
                 <div class="modal-footer" style="background: darkgray; padding: 0">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pecunia_22.models.Note;
+import pecunia_22.models.dto.medal.MedalDto;
 import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.repositories.CurrencyRepository;
 import pecunia_22.models.repositories.NoteRepository;
@@ -22,6 +23,7 @@ import pecunia_22.services.noteServices.NoteServiceImpl;
 import utils.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -29,21 +31,19 @@ import java.util.List;
 @Controller
 public class NoteCollectionController {
 
-    private NoteServiceImpl noteService;
-    private CountryServiceImpl countryService;
-    private UserCheckLoged userCheckLoged;
+    private final NoteServiceImpl noteService;
+    private final CountryServiceImpl countryService;
+    private final UserCheckLoged userCheckLoged;
+    private final ModelMapper modelMapper;
 
-    private NoteRepository noteRepository;
-    private CurrencyRepository currencyRepository;
 
     @Autowired
-    public NoteCollectionController(NoteServiceImpl noteService, CountryServiceImpl countryService, UserCheckLoged userCheckLoged, NoteRepository noteRepository) {
+    public NoteCollectionController(NoteServiceImpl noteService, CountryServiceImpl countryService, UserCheckLoged userCheckLoged, ModelMapper modelMapper) {
         this.noteService = noteService;
         this.countryService = countryService;
         this.userCheckLoged = userCheckLoged;
-        this.noteRepository = noteRepository;
+        this.modelMapper = modelMapper;
     }
-
 
     @GetMapping()
     public String getIndex(ModelMap modelMap) {
@@ -136,21 +136,33 @@ public class NoteCollectionController {
                                 @RequestParam("status") String status,
                                 ModelMap modelMap) {
 
-        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
-        System.out.println(status);
-        System.out.println();
-        System.out.println("============+++++++++++++++++++ STATUS +++++++++++++++++++=================");
-
-
         String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =20;
 
         Page<Note> page = noteService.findNotePaginated(pageNo, pageSize, currencyId, status, role);
-        List<NoteDto> noteDtoList = new ArrayList<>();
+        if (page.isEmpty()) {
+
+            log.warn(
+                    """
+                            No notes found for currencyId={} 
+                            status={}
+                            role={}
+                            """,
+                    currencyId,
+                    status,
+                    role
+            );
+
+            modelMap.addAttribute("notes", Collections.emptyList());
+
+            return "note/collection/notes";
+        }
+
         if (page.getTotalPages() >= pageNo) {
-            for (Note note : page.getContent()) {
-                noteDtoList.add(new ModelMapper().map(note, NoteDto.class));
-            }
+            List<NoteDto> noteDtoList = page.getContent()
+                    .stream()
+                    .map(m -> modelMapper.map(m, NoteDto.class))
+                    .toList();
 
             String pathPage = "/note/collection/notes/page/";
             modelMap.addAttribute("currentPage", pageNo);
@@ -159,14 +171,19 @@ public class NoteCollectionController {
             modelMap.addAttribute("pageSize", pageSize);
             modelMap.addAttribute("pathPage", pathPage);
 
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-            System.out.println(page.getTotalElements());
-            System.out.println(page.getTotalPages());
-            System.out.println(page.getSize());
+            log.info("""
+                    
+                    ROLE -> {}
+                    Page Elemants -> {}
+                    Page Total -> {}
+                    Page Size -> {}
+                    """,
+                    role,
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.getSize());
 
             modelMap.addAttribute("notes", noteDtoList);
-            System.out.println(role);
-            System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
             return "note/collection/notes";
         }else {
             return findPaginated(1, currencyId, "KOLEKCJA", modelMap);
