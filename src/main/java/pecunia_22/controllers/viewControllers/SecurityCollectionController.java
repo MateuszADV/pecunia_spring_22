@@ -15,6 +15,7 @@ import pecunia_22.models.dto.note.NoteDto;
 import pecunia_22.models.dto.security.SecurityDto;
 import pecunia_22.models.sqlClass.CountryByStatus;
 import pecunia_22.models.sqlClass.CurrencyByStatus;
+import pecunia_22.security.config.UserCheckLoged;
 import pecunia_22.services.securityService.SecurityServiceImpl;
 import utils.JsonUtils;
 import utils.Role;
@@ -28,11 +29,13 @@ import java.util.List;
 @Controller
 public class SecurityCollectionController {
 
+    private final UserCheckLoged userCheckLoged;
     private final SecurityServiceImpl securityService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SecurityCollectionController(SecurityServiceImpl securityService, ModelMapper modelMapper) {
+    public SecurityCollectionController(UserCheckLoged userCheckLoged, SecurityServiceImpl securityService, ModelMapper modelMapper) {
+        this.userCheckLoged = userCheckLoged;
         this.securityService = securityService;
         this.modelMapper = modelMapper;
     }
@@ -86,14 +89,12 @@ public class SecurityCollectionController {
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("currencyId") Long currencyId,
                                 @RequestParam("status") String status, ModelMap modelMap) {
-        String role = Role.role();
+        String role = userCheckLoged.UserCheckLoged().getAuthorities().toArray()[0].toString();
         Integer pageSize =10;
 
         Page<Security> page = securityService.findSecurityPaginated(pageNo, pageSize, currencyId, status, role);
-//        List<SecurityDto> securityDtoList = new ArrayList<>();
 
         if (page.isEmpty()) {
-
             log.warn(
                     """
                             No security found for currencyId={} 

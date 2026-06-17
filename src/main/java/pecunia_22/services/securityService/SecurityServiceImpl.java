@@ -2,6 +2,7 @@ package pecunia_22.services.securityService;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
@@ -123,6 +125,19 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public Page<Security> findSecurityPaginated(Integer pageNo, Integer pageSize, Long currencyId, String status, String role) {
 
+        log.info("""
+                
+                Role -> {}
+                Currency ID -> {}
+                Status -> {}
+                Page No -> {}
+                Page Size -> {}
+                """,
+                currentUserService.getRoles(),
+                currencyId,
+                status,
+                pageNo,
+                pageSize);
         if (currentUserService.isAdmin()) {
             Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
             return this.securityRepository.securityPageable(currencyId, status, null, pageable);
